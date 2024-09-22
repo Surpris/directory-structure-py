@@ -1,0 +1,35 @@
+
+[project]
+name = "directory-structure-py"
+version = "0.1.0"
+description = "Python function collecting the metadata of a directory and its contents"
+readme = "README.md"
+license = { file = "LICENSE" }
+authors = [{ name = "Surpris", email = "take90-it09-easy27@outlook.jp" }]
+dependencies = []
+requires-python = ">=3.10"
+classifiers = [
+    'Development Status :: 3 - Alpha',
+    'Intended Audience :: Developers',
+    'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3.11',
+    'Programming Language :: Python :: 3.12',
+    "Operating System :: OS Independent",
+    "Operating System :: POSIX",
+    "Operating System :: MacOS",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: Microsoft :: Windows",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    'License :: OSI Approved :: Apache Software License'
+]
+
+[project.optional-dependencies]
+dev = []
+
+[project.scripts]
+directory_structure_py = "directory_structure_py:main"
+
+[project.urls]
+Homepage = "https://github.com/Surpris/directory-structure-py"
+Repository = "https://github.com/Surpris/directory-structure-py"
+"Bug Tracker" = "https://github.com/Surpris/directory-structure-py/issues"
