@@ -50,7 +50,7 @@ def get_metadata_of_single_file(path: Path | str) -> Dict[str, Any]:
     if path.is_dir():
         part: List[str] = [p_.name for p_ in path.iterdir()]
         if part:
-            dst["hasPart"] =  part
+            dst["hasPart"] = part
     dst["contentSize"] = path.stat().st_size
     dst["creationDatetime"] = datetime.datetime.fromtimestamp(
         path.stat().st_ctime
@@ -102,7 +102,28 @@ def get_metadata_of_files(
     return dst
 
 
-def main(src: Path | str, dst: Path | str, include_root_path: bool):
+def json2tsv(src: str, dst: str = "") -> None:
+    buff: List[List[int | str]] = []
+    columns: List[str] = []
+    with open(src, "r", encoding="utf-8") as ff:
+        data: Dict[str, Any] = json.load(ff)
+        # extract all keys
+        columns: List[str] = []
+        for content in data["contents"]:
+            columns.extend(list(content.keys()))
+        columns = sorted(list(set(columns)))
+        # mapping
+        buff: List[List[int | str]] = []
+        for content in data["contents"]:
+            buff.append([str(content.get(key, "")) for key in columns])
+    if not dst:
+        dst = src.replace(os.path.splitext(src)[-1], ".tsv")
+    with open(dst, "w", encoding="utf-8") as ff:
+        ff.write("\t".join(columns) + "\n")
+        ff.writelines(["\t".join(l) + "\n" for l in buff])
+
+
+def main(src: Path | str, dst: Path | str, include_root_path: bool, to_tsv: bool = False):
     """
     Collects metadata from the source directory and writes it to a JSON file.
 
@@ -125,6 +146,8 @@ def main(src: Path | str, dst: Path | str, include_root_path: bool):
     data: Dict[str, Any] = get_metadata_of_files(src, include_root_path)
     with open(dst, "w", encoding="utf-8") as ff:
         json.dump(data, ff, indent=JSON_OUTPUT_INDENT)
+    if to_tsv:
+        json2tsv(dst)
 
 
 if __name__ == "__main__":
@@ -137,7 +160,10 @@ if __name__ == "__main__":
     parser.add_argument(
         "--include_root_path", dest="include_root_path", action="store_true"
     )
+    parser.add_argument(
+        "--to_tsv", dest="to_tsv", action="store_true"
+    )
     args = parser.parse_args()
     if not args.dst:
         args.dst = os.path.join(args.src, DEFAULT_OUTPUT_NAME)
-    main(args.src, args.dst, args.include_root_path)
+    main(args.src, args.dst, args.include_root_path, args.to_tsv)
