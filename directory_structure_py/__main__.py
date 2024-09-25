@@ -15,7 +15,10 @@ if __name__ == "__main__":
     parser.add_argument(
         "--include_root_path", dest="include_root_path", action="store_true"
     )
+    parser.add_argument(
+        "--to_tsv", dest="to_tsv", action="store_true"
+    )
     args = parser.parse_args()
     if not args.dst:
         args.dst = os.path.join(args.src, DEFAULT_OUTPUT_NAME)
-    main(args.src, args.dst, args.include_root_path)
+    main(args.src, args.dst, args.include_root_path, args.to_tsv)

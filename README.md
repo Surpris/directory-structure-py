@@ -10,7 +10,7 @@ Python function collecting the metadata of a directory and its contents.
 
 | Function                    | Overview                                                                      |
 | :-------------------------- | :---------------------------------------------------------------------------- |
-| get_metadata_of_single_file | Retrieves metadata for a given file or directory using the `pathlib` module.    |
+| get_metadata_of_single_file | Retrieves metadata for a given file or directory using the `pathlib` module.  |
 | get_metadata_of_files       | Recursively retrieves metadata for files and directories within a given path. |
 
 # Data model of metadata
@@ -59,13 +59,24 @@ pip install .
 
 # Usage
 
+## CLI
+
 `python -m`:
 
 ```sh
 python -m directory_structure_py <file_or_directory_path> \
     --dst <output_path> \
-    --include_root_path // option
+    --include_root_path \ // option
+    --to_tsv // option
 ```
+
+Options:
+
+| Item                | Type   | Description                                                                     |
+| :------------------ | :----- | :------------------------------------------------------------------------------ |
+| `dst`               | str    | destination path of the json output                                             |
+| `include_root_path` | (bool) | include `file_or_directory_path` with the key `root_path` if this option is set |
+| `to_tsv`            | (bool) | output a TSV-format file  if this option is set                                 |
 
 ## python
 
@@ -91,7 +102,7 @@ metadata: dict = get_metadata_of_files(fpath)
 
 ```sh
 # at the root directory of this repository
-python -m directory_structure_py ./sample --dst sample.json
+python -m directory_structure_py ./sample --dst sample.json --to_tsv
 ```
 
 The contents of the `sample.json`:
@@ -170,4 +181,18 @@ The contents of the `sample.json`:
         }
     ]
 }
+```
+
+The contents of `sample.tsv`:
+
+```tsv
+basename	contentSize	creationDatetime	extension	hasPart	modificationDatetime	name	type
+sample	0	2024-09-25T12:16:08		['data', 'hogehoge', 'readme.md']	2024-09-25T12:17:06		Directory
+data	0	2024-09-25T12:17:06		['data_001.csv', 'data_002.csv']	2024-09-25T12:17:53		Directory
+data_001.csv	42	2024-09-25T12:17:15	.csv		2024-09-25T12:18:08	data_001	File
+data_002.csv	41	2024-09-25T12:17:48	.csv		2024-09-25T12:18:05	data_002	File
+hogehoge	0	2024-09-25T12:16:46		['fuga.txt']	2024-09-25T12:16:51		Directory
+fuga.txt	6	2024-09-25T12:16:51	.txt		2024-09-25T12:16:55	fuga	File
+readme.md	142	2024-09-25T12:16:19	.md		2024-09-25T12:27:38	readme	File
+
 ```
