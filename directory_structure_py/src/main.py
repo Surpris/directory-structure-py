@@ -43,6 +43,7 @@ def get_metadata_of_single_file(path: Path | str) -> Dict[str, Any]:
     else:
         dst["type"] = "Unknown"
 
+    dst["parent"] = path.parent.name
     dst["basename"] = path.name
     if path.is_file():
         dst["name"] = os.path.splitext(path.name)[0]
