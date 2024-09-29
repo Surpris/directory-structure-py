@@ -67,16 +67,18 @@ pip install .
 python -m directory_structure_py <file_or_directory_path> \
     --dst <output_path> \
     --include_root_path \ // option
+    --in_tree \ // option
     --to_tsv // option
 ```
 
 Options:
 
-| Item                | Type   | Description                                                                     |
-| :------------------ | :----- | :------------------------------------------------------------------------------ |
-| `dst`               | str    | destination path of the json output                                             |
-| `include_root_path` | (bool) | include `file_or_directory_path` with the key `root_path` if this option is set |
-| `to_tsv`            | (bool) | output a TSV-format file  if this option is set                                 |
+| Item                | Type | Description                                                                     |
+| :------------------ | :--- | :------------------------------------------------------------------------------ |
+| `dst`               | str  | destination path of the json output                                             |
+| `include_root_path` | bool | include `file_or_directory_path` with the key `root_path` if this option is set |
+| `in_tree`           | bool | output the metadata in a tree format if this option is set                      |
+| `to_tsv`            | bool | output a TSV-format file if this option is set                                  |
 
 ## python
 
