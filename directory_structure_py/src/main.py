@@ -124,6 +124,38 @@ def json2tsv(src: str, dst: str = "") -> None:
         ff.writelines(["\t".join(l) + "\n" for l in buff])
 
 
+def _construct_tree(
+    tree_: Dict[str, Any], src: List[Dict[str, Any]]
+) -> Dict[str, Any]:
+    if not tree_:
+        for node in src:
+            if node["parent"] == "":
+                tree_ = node
+                break
+    if tree_["type"] == "File":
+        return tree_
+    buff: List[Dict[str, Any]] = []
+    for part in tree_["hasPart"]:
+        for node in src:
+            if node["basename"] == part and node["parent"] == tree_["basename"]:
+                buff.append(
+                    _construct_tree(node, src)
+                )
+    tree_["hasPart"] = buff
+    return tree_
+
+
+def metadata2tree(src: Dict[str, Any]) -> Dict[str, Any]:
+    contents: List[Dict[str, Any]] = src["contents"]
+    tree: Dict[str, Any] = {}
+    return _construct_tree(tree, contents)
+
+
+def metadata2tree_from_file(src: Path | str) -> Dict[str, Any]:
+    with open(src, "r", encoding="utf-8") as ff:
+        return metadata2tree(json.load(ff))
+
+
 def main(src: Path | str, dst: Path | str, include_root_path: bool, to_tsv: bool = False):
     """
     Collects metadata from the source directory and writes it to a JSON file.
