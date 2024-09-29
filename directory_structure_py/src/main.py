@@ -104,6 +104,37 @@ def get_metadata_of_files(
 
 
 def json2tsv(src: str, dst: str = "") -> None:
+    """
+    Converts a JSON file to a TSV (Tab-Separated Values) file.
+
+    The function reads a JSON file specified by `src`, extracts its contents,
+    and writes them into a TSV file. 
+    If the `dst` (destination) parameter is not provided, the output TSV file will
+    have the same name as the source file but with a `.tsv` extension.
+
+    The JSON structure is expected to contain a "contents" key, which holds a list of dictionaries. 
+    The function gathers all the unique keys from these dictionaries to form the columns of
+    the TSV file. 
+    For each row (content), it writes values corresponding to these keys. If a key is missing in
+    a particular row, an empty string is used.
+
+    Args:
+        src (str): Path to the source JSON file.
+        dst (str, optional): Path to the destination TSV file.
+            Defaults to a file with the same name as `src` but with a `.tsv` extension.
+    
+    Returns:
+        None: The function writes directly to a file and does not return a value.
+    
+    Raises:
+        FileNotFoundError: If the source file does not exist.
+        JSONDecodeError: If the source file is not a valid JSON.
+        OSError: If there are issues reading from or writing to the file system.
+    
+    Example:
+        json2tsv("data.json", "output.tsv")
+    """
+
     buff: List[List[int | str]] = []
     columns: List[str] = []
     with open(src, "r", encoding="utf-8") as ff:
@@ -127,6 +158,42 @@ def json2tsv(src: str, dst: str = "") -> None:
 def _construct_tree(
     tree_: Dict[str, Any], src: List[Dict[str, Any]]
 ) -> Dict[str, Any]:
+    """
+    Recursively constructs a hierarchical tree structure from a flat list of nodes.
+
+    This function takes an existing tree structure (or an empty dictionary) and
+    a source list of nodes, 
+    each represented as a dictionary with "basename", "parent", and "type" keys,
+    and builds a nested tree.
+    It looks for nodes that match the "hasPart" attribute of the current tree node,
+    attaching child nodes recursively.
+
+    If `tree_` is empty, the function initializes it by searching for the root node, 
+    defined as the node where the "parent" key is an empty string.
+    The function handles the following cases:
+    
+    1. If a node has the type "File", it is treated as a leaf node, and recursion terminates.
+    2. If a node has children (stored in the "hasPart" key), those children are recursively
+    added to the tree.
+
+    Args:
+        tree_ (Dict[str, Any]): The current tree or an empty dictionary to initialize the root node.
+        src (List[Dict[str, Any]]): A list of nodes, where each node is a dictionary containing
+            "basename", "parent", "type", and possibly "hasPart".
+    
+    Returns:
+        Dict[str, Any]: The updated tree structure with all nested nodes attached.
+
+    Example:
+        tree = _construct_tree({}, nodes)
+    
+    Notes:
+        - Nodes in `src` should have "basename" and "parent" keys. 
+        - Leaf nodes are those with a "type" of "File".
+    
+    Raises:
+        KeyError: If a required key is missing from any node in the source list.
+    """
     if not tree_:
         for node in src:
             if node["parent"] == "":
@@ -146,12 +213,63 @@ def _construct_tree(
 
 
 def metadata2tree(src: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Constructs a hierarchical tree structure from a metadata dictionary.
+
+    This function takes a metadata dictionary (`src`) containing a "contents" key, 
+    which holds a list of nodes. Each node is represented as a dictionary with keys
+    such as "basename", 
+    "parent", "type", and "hasPart". The function uses these nodes to construct a hierarchical tree 
+    by calling the helper function `_construct_tree`.
+
+    Args:
+        src (Dict[str, Any]): A metadata dictionary with a "contents" key,
+            which contains a list of node dictionaries.
+    
+    Returns:
+        Dict[str, Any]: A hierarchical tree structure where nodes are nested
+            according to their parent-child relationships.
+    
+    Example:
+        tree = metadata2tree(metadata_dict)
+    
+    Notes:
+        - The "contents" key in `src` should be a list of dictionaries,
+            each representing a node with its metadata.
+        - The function relies on `_construct_tree` to recursively build the tree.
+    
+    Raises:
+        KeyError: If the "contents" key is missing in the source dictionary.
+    """
+
     contents: List[Dict[str, Any]] = src["contents"]
     tree: Dict[str, Any] = {}
     return _construct_tree(tree, contents)
 
 
 def metadata2tree_from_file(src: Path | str) -> Dict[str, Any]:
+    """
+    Constructs a hierarchical tree structure from a JSON metadata file.
+
+    This function reads a JSON file from the provided path (`src`), 
+    loads its content, and passes it to the `metadata2tree` function to generate 
+    a hierarchical tree structure based on the metadata.
+
+    Args:
+        src (Path | str): The path to the JSON file containing the metadata. 
+                          Can be a `Path` object or a string representing the file path.
+    
+    Returns:
+        Dict[str, Any]: A hierarchical tree structure constructed from the JSON metadata.
+    
+    Example:
+        tree = metadata2tree_from_file("metadata.json")
+    
+    Raises:
+        FileNotFoundError: If the specified file does not exist.
+        JSONDecodeError: If the file is not a valid JSON.
+        OSError: If an error occurs while reading the file.
+    """
     with open(src, "r", encoding="utf-8") as ff:
         return metadata2tree(json.load(ff))
 
