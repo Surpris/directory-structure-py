@@ -62,7 +62,7 @@ def get_metadata_of_single_file(path: Path | str) -> Dict[str, Any]:
     return dst
 
 
-def get_metadata_of_files(
+def get_metadata_of_files_in_list_format(
     src: Path | str, include_root_path: bool = False
 ) -> Dict[str, Any]:
     """
@@ -212,7 +212,7 @@ def _construct_tree(
     return tree_
 
 
-def metadata2tree(src: Dict[str, Any]) -> Dict[str, Any]:
+def list2tree(src: Dict[str, Any]) -> Dict[str, Any]:
     """
     Constructs a hierarchical tree structure from a metadata dictionary.
 
@@ -231,7 +231,7 @@ def metadata2tree(src: Dict[str, Any]) -> Dict[str, Any]:
             according to their parent-child relationships.
     
     Example:
-        tree = metadata2tree(metadata_dict)
+        tree = list2tree(metadata_dict)
     
     Notes:
         - The "contents" key in `src` should be a list of dictionaries,
@@ -244,15 +244,16 @@ def metadata2tree(src: Dict[str, Any]) -> Dict[str, Any]:
 
     contents: List[Dict[str, Any]] = src["contents"]
     tree: Dict[str, Any] = {}
-    return _construct_tree(tree, contents)
+    tree["contents"] = _construct_tree(tree, contents)
+    return tree
 
 
-def metadata2tree_from_file(src: Path | str) -> Dict[str, Any]:
+def list2tree_from_file(src: Path | str) -> Dict[str, Any]:
     """
     Constructs a hierarchical tree structure from a JSON metadata file.
 
     This function reads a JSON file from the provided path (`src`), 
-    loads its content, and passes it to the `metadata2tree` function to generate 
+    loads its content, and passes it to the `list2tree` function to generate 
     a hierarchical tree structure based on the metadata.
 
     Args:
@@ -263,7 +264,7 @@ def metadata2tree_from_file(src: Path | str) -> Dict[str, Any]:
         Dict[str, Any]: A hierarchical tree structure constructed from the JSON metadata.
     
     Example:
-        tree = metadata2tree_from_file("metadata.json")
+        tree = list2tree_from_file("metadata.json")
     
     Raises:
         FileNotFoundError: If the specified file does not exist.
@@ -271,10 +272,14 @@ def metadata2tree_from_file(src: Path | str) -> Dict[str, Any]:
         OSError: If an error occurs while reading the file.
     """
     with open(src, "r", encoding="utf-8") as ff:
-        return metadata2tree(json.load(ff))
+        return list2tree(json.load(ff))
 
 
-def main(src: Path | str, dst: Path | str, include_root_path: bool, to_tsv: bool = False):
+def main(
+    src: Path | str, dst: Path | str,
+    include_root_path: bool,
+    in_tree: bool = False, to_tsv: bool = False
+):
     """
     Collects metadata from the source directory and writes it to a JSON file.
 
@@ -290,15 +295,21 @@ def main(src: Path | str, dst: Path | str, include_root_path: bool, to_tsv: bool
         as a JSON file.
         include_root_path (bool): If `True`, includes the root path in the result 
         under the key 'root_path'. Default is `False`.
+        in_tree (bool): If `True`, output the metadata in a tree format.
+        to_tsv (bool): If `True`, output the metadata a TSV format as well as a JSON one.
 
     Returns:
         None: The function writes the metadata to a file and does not return anything.
     """
-    data: Dict[str, Any] = get_metadata_of_files(src, include_root_path)
+    data: Dict[str, Any] = get_metadata_of_files_in_list_format(src, include_root_path)
     with open(dst, "w", encoding="utf-8") as ff:
         json.dump(data, ff, indent=JSON_OUTPUT_INDENT)
     if to_tsv:
         json2tsv(dst)
+    if in_tree:
+        data = list2tree(data)
+        with open(dst, "w", encoding="utf-8") as ff:
+            json.dump(data, ff, indent=JSON_OUTPUT_INDENT)
 
 
 if __name__ == "__main__":
@@ -312,9 +323,12 @@ if __name__ == "__main__":
         "--include_root_path", dest="include_root_path", action="store_true"
     )
     parser.add_argument(
+        "--in_tree", dest="in_tree", action="store_true"
+    )
+    parser.add_argument(
         "--to_tsv", dest="to_tsv", action="store_true"
     )
     args = parser.parse_args()
     if not args.dst:
         args.dst = os.path.join(args.src, DEFAULT_OUTPUT_NAME)
-    main(args.src, args.dst, args.include_root_path, args.to_tsv)
+    main(args.src, args.dst, args.include_root_path, args.in_tree, args.to_tsv)
