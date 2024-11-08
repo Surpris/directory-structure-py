@@ -24,7 +24,12 @@ classifiers = [
 ]
 
 [project.optional-dependencies]
-dev = []
+dev = [
+    "pytest",
+    "pylint",
+    "autopep8",
+    "flake8"
+]
 
 [project.scripts]
 directory_structure_py = "directory_structure_py:main"
