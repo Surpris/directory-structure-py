@@ -28,12 +28,11 @@ def generate_id(path: Path | str, root_path: Path | str = "") -> str:
 
     Returns:
         A string representing the unique ID of the path.
-
-    Raises:
-        ValueError: If `root_path` is provided and `path` is not a subpath of `root_path`.
     """
     if not root_path:
         return str(path.absolute().as_posix())
+    if path == root_path:
+        return "."
     return str(path.relative_to(root_path).as_posix())
 
 
@@ -72,7 +71,7 @@ def get_metadata_of_single_file(path: Path | str, root_path: Path | str = "") ->
     else:
         dst["type"] = "Unknown"
 
-    if path.parent.name == "":
+    if str(path) == str(root_path):
         dst["parent"] = {}
     else:
         dst["parent"] = {"@id": generate_id(path.parent, root_path)}
@@ -228,7 +227,7 @@ def _construct_tree(
     """
     if not tree_:
         for node in src:
-            if node["parent"] == "":
+            if not node["parent"]:
                 tree_ = node
                 break
     if tree_["type"] == "File":
@@ -236,7 +235,7 @@ def _construct_tree(
     buff: List[Dict[str, Any]] = []
     for part in tree_["hasPart"]:
         for node in src:
-            if node["basename"] == part and node["parent"] == tree_["basename"]:
+            if node["@id"] == part["@id"] and node["parent"]["@id"] == tree_["@id"]:
                 buff.append(
                     _construct_tree(node, src)
                 )
