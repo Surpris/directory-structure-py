@@ -130,6 +130,8 @@ def get_metadata_of_files_in_list_format(
         src = Path(src)
     if include_root_path:
         dst["root_path"] = str(src)
+    else:
+        dst["root_path"] = "."
     dst["contents"] = _get_metadata_list(src, root_path=src)
     return dst
 
