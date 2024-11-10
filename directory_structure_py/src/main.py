@@ -72,7 +72,10 @@ def get_metadata_of_single_file(path: Path | str, root_path: Path | str = "") ->
     else:
         dst["type"] = "Unknown"
 
-    dst["parent"] = path.parent.name
+    if path.parent.name == "":
+        dst["parent"] = {}
+    else:
+        dst["parent"] = {"@id": generate_id(path.parent, root_path)}
     dst["basename"] = path.name
     if path.is_file():
         dst["name"] = os.path.splitext(path.name)[0]
