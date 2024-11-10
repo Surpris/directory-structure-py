@@ -10,18 +10,25 @@ from directory_structure_py.src.main import list2tree
 def test_list2tree():
     expected = {
         "contents": {
+            "@id": ".",
             "type": "Directory",
-            "parent": "",
+            "parent": {},
             "basename": "sample",
             "hasPart": [
                 {
+                    "@id": "data",
                     "type": "Directory",
-                    "parent": "sample",
+                    "parent": {
+                        "@id": "."
+                    },
                     "basename": "data",
                     "hasPart": [
                         {
+                            "@id": "data/data_001.csv",
                             "type": "File",
-                            "parent": "data",
+                            "parent": {
+                                "@id": "data"
+                            },
                             "basename": "data_001.csv",
                             "name": "data_001",
                             "extension": ".csv",
@@ -30,8 +37,11 @@ def test_list2tree():
                             "modificationDatetime": "2024-09-25T12:18:08"
                         },
                         {
+                            "@id": "data/data_002.csv",
                             "type": "File",
-                            "parent": "data",
+                            "parent": {
+                                "@id": "data"
+                            },
                             "basename": "data_002.csv",
                             "name": "data_002",
                             "extension": ".csv",
@@ -45,13 +55,58 @@ def test_list2tree():
                     "modificationDatetime": "2024-09-25T12:17:53"
                 },
                 {
+                    "@id": "hogehoge",
                     "type": "Directory",
-                    "parent": "sample",
+                    "parent": {
+                        "@id": "."
+                    },
                     "basename": "hogehoge",
                     "hasPart": [
                         {
+                            "@id": "hogehoge/data",
+                            "type": "Directory",
+                            "parent": {
+                                "@id": "hogehoge"
+                            },
+                            "basename": "data",
+                            "hasPart": [
+                                {
+                                    "@id": "hogehoge/data/data_002.csv",
+                                    "type": "File",
+                                    "parent": {
+                                        "@id": "hogehoge/data"
+                                    },
+                                    "basename": "data_002.csv",
+                                    "name": "data_002",
+                                    "extension": ".csv",
+                                    "contentSize": 41,
+                                    "creationDatetime": "2024-11-10T16:40:03",
+                                    "modificationDatetime": "2024-09-25T12:18:05"
+                                },
+                                {
+                                    "@id": "hogehoge/data/data_003.csv",
+                                    "type": "File",
+                                    "parent": {
+                                        "@id": "hogehoge/data"
+                                    },
+                                    "basename": "data_003.csv",
+                                    "name": "data_003",
+                                    "extension": ".csv",
+                                    "contentSize": 47,
+                                    "creationDatetime": "2024-11-10T16:40:07",
+                                    "modificationDatetime": "2024-11-10T16:40:30"
+                                }
+                            ],
+                            "contentSize": 0,
+                            "creationDatetime": "2024-11-10T16:39:53",
+                            "modificationDatetime": "2024-11-10T16:40:12"
+                        },
+                        {
+                            "@id": "hogehoge/fuga.txt",
                             "type": "File",
-                            "parent": "hogehoge",
+                            "parent": {
+                                "@id": "hogehoge"
+                            },
                             "basename": "fuga.txt",
                             "name": "fuga",
                             "extension": ".txt",
@@ -62,54 +117,75 @@ def test_list2tree():
                     ],
                     "contentSize": 0,
                     "creationDatetime": "2024-09-25T12:16:46",
-                    "modificationDatetime": "2024-09-25T12:16:51"
+                    "modificationDatetime": "2024-11-10T16:39:53"
                 },
                 {
+                    "@id": "readme.md",
                     "type": "File",
-                    "parent": "sample",
+                    "parent": {
+                        "@id": "."
+                    },
                     "basename": "readme.md",
                     "name": "readme",
                     "extension": ".md",
-                    "contentSize": 142,
+                    "contentSize": 187,
                     "creationDatetime": "2024-09-25T12:16:19",
-                    "modificationDatetime": "2024-09-25T12:27:38"
+                    "modificationDatetime": "2024-11-10T17:42:20"
                 }
             ],
-            "contentSize": 0,
+            "contentSize": 4096,
             "creationDatetime": "2024-09-25T12:16:08",
-            "modificationDatetime": "2024-09-25T12:17:06"
+            "modificationDatetime": "2024-11-10T18:12:28"
         }
     }
     src = {
+        "root_path": ".",
         "contents": [
             {
+                "@id": ".",
                 "type": "Directory",
-                "parent": "",
+                "parent": {},
                 "basename": "sample",
                 "hasPart": [
-                    "data",
-                    "hogehoge",
-                    "readme.md"
+                    {
+                        "@id": "data"
+                    },
+                    {
+                        "@id": "hogehoge"
+                    },
+                    {
+                        "@id": "readme.md"
+                    }
                 ],
-                "contentSize": 0,
+                "contentSize": 4096,
                 "creationDatetime": "2024-09-25T12:16:08",
-                "modificationDatetime": "2024-09-25T12:17:06"
+                "modificationDatetime": "2024-11-10T18:12:28"
             },
             {
+                "@id": "data",
                 "type": "Directory",
-                "parent": "sample",
+                "parent": {
+                    "@id": "."
+                },
                 "basename": "data",
                 "hasPart": [
-                    "data_001.csv",
-                    "data_002.csv"
+                    {
+                        "@id": "data/data_001.csv"
+                    },
+                    {
+                        "@id": "data/data_002.csv"
+                    }
                 ],
                 "contentSize": 0,
                 "creationDatetime": "2024-09-25T12:17:06",
                 "modificationDatetime": "2024-09-25T12:17:53"
             },
             {
+                "@id": "data/data_001.csv",
                 "type": "File",
-                "parent": "data",
+                "parent": {
+                    "@id": "data"
+                },
                 "basename": "data_001.csv",
                 "name": "data_001",
                 "extension": ".csv",
@@ -118,8 +194,11 @@ def test_list2tree():
                 "modificationDatetime": "2024-09-25T12:18:08"
             },
             {
+                "@id": "data/data_002.csv",
                 "type": "File",
-                "parent": "data",
+                "parent": {
+                    "@id": "data"
+                },
                 "basename": "data_002.csv",
                 "name": "data_002",
                 "extension": ".csv",
@@ -128,19 +207,75 @@ def test_list2tree():
                 "modificationDatetime": "2024-09-25T12:18:05"
             },
             {
+                "@id": "hogehoge",
                 "type": "Directory",
-                "parent": "sample",
+                "parent": {
+                    "@id": "."
+                },
                 "basename": "hogehoge",
                 "hasPart": [
-                    "fuga.txt"
+                    {
+                        "@id": "hogehoge/data"
+                    },
+                    {
+                        "@id": "hogehoge/fuga.txt"
+                    }
                 ],
                 "contentSize": 0,
                 "creationDatetime": "2024-09-25T12:16:46",
-                "modificationDatetime": "2024-09-25T12:16:51"
+                "modificationDatetime": "2024-11-10T16:39:53"
             },
             {
+                "@id": "hogehoge/data",
+                "type": "Directory",
+                "parent": {
+                    "@id": "hogehoge"
+                },
+                "basename": "data",
+                "hasPart": [
+                    {
+                        "@id": "hogehoge/data/data_002.csv"
+                    },
+                    {
+                        "@id": "hogehoge/data/data_003.csv"
+                    }
+                ],
+                "contentSize": 0,
+                "creationDatetime": "2024-11-10T16:39:53",
+                "modificationDatetime": "2024-11-10T16:40:12"
+            },
+            {
+                "@id": "hogehoge/data/data_002.csv",
                 "type": "File",
-                "parent": "hogehoge",
+                "parent": {
+                    "@id": "hogehoge/data"
+                },
+                "basename": "data_002.csv",
+                "name": "data_002",
+                "extension": ".csv",
+                "contentSize": 41,
+                "creationDatetime": "2024-11-10T16:40:03",
+                "modificationDatetime": "2024-09-25T12:18:05"
+            },
+            {
+                "@id": "hogehoge/data/data_003.csv",
+                "type": "File",
+                "parent": {
+                    "@id": "hogehoge/data"
+                },
+                "basename": "data_003.csv",
+                "name": "data_003",
+                "extension": ".csv",
+                "contentSize": 47,
+                "creationDatetime": "2024-11-10T16:40:07",
+                "modificationDatetime": "2024-11-10T16:40:30"
+            },
+            {
+                "@id": "hogehoge/fuga.txt",
+                "type": "File",
+                "parent": {
+                    "@id": "hogehoge"
+                },
                 "basename": "fuga.txt",
                 "name": "fuga",
                 "extension": ".txt",
@@ -149,14 +284,17 @@ def test_list2tree():
                 "modificationDatetime": "2024-09-25T12:16:55"
             },
             {
+                "@id": "readme.md",
                 "type": "File",
-                "parent": "sample",
+                "parent": {
+                    "@id": "."
+                },
                 "basename": "readme.md",
                 "name": "readme",
                 "extension": ".md",
-                "contentSize": 142,
+                "contentSize": 187,
                 "creationDatetime": "2024-09-25T12:16:19",
-                "modificationDatetime": "2024-09-25T12:27:38"
+                "modificationDatetime": "2024-11-10T17:42:20"
             }
         ]
     }
