@@ -12,6 +12,7 @@ from typing import Dict, Any, List
 DATETIME_FMT: str = "%Y-%m-%dT%H:%M:%S"
 DEFAULT_OUTPUT_NAME: str = "directory_structure_metadata.json"
 JSON_OUTPUT_INDENT: int = 4
+ENSURE_ASCII: bool = False
 
 
 def generate_id(path: Path | str, root_path: Path | str = "") -> str:
@@ -337,13 +338,13 @@ def main(
     data: Dict[str, Any] = get_metadata_of_files_in_list_format(
         src, include_root_path)
     with open(dst, "w", encoding="utf-8") as ff:
-        json.dump(data, ff, indent=JSON_OUTPUT_INDENT)
+        json.dump(data, ff, indent=JSON_OUTPUT_INDENT, ensure_ascii=ENSURE_ASCII)
     if to_tsv:
         json2tsv(dst)
     if in_tree:
         data = list2tree(data)
         with open(dst, "w", encoding="utf-8") as ff:
-            json.dump(data, ff, indent=JSON_OUTPUT_INDENT)
+            json.dump(data, ff, indent=JSON_OUTPUT_INDENT, ensure_ascii=ENSURE_ASCII)
 
 
 if __name__ == "__main__":
