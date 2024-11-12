@@ -23,5 +23,8 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
     if not args.dst:
-        args.dst = os.path.join(args.src, DEFAULT_OUTPUT_NAME)
+        if os.path.isdir(args.src):
+            args.dst = os.path.join(args.src, DEFAULT_OUTPUT_NAME)
+        else:
+            args.dst = os.path.join(os.path.dirname(args.src), DEFAULT_OUTPUT_NAME)
     main(args.src, args.dst, args.include_root_path, args.in_tree, args.to_tsv)
