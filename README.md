@@ -89,12 +89,12 @@ python -m directory_structure_py <file_or_directory_path> \
 
 Options:
 
-| Item                | Type | Description                                                                     |
-| :------------------ | :--- | :------------------------------------------------------------------------------ |
-| `dst`               | str  | destination path of the json output                                             |
-| `include_root_path` | bool | include `file_or_directory_path` with the key `root_path` if this option is set |
-| `in_tree`           | bool | output the metadata in a tree format if this option is set                      |
-| `to_tsv`            | bool | output a TSV-format file if this option is set                                  |
+| Item                | Type | Description                                                                                                                      |
+| :------------------ | :--- | :------------------------------------------------------------------------------------------------------------------------------- |
+| `dst`               | str  | destination path of the json output. If empty, the metadata file will be output to the same directory as that of the input file. |
+| `include_root_path` | bool | include `file_or_directory_path` with the key `root_path` if this option is set                                                  |
+| `in_tree`           | bool | output the metadata in a tree format if this option is set                                                                       |
+| `to_tsv`            | bool | output a TSV-format file if this option is set                                                                                   |
 
 ## Batch file (only for Windows)
 
