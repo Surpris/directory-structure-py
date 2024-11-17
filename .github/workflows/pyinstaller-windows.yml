@@ -29,9 +29,8 @@ jobs:
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
         python -m pip install --no-cache-dir --progress-bar off -U .
     - name: Build an executable file
-      shell: bash
       run: |
         pyinstaller ./directory_structure_py/src/main.py --clean --onefile -n directory_structure_py.exe
         cp ./for_portable/* ./dist/
         cp ./directory_structure_py/config/logging.json ./dist/
-        zip -r portable-windows.zip ./dist
+        Compress-Archive -Path dist/* -Destination  portable-windows.zip
