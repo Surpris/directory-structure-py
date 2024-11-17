@@ -35,7 +35,7 @@
 # 使い方
 
 バッチファイル "directory_structure_py.bat" に、メタデータを収集したいディレクトリまたはファイルのパスを drag & drop します。
-デフォルトでは以下の名前のファイルが、"directory_structure_py.bat" と同じディレクトリに出力されます。
+デフォルトでは以下の名前のファイルが、"directory_structure_py.bat" が配置されているディレクトリ以下にある `output` ディレクトリに出力されます。
 
 * `directory_structure_metadata.json`：ディレクトリツリーと同じ構造を持つメタデータツリーが含まれます。
 * `directory_structure_metadata.tsv`: メタデータリストが含まれます。
