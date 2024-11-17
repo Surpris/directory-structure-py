@@ -366,6 +366,8 @@ def main(
     data: Dict[str, Any] = get_metadata_of_files_in_list_format(
         src, include_root_path
     )
+    if not os.path.exists(os.path.dirname(dst)):
+        os.makedirs(os.path.dirname(dst))
     with open(dst, "w", encoding="utf-8") as ff:
         json.dump(
             data, ff,
