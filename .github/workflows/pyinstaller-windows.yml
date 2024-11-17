@@ -28,7 +28,7 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install flake8 pytest
         python -m pip install pyinstaller
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        if exist requirements.txt (pip install -r requirements.txt)
         python -m pip install --no-cache-dir --progress-bar off -U .
     - name: Build an executable file
       run: |
