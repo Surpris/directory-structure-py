@@ -5,6 +5,7 @@ get the directory tree
 
 import datetime
 import json
+from logging import getLogger, config
 import os
 from pathlib import Path
 from typing import Dict, Any, List
@@ -13,6 +14,21 @@ DATETIME_FMT: str = "%Y-%m-%dT%H:%M:%S"
 DEFAULT_OUTPUT_NAME: str = "directory_structure_metadata.json"
 JSON_OUTPUT_INDENT: int = 4
 ENSURE_ASCII: bool = False
+
+
+with open(
+    os.path.join(os.path.dirname(__file__), "../config/logging.json"),
+    "r", encoding="utf-8"
+) as ff:
+    log_conf = json.load(ff)
+    log_conf["handlers"]["fileHandler"]["filename"] = \
+        os.path.join(
+            os.path.dirname(__file__),
+            f"../log/directory_structure_py_{datetime.datetime.now().strftime('%Y%m%d%H%M%S')}.log"
+    )
+    config.dictConfig(log_conf)
+
+logger = getLogger("main")
 
 
 def generate_id(path: Path | str, root_path: Path | str = "") -> str:
@@ -335,16 +351,30 @@ def main(
     Returns:
         None: The function writes the metadata to a file and does not return anything.
     """
+    logger.info("the main process starts.")
+    logger.info("source path: '%s'.", str(src))
     data: Dict[str, Any] = get_metadata_of_files_in_list_format(
-        src, include_root_path)
+        src, include_root_path
+    )
     with open(dst, "w", encoding="utf-8") as ff:
-        json.dump(data, ff, indent=JSON_OUTPUT_INDENT, ensure_ascii=ENSURE_ASCII)
+        json.dump(
+            data, ff,
+            indent=JSON_OUTPUT_INDENT,
+            ensure_ascii=ENSURE_ASCII
+        )
     if to_tsv:
+        logger.info("generate a TSV-format file.")
         json2tsv(dst)
     if in_tree:
+        logger.info("convert the list metadata file into the tree-format one.")
         data = list2tree(data)
         with open(dst, "w", encoding="utf-8") as ff:
-            json.dump(data, ff, indent=JSON_OUTPUT_INDENT, ensure_ascii=ENSURE_ASCII)
+            json.dump(
+                data, ff,
+                indent=JSON_OUTPUT_INDENT,
+                ensure_ascii=ENSURE_ASCII
+            )
+    logger.info("the main process ended.")
 
 
 if __name__ == "__main__":
@@ -368,5 +398,8 @@ if __name__ == "__main__":
         if os.path.isdir(args.src):
             args.dst = os.path.join(args.src, DEFAULT_OUTPUT_NAME)
         else:
-            args.dst = os.path.join(os.path.dirname(args.src), DEFAULT_OUTPUT_NAME)
+            args.dst = os.path.join(
+                os.path.dirname(args.src), DEFAULT_OUTPUT_NAME
+            )
+    logger.info("hello")
     main(args.src, args.dst, args.include_root_path, args.in_tree, args.to_tsv)
