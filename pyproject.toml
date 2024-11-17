@@ -1,7 +1,7 @@
 
 [project]
 name = "directory-structure-py"
-version = "0.1.2"
+version = "0.1.3"
 description = "Python function collecting the metadata of a directory and its contents"
 readme = "README.md"
 license = { file = "LICENSE" }
@@ -40,4 +40,4 @@ Repository = "https://github.com/Surpris/directory-structure-py"
 "Bug Tracker" = "https://github.com/Surpris/directory-structure-py/issues"
 
 [tool.setuptools.packages.find]
-exclude = ["sample"]
+exclude = ["sample", "for_portable"]

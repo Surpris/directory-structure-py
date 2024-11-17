@@ -84,22 +84,32 @@ python -m directory_structure_py <file_or_directory_path> \
     --dst <output_path> \
     --include_root_path \ // option
     --in_tree \ // option
-    --to_tsv // option
+    --to_tsv \ // option
+    --log_config_path <log_config_path> \ // option
+    --log_output_path <log_output_path> // option
 ```
 
-Options:
+Main options:
 
-| Item                | Type | Description                                                                                                                      |
-| :------------------ | :--- | :------------------------------------------------------------------------------------------------------------------------------- |
-| `dst`               | str  | destination path of the json output. If empty, the metadata file will be output to the same directory as that of the input file. |
-| `include_root_path` | bool | include `file_or_directory_path` with the key `root_path` if this option is set                                                  |
-| `in_tree`           | bool | output the metadata in a tree format if this option is set                                                                       |
-| `to_tsv`            | bool | output a TSV-format file if this option is set                                                                                   |
+| Item                | Type   | Description                                                                                                                      |
+| :------------------ | :----- | :------------------------------------------------------------------------------------------------------------------------------- |
+| `dst`               | str    | destination path of the json output. If empty, the metadata file will be output to the same directory as that of the input file. |
+| `include_root_path` | (bool) | include `file_or_directory_path` with the key `root_path` if this option is set                                                  |
+| `in_tree`           | (bool) | output the metadata in a tree format if this option is set                                                                       |
+| `to_tsv`            | (bool) | output a TSV-format file if this option is set                                                                                   |
+
+Logging options:
+
+| Item              | Type | Description                                                                        |
+| :---------------- | :--- | :--------------------------------------------------------------------------------- |
+| `log_config_path` | str  | a log config path. See `config/logging.json` for the detail of the content format. |
+| `log_output_path` | str  | destination path of the log.                                                       |
+
 
 ## Batch file (only for Windows)
 
 Drag the directory or file and drop it on the batch file "directory_structure_py.bat".
-By default, the following files are output to the same directory as where "directory_structure_py.bat" is located.
+By default, the following files are output to the `output` directory in the directory where "directory_structure_py.bat" is located.
 
 * `directory_structure_metadata.json`: a metadata tree is included.
 * `directory_structure_metadata.tsv`: a metadata list is included.

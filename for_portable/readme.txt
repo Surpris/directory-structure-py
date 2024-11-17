@@ -35,7 +35,7 @@ Please see "# Example" section for the output formats.
 # Usage
 
 Drag the directory or file and drop it on the batch file "directory_structure_py.bat".
-By default, the following files are output to the same directory as where "directory_structure_py.bat" is located.
+By default, the following files are output to the `output` directory in the directory where "directory_structure_py.bat" is located.
 
 * `directory_structure_metadata.json`: This file includes a metadata tree with the same structure as the input directory tree.
 * `directory_structure_metadata.tsv`: This file includes a metadata list.
