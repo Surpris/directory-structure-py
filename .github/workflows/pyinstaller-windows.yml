@@ -1,14 +1,13 @@
 # This workflow will build a Windows executable file
 
-name: PyInstaller-Windows
+name: Build-and-Upload-for-Windows
 
 on:
   push:
     branches: [ "main" ]
 
 jobs:
-  build:
-
+  windows-build:
     runs-on: windows-latest
     strategy:
       fail-fast: false
@@ -33,4 +32,9 @@ jobs:
         pyinstaller ./directory_structure_py/src/main.py --clean --onefile -n directory_structure_py.exe
         cp ./for_portable/* ./dist/
         cp ./directory_structure_py/config/logging.json ./dist/
-        Compress-Archive -Path dist/* -Destination  portable-windows.zip
+        Compress-Archive -Path dist/* -Destination  ./dist/portable-windows.zip
+    - name: Upload the built artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: portable-windows
+        path: ./dist/portable-windows.zip
