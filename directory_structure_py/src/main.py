@@ -5,30 +5,34 @@ get the directory tree
 
 import datetime
 import json
-from logging import getLogger, config
+from logging import getLogger, config, Logger
 import os
 from pathlib import Path
+import time
 from typing import Dict, Any, List
 
 DATETIME_FMT: str = "%Y-%m-%dT%H:%M:%S"
 DEFAULT_OUTPUT_NAME: str = "directory_structure_metadata.json"
 JSON_OUTPUT_INDENT: int = 4
 ENSURE_ASCII: bool = False
+LOG_CONF_PATH: str = os.path.join(
+    os.path.dirname(__file__), "../config/logging.json"
+)
+LOG_OUTPUT_PATH: str = os.path.join(
+    os.path.dirname(__file__),
+    f"../log/directory_structure_py_{datetime.datetime.now().strftime('%Y%m%d%H%M%S')}.log"
+)
 
 
-with open(
-    os.path.join(os.path.dirname(__file__), "../config/logging.json"),
-    "r", encoding="utf-8"
-) as ff:
-    log_conf = json.load(ff)
-    log_conf["handlers"]["fileHandler"]["filename"] = \
-        os.path.join(
-            os.path.dirname(__file__),
-            f"../log/directory_structure_py_{datetime.datetime.now().strftime('%Y%m%d%H%M%S')}.log"
-    )
-    config.dictConfig(log_conf)
+def set_logger(config_path: str, output_log_path: str) -> Logger:
+    """Set a logger"""
+    with open(config_path, "r", encoding="utf-8") as ff:
+        log_conf = json.load(ff)
+        log_conf["handlers"]["fileHandler"]["filename"] = output_log_path
+        config.dictConfig(log_conf)
 
-logger = getLogger("main")
+    logger = getLogger("main")
+    return logger
 
 
 def generate_id(path: Path | str, root_path: Path | str = "") -> str:
@@ -328,7 +332,9 @@ def list2tree_from_file(src: Path | str) -> Dict[str, Any]:
 def main(
     src: Path | str, dst: Path | str,
     include_root_path: bool,
-    in_tree: bool = False, to_tsv: bool = False
+    in_tree: bool = False, to_tsv: bool = False,
+    log_config_path: str = LOG_CONF_PATH,
+    log_output_path: str = LOG_OUTPUT_PATH
 ):
     """
     Collects metadata from the source directory and writes it to a JSON file.
@@ -351,7 +357,11 @@ def main(
     Returns:
         None: The function writes the metadata to a file and does not return anything.
     """
-    logger.info("the main process starts.")
+    st = time.time()
+    if not os.path.exists(os.path.dirname(log_output_path)):
+        os.makedirs(os.path.dirname(log_output_path))
+    logger: Logger = set_logger(log_config_path, log_output_path)
+    logger.info("starts.")
     logger.info("source path: '%s'.", str(src))
     data: Dict[str, Any] = get_metadata_of_files_in_list_format(
         src, include_root_path
@@ -366,7 +376,7 @@ def main(
         logger.info("generate a TSV-format file.")
         json2tsv(dst)
     if in_tree:
-        logger.info("convert the list metadata file into the tree-format one.")
+        logger.info("convert the metadata format from list to tree.")
         data = list2tree(data)
         with open(dst, "w", encoding="utf-8") as ff:
             json.dump(
@@ -374,7 +384,8 @@ def main(
                 indent=JSON_OUTPUT_INDENT,
                 ensure_ascii=ENSURE_ASCII
             )
-    logger.info("the main process ended.")
+    logger.info("ended.")
+    logger.info("elapsed time: %.*f sec.", 3, time.time() - st)
 
 
 if __name__ == "__main__":
@@ -393,6 +404,12 @@ if __name__ == "__main__":
     parser.add_argument(
         "--to_tsv", dest="to_tsv", action="store_true"
     )
+    parser.add_argument(
+        "--log_config_path", dest="log_config_path", type=str, default=LOG_CONF_PATH
+    )
+    parser.add_argument(
+        "--log_output_path", dest="log_output_path", type=str, default=LOG_OUTPUT_PATH
+    )
     args = parser.parse_args()
     if not args.dst:
         if os.path.isdir(args.src):
@@ -401,5 +418,7 @@ if __name__ == "__main__":
             args.dst = os.path.join(
                 os.path.dirname(args.src), DEFAULT_OUTPUT_NAME
             )
-    logger.info("hello")
-    main(args.src, args.dst, args.include_root_path, args.in_tree, args.to_tsv)
+    main(
+        args.src, args.dst, args.include_root_path, args.in_tree, args.to_tsv,
+        args.log_config_path, args.log_output_path
+    )
