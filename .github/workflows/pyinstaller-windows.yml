@@ -15,26 +15,26 @@ jobs:
         python-version: ["3.10"]
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v3
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
-      shell: bash
-      run: |
-        python -m pip install --upgrade pip
-        python -m pip install pyinstaller
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-        python -m pip install --no-cache-dir --progress-bar off -U .
-    - name: Build an executable file
-      run: |
-        pyinstaller ./directory_structure_py/src/main.py --clean --onefile -n directory_structure_py.exe
-        cp ./for_portable/* ./dist/
-        cp ./directory_structure_py/config/logging.json ./dist/
-        Compress-Archive -Path dist/* -Destination  ./dist/portable-windows.zip
-    - name: Upload the built artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: portable-windows
-        path: ./dist/portable-windows.zip
+      - uses: actions/checkout@v4
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        shell: bash
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pyinstaller
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          python -m pip install --no-cache-dir --progress-bar off -U .
+      - name: Build an executable file
+        run: |
+          pyinstaller ./directory_structure_py/src/main.py --clean --onefile -n directory_structure_py.exe
+          cp ./for_portable/* ./dist/
+          cp ./directory_structure_py/config/logging.json ./dist/
+          cp -r ./sample ./dist/
+      - name: Upload the built artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: portable-windows
+          path: ./dist/*
