@@ -23,7 +23,7 @@ The following metadata items are collected:
     "type": "Directory",
     "parent": "parent directory info including '@id'",
     "basename": "basename (ex. test.dat)",
-    "hasPart": ["basename of file or directory"],
+    "hasPart": ["`@id` or metadata of file or directory"],
     "contentSize": "file size (Byte)",
     "creationDatetime": "creation datetime (%Y-%m-%dT%H:%M:%S)",
     "modificationDatetime": "modification datetime (%Y-%m-%dT%H:%M:%S)"
