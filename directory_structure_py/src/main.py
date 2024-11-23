@@ -210,43 +210,29 @@ def json2tsv(src: str, dst: str = "") -> None:
 
 
 def _construct_tree(
-    tree_: Dict[str, Any], src: List[Dict[str, Any]]
+    tree_: Dict[str, Any], src: List[Dict[str, Any]],
+    structure_only: bool = False
 ) -> Dict[str, Any]:
-    """
-    Recursively constructs a hierarchical tree structure from a flat list of nodes.
+    """Recursively constructs a tree structure from a list of nodes.
 
-    This function takes an existing tree structure (or an empty dictionary) and
-    a source list of nodes, 
-    each represented as a dictionary with "basename", "parent", and "type" keys,
-    and builds a nested tree.
-    It looks for nodes that match the "hasPart" attribute of the current tree node,
-    attaching child nodes recursively.
-
-    If `tree_` is empty, the function initializes it by searching for the root node, 
-    defined as the node where the "parent" key is an empty string.
-    The function handles the following cases:
-
-    1. If a node has the type "File", it is treated as a leaf node, and recursion terminates.
-    2. If a node has children (stored in the "hasPart" key), those children are recursively
-    added to the tree.
+    This function takes a partially constructed tree and a list of source nodes
+    as input and recursively builds a complete tree structure.  It handles
+    cases where the tree is initially empty or contains only a root node.
+    If `structure_only` is False, it all metadata in the resulting tree;
+    otherwise, it only returns the '@id' of leaf nodes.
 
     Args:
-        tree_ (Dict[str, Any]): The current tree or an empty dictionary to initialize the root node.
-        src (List[Dict[str, Any]]): A list of nodes, where each node is a dictionary containing
-            "basename", "parent", "type", and possibly "hasPart".
+        tree_: A dictionary representing a partially constructed tree or an empty dictionary.
+        src: A list of dictionaries, where each dictionary represents a node in the tree.
+            Each node should have '@id' and 'parent' keys.
+        structure_only: A boolean indicating whether to output the structure only.
+            in the resulting tree. Defaults to False.
 
     Returns:
-        Dict[str, Any]: The updated tree structure with all nested nodes attached.
+        A dictionary representing the complete tree structure.
+            If `include_metadata` is False and the node is a leaf node (type "File"),
+            returns only its '@id' as a string.
 
-    Example:
-        tree = _construct_tree({}, nodes)
-
-    Notes:
-        - Nodes in `src` should have "basename" and "parent" keys. 
-        - Leaf nodes are those with a "type" of "File".
-
-    Raises:
-        KeyError: If a required key is missing from any node in the source list.
     """
     if not tree_:
         for node in src:
@@ -254,19 +240,21 @@ def _construct_tree(
                 tree_ = node
                 break
     if tree_["type"] == "File":
-        return tree_
+        if not structure_only:
+            return tree_
+        return tree_["@id"]
     buff: List[Dict[str, Any]] = []
     for part in tree_["hasPart"]:
         for node in src:
             if node["@id"] == part["@id"] and node["parent"]["@id"] == tree_["@id"]:
                 buff.append(
-                    _construct_tree(node, src)
+                    _construct_tree(node, src, structure_only)
                 )
     tree_["hasPart"] = buff
-    return tree_
+    return {tree_["@id"]: tree_["hasPart"]}
 
 
-def list2tree(src: Dict[str, Any]) -> Dict[str, Any]:
+def list2tree(src: Dict[str, Any], structure_only: bool = False) -> Dict[str, Any]:
     """
     Constructs a hierarchical tree structure from a metadata dictionary.
 
@@ -279,6 +267,8 @@ def list2tree(src: Dict[str, Any]) -> Dict[str, Any]:
     Args:
         src (Dict[str, Any]): A metadata dictionary with a "contents" key,
             which contains a list of node dictionaries.
+        structure_only: A boolean indicating whether to output the structure only.
+            in the resulting tree. Defaults to False.
 
     Returns:
         Dict[str, Any]: A hierarchical tree structure where nodes are nested
@@ -298,11 +288,11 @@ def list2tree(src: Dict[str, Any]) -> Dict[str, Any]:
 
     contents: List[Dict[str, Any]] = src["contents"]
     tree: Dict[str, Any] = {}
-    tree["contents"] = _construct_tree(tree, contents)
+    tree["contents"] = _construct_tree(tree, contents, structure_only)
     return tree
 
 
-def list2tree_from_file(src: Path | str) -> Dict[str, Any]:
+def list2tree_from_file(src: Path | str, structure_only: bool = False) -> Dict[str, Any]:
     """
     Constructs a hierarchical tree structure from a JSON metadata file.
 
@@ -313,6 +303,8 @@ def list2tree_from_file(src: Path | str) -> Dict[str, Any]:
     Args:
         src (Path | str): The path to the JSON file containing the metadata. 
                           Can be a `Path` object or a string representing the file path.
+        structure_only: A boolean indicating whether to output the structure only.
+            in the resulting tree. Defaults to False.
 
     Returns:
         Dict[str, Any]: A hierarchical tree structure constructed from the JSON metadata.
@@ -326,12 +318,13 @@ def list2tree_from_file(src: Path | str) -> Dict[str, Any]:
         OSError: If an error occurs while reading the file.
     """
     with open(src, "r", encoding="utf-8") as ff:
-        return list2tree(json.load(ff))
+        return list2tree(json.load(ff), structure_only)
 
 
 def main(
     src: Path | str, dst: Path | str,
     include_root_path: bool,
+    structure_only: bool = False,
     in_tree: bool = False, to_tsv: bool = False,
     log_config_path: str = LOG_CONF_PATH,
     log_output_path: str = LOG_OUTPUT_PATH
@@ -348,9 +341,11 @@ def main(
     Args:
         src (Path | str): The path to the source directory from which to collect metadata.
         dst (Path | str): The path to the destination file where the metadata will be saved 
-        as a JSON file.
+            as a JSON file.
         include_root_path (bool): If `True`, includes the root path in the result 
-        under the key 'root_path'. Default is `False`.
+            under the key 'root_path'. Default is `False`.
+        structure_only: A boolean indicating whether to output the structure only.
+            in the resulting tree. Defaults to False.
         in_tree (bool): If `True`, output the metadata in a tree format.
         to_tsv (bool): If `True`, output the metadata a TSV format as well as a JSON one.
 
@@ -379,8 +374,12 @@ def main(
         json2tsv(dst)
     if in_tree:
         logger.info("convert the metadata format from list to tree.")
-        data = list2tree(data)
-        with open(dst, "w", encoding="utf-8") as ff:
+        data = list2tree(data, structure_only)
+        dst_tree: str = dst.replace(
+            os.path.splitext(dst)[-1],
+            f"_tree{os.path.splitext(dst)[-1]}"
+        )
+        with open(dst_tree, "w", encoding="utf-8") as ff:
             json.dump(
                 data, ff,
                 indent=JSON_OUTPUT_INDENT,
@@ -404,6 +403,9 @@ if __name__ == "__main__":
         "--in_tree", dest="in_tree", action="store_true"
     )
     parser.add_argument(
+        "--structure_only", dest="structure_only", action="store_true"
+    )
+    parser.add_argument(
         "--to_tsv", dest="to_tsv", action="store_true"
     )
     parser.add_argument(
@@ -421,6 +423,7 @@ if __name__ == "__main__":
                 os.path.dirname(args.src), DEFAULT_OUTPUT_NAME
             )
     main(
-        args.src, args.dst, args.include_root_path, args.in_tree, args.to_tsv,
+        args.src, args.dst, args.include_root_path,
+        args.structure_only, args.in_tree, args.to_tsv,
         args.log_config_path, args.log_output_path
     )
