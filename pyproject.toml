@@ -1,7 +1,7 @@
 
 [project]
 name = "directory-structure-py"
-version = "0.1.4"
+version = "0.2.0"
 description = "Python function collecting the metadata of a directory and its contents"
 readme = "README.md"
 license = { file = "LICENSE" }

@@ -6,13 +6,6 @@ Python function collecting the metadata of a directory and its contents.
 
 * Python &geq; 3.10
 
-# Functions
-
-| Function                    | Overview                                                                      |
-| :-------------------------- | :---------------------------------------------------------------------------- |
-| get_metadata_of_single_file | Retrieves metadata for a given file or directory using the `pathlib` module.  |
-| get_metadata_of_files       | Recursively retrieves metadata for files and directories within a given path. |
-
 # Data model of metadata
 
 `get_metadata_of_single_file` returns a dict object with the following format:
@@ -44,6 +37,16 @@ Python function collecting the metadata of a directory and its contents.
 }
 ```
 
+# Functions
+
+## In `get_metadata`
+
+| Function                               | Overview                                                                      |
+| :------------------------------------- | :---------------------------------------------------------------------------- |
+| `generate_id`                          | Generates a unique ID from a given path, optionally relative to a root path.  |
+| `get_metadata_of_single_file`          | Retrieves metadata for a given file or directory using the `pathlib` module.  |
+| `get_metadata_of_files_in_list_format` | Recursively retrieves metadata for files and directories within a given path. |
+
 `get_metadata_of_files` returns a dict object with the following format:
 
 ```json
@@ -52,6 +55,16 @@ Python function collecting the metadata of a directory and its contents.
     "contents": ["metadata returned by get_metadata_of_single_file"]
 }
 ```
+
+## In `conversion`
+
+| Function                                  | Overview                                                                                    |
+| :---------------------------------------- | :------------------------------------------------------------------------------------------ |
+| `convert_meta_list_json_to_tsv`           | Converts a list of dictionaries (JSON-like structure) into a TSV-compatible list of lists.  |
+| `convert_meta_list_json_to_tsv_from_file` | Converts a JSON file containing a list of dictionaries into a TSV-compatible list of lists. |
+| `list2tree`                               | Constructs a hierarchical tree structure from a metadata dictionary.                        |
+| `list2tree_from_file`                     | Constructs a hierarchical tree structure from a JSON metadata file.                         |
+| `convert_mata_list_json_to_rocrate`       | Converts a metadata list JSON structure into a Research Object Crate (ROCrate).             |
 
 # Installation
 
@@ -83,9 +96,10 @@ The portable file is also provided only for Windows. You can download it via the
 python -m directory_structure_py <file_or_directory_path> \
     --dst <output_path> \
     --include_root_path \ // option
+    --in_rocrate \ // option
+    --to_tsv \ // option
     --in_tree \ // option
     --structure_only \ // option
-    --to_tsv \ // option
     --log_config_path <log_config_path> \ // option
     --log_output_path <log_output_path> // option
 ```
@@ -96,9 +110,10 @@ Main options:
 | :------------------ | :----- | :------------------------------------------------------------------------------------------------------------------------------- |
 | `dst`               | str    | destination path of the json output. If empty, the metadata file will be output to the same directory as that of the input file. |
 | `include_root_path` | (bool) | include `file_or_directory_path` with the key `root_path` if this option is set                                                  |
+| `in_rocrate`        | (bool) | output an RO-Crate-format file instead of the list format one if this option is set                                              |
+| `to_tsv`            | (bool) | output a TSV-format file if this option is set                                                                                   |
 | `in_tree`           | (bool) | output the metadata in a tree format if this option is set                                                                       |
 | `structure_only`    | (bool) | output only the structure in a tree format if this option is set                                                                 |
-| `to_tsv`            | (bool) | output a TSV-format file if this option is set                                                                                   |
 
 Logging options:
 
@@ -113,39 +128,35 @@ Logging options:
 Drag the directory or file and drop it on the batch file "directory_structure_py.bat".
 By default, the following files are output to the `output` directory in the directory where "directory_structure_py.bat" is located.
 
-* `directory_structure_metadata.json`: a metadata tree is included.
+* `ro-crate-metadata.json`: a metadata is included in the RO-Crate format.
+* `directory_structure_metadata_tree.json`: the directory tree is included.
 * `directory_structure_metadata.tsv`: a metadata list is included.
+
+You can change the output formats by modifying the options set in teh batch file.
 
 ## python
 
 ### get_metadata_of_single_file
 
 ```python
-from directory_structure_py import get_metadata_of_single_file
+from directory_structure_py.src.get_metadata import get_metadata_of_single_file
 
 fpath: str = "file_or_directory_path"
 metadata: dict = get_metadata_of_single_file(fpath)
 ```
 
-### get_metadata_of_files
+### get_metadata_of_files_in_list_format
 
 ```python
-from directory_structure_py import get_metadata_of_files
+from directory_structure_py.src.get_metadata import get_metadata_of_files_in_list_format
 
 fpath: str = "file_or_directory_path"
 metadata: dict = get_metadata_of_files(fpath)
 ```
 
-# Example
+# Output examples
 
-CLI command:
-
-```sh
-# at the root directory of this repository
-python -m directory_structure_py ./sample --dst ./output/sample --to_tsv --in_tree
-```
-
-Examples of the output by the above command are in [output/sample](./output/sample).
+Please see [output/sample](./output/sample).
 
 # Contributions
 
