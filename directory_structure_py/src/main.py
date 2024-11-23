@@ -9,6 +9,7 @@ from logging import getLogger, config, Logger
 import os
 from pathlib import Path
 import time
+import traceback
 from typing import Dict, Any, List
 from directory_structure_py.src.constants import (
     DEFAULT_OUTPUT_NAME, ENSURE_ASCII, JSON_OUTPUT_INDENT
@@ -103,32 +104,36 @@ def main(
     logger: Logger = set_logger(log_config_path, log_output_path)
     logger.info("starts.")
     logger.info("source path: '%s'.", str(src))
-    data: Dict[str, Any] = get_metadata_of_files_in_list_format(
-        src, include_root_path
-    )
-    if not os.path.exists(os.path.dirname(dst)):
-        os.makedirs(os.path.dirname(dst))
-    if not in_rocrate:
-        save_dict_to_json(data, dst)
-    else:
-        data["root_path"] = f"{str(Path(src).absolute().as_posix())}"
-        crate: ROCrate = convert_mata_list_json_to_rocrate(data)
-        crate.metadata.write(os.path.dirname(dst))
-    if to_tsv:
-        logger.info("generate a TSV-format file.")
-        data_tsv = convert_meta_list_json_to_tsv(data)
-        dst_tsv: str = dst.replace(
-            os.path.splitext(dst)[-1], ".tsv"
+    try:
+        data: Dict[str, Any] = get_metadata_of_files_in_list_format(
+            src, include_root_path
         )
-        save_nested_list_to_tsv(data_tsv, dst_tsv)
-    if in_tree:
-        logger.info("convert the metadata format from list to tree.")
-        data = list2tree(data, structure_only)
-        dst_tree: str = dst.replace(
-            os.path.splitext(dst)[-1],
-            f"_tree{os.path.splitext(dst)[-1]}"
-        )
-        save_dict_to_json(data, dst_tree)
+        if not os.path.exists(os.path.dirname(dst)):
+            os.makedirs(os.path.dirname(dst))
+        if not in_rocrate:
+            save_dict_to_json(data, dst)
+        else:
+            data["root_path"] = f"{str(Path(src).absolute().as_posix())}"
+            crate: ROCrate = convert_mata_list_json_to_rocrate(data)
+            crate.metadata.write(os.path.dirname(dst))
+        if to_tsv:
+            logger.info("generate a TSV-format file.")
+            data_tsv = convert_meta_list_json_to_tsv(data)
+            dst_tsv: str = dst.replace(
+                os.path.splitext(dst)[-1], ".tsv"
+            )
+            save_nested_list_to_tsv(data_tsv, dst_tsv)
+        if in_tree:
+            logger.info("convert the metadata format from list to tree.")
+            data = list2tree(data, structure_only)
+            dst_tree: str = dst.replace(
+                os.path.splitext(dst)[-1],
+                f"_tree{os.path.splitext(dst)[-1]}"
+            )
+            save_dict_to_json(data, dst_tree)
+    except Exception:
+        traceback.print_exc()
+        logger.error(traceback.format_exc())
     logger.info("ended.")
     logger.info("elapsed time: %.*f sec.", 3, time.time() - st)
 
