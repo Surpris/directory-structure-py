@@ -10,6 +10,25 @@ from directory_structure_py.src.constants import OUTPUT_ROOT_KEY, DATETIME_FMT
 
 
 def convert_meta_list_json_to_tsv(src: Dict[str, Any]) -> List[List[str]]:
+    """Converts a list of dictionaries (JSON-like structure) into a TSV-compatible list of lists.
+
+    This function takes a dictionary where one key (specified by OUTPUT_ROOT_KEY) contains a list of dictionaries.  
+    Each inner dictionary represents a row.  The function extracts all unique keys across all inner dictionaries 
+    to form the column headers.  It then creates a list of lists, where each inner list represents a row, 
+    with values corresponding to the column headers.  Missing values are represented as empty strings.
+
+    Args:
+        src: A dictionary containing a list of dictionaries under the key OUTPUT_ROOT_KEY.  
+             The inner dictionaries represent rows of data, and their keys represent columns.
+
+    Returns:
+        A list of lists representing the data in TSV format. The first list contains the column headers.
+        Each subsequent list represents a row, with values as strings.  Returns an empty list if input is invalid.
+
+    Raises:
+        KeyError: if OUTPUT_ROOT_KEY is not found in the input dictionary `src` or if any inner dictionary is not properly formed.
+
+    """
     buff: List[List[int | str]] = []
     columns: List[str] = []
 
@@ -31,6 +50,23 @@ def convert_meta_list_json_to_tsv(src: Dict[str, Any]) -> List[List[str]]:
 
 
 def convert_meta_list_json_to_tsv_from_file(src: str) -> List[List[str]]:
+    """Converts a JSON file containing a list of dictionaries into a TSV-compatible list of lists.
+
+    This function reads a JSON file from the specified path, parses it, and then uses 
+    `convert_meta_list_json_to_tsv` to convert the JSON data into a TSV-compatible format.
+
+    Args:
+        src: The path to the JSON file.
+
+    Returns:
+        A list of lists representing the data in TSV format. The first list contains the column headers.
+        Each subsequent list represents a row, with values as strings. Returns an empty list if there's an error 
+        reading the file or if the JSON is invalid or doesn't match the expected structure.
+
+    Raises:
+        FileNotFoundError: If the specified file does not exist.
+        json.JSONDecodeError: If the file contains invalid JSON.
+    """
     output: List[str] = []
     with open(src, "r", encoding="utf-8") as ff:
         data: Dict[str, Any] = json.load(ff)
@@ -156,6 +192,24 @@ def list2tree_from_file(src: Path | str, structure_only: bool = False) -> Dict[s
 def convert_mata_list_json_to_rocrate(
     src: Dict[str, str | int | List[Dict[str, Any]]]
 ) -> ROCrate:
+    """Converts a metadata list JSON structure into a Research Object Crate (ROCrate).
+
+    This function takes a dictionary representing a metadata list in JSON format and creates a ROCrate object.
+    It iterates through the metadata list, extracting relevant properties for each item (files and directories).
+    Directories are handled differently than files; specific keys are ignored or renamed ("basename" becomes "name").
+    The resulting ROCrate includes a datePublished property reflecting the current time.
+
+    Args:
+        src: A dictionary containing the metadata list.  Must contain "@graph" key with a list of dictionaries, and a "root_path" key specifying the root path.  Each dictionary in '@graph' represents a file or directory metadata.
+
+    Returns:
+        A ROCrate object populated with the metadata from the input dictionary.  Returns an empty ROCrate if input is invalid.
+
+    Raises:
+        KeyError: If the input dictionary does not contain the required keys ("@graph", "root_path").
+        TypeError: If the input data is not in the expected format.
+
+    """
     crate = ROCrate()
     _ = crate.add_tree(src["root_path"])
     meta_list: List[Dict[str, Any]] = src["@graph"]
