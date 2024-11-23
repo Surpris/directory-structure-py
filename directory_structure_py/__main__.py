@@ -1,7 +1,9 @@
 """directory_structure_py"""
 
 
-from .src.main import main, DEFAULT_OUTPUT_NAME, LOG_OUTPUT_PATH, LOG_CONF_PATH
+from directory_structure_py.src.main import (
+    main, DEFAULT_OUTPUT_NAME, LOG_OUTPUT_PATH, LOG_CONF_PATH
+)
 
 
 if __name__ == "__main__":

@@ -10,11 +10,14 @@ import os
 from pathlib import Path
 import time
 from typing import Dict, Any
-from directory_structure_py.src.constants import DEFAULT_OUTPUT_NAME, ENSURE_ASCII, JSON_OUTPUT_INDENT
+from directory_structure_py.src.constants import (
+    DEFAULT_OUTPUT_NAME, ENSURE_ASCII, JSON_OUTPUT_INDENT
+)
 from directory_structure_py.src.get_metadata import (
     get_metadata_of_files_in_list_format,
-    list2tree,
-    json2tsv
+)
+from directory_structure_py.src.conversion import (
+    list2tree, convert_meta_list_json_to_tsv
 )
 
 LOG_CONF_PATH: str = os.path.join(
@@ -103,7 +106,7 @@ def main(
         )
     if to_tsv:
         logger.info("generate a TSV-format file.")
-        json2tsv(dst)
+        convert_meta_list_json_to_tsv(dst)
     if in_tree:
         logger.info("convert the metadata format from list to tree.")
         data = list2tree(data, structure_only)
