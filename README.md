@@ -4,7 +4,7 @@ Python function collecting the metadata of a directory and its contents.
 
 # Requirements
 
-* Python &geq; 3.10 (3.10 \~ 3.12 are tested by the GitHub Actions.)
+* Python &geq; 3.10
 
 # Functions
 
@@ -37,7 +37,7 @@ Python function collecting the metadata of a directory and its contents.
     "type": "Directory",
     "parent": "parent directory info including '@id'",
     "basename": "basename (ex. test.dat)",
-    "hasPart": ["basename of file or directory"],
+    "hasPart": ["`@id` or metadata of file or directory"],
     "contentSize": "file size (Byte)",
     "creationDatetime": "creation datetime (%Y-%m-%dT%H:%M:%S)",
     "modificationDatetime": "modification datetime (%Y-%m-%dT%H:%M:%S)"
@@ -84,6 +84,7 @@ python -m directory_structure_py <file_or_directory_path> \
     --dst <output_path> \
     --include_root_path \ // option
     --in_tree \ // option
+    --structure_only \ // option
     --to_tsv \ // option
     --log_config_path <log_config_path> \ // option
     --log_output_path <log_output_path> // option

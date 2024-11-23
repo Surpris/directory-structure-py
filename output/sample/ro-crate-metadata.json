@@ -1,0 +1,151 @@
+{
+    "@context": "https://w3id.org/ro/crate/1.1/context",
+    "@graph": [
+        {
+            "@id": "./",
+            "@type": "Dataset",
+            "datePublished": "2024-11-23T19:50:08",
+            "hasPart": [
+                {
+                    "@id": "sample/"
+                },
+                {
+                    "@id": "sample/data/"
+                },
+                {
+                    "@id": "sample/data/data_001.csv"
+                },
+                {
+                    "@id": "sample/data/data_002.csv"
+                },
+                {
+                    "@id": "sample/hogehoge/"
+                },
+                {
+                    "@id": "sample/hogehoge/data/"
+                },
+                {
+                    "@id": "sample/hogehoge/data/data_002.csv"
+                },
+                {
+                    "@id": "sample/hogehoge/data/data_003.csv"
+                },
+                {
+                    "@id": "sample/hogehoge/fuga.txt"
+                },
+                {
+                    "@id": "sample/readme.md"
+                }
+            ]
+        },
+        {
+            "@id": "ro-crate-metadata.json",
+            "@type": "CreativeWork",
+            "about": {
+                "@id": "./"
+            },
+            "conformsTo": {
+                "@id": "https://w3id.org/ro/crate/1.1"
+            }
+        },
+        {
+            "@id": "sample/",
+            "@type": "Dataset",
+            "dateCreated": "2024-09-25T12:16:08",
+            "dateModified": "2024-11-23T12:15:26",
+            "hasPart": [
+                "sample/data/",
+                "sample/hogehoge/",
+                "sample/readme.md"
+            ],
+            "name": "sample"
+        },
+        {
+            "@id": "sample/data/",
+            "@type": "Dataset",
+            "dateCreated": "2024-09-25T12:17:06",
+            "dateModified": "2024-09-25T12:17:53",
+            "hasPart": [
+                "sample/data/data_001.csv",
+                "sample/data/data_002.csv"
+            ],
+            "name": "data"
+        },
+        {
+            "@id": "sample/data/data_001.csv",
+            "@type": "File",
+            "contentSize": 42,
+            "dateCreated": "2024-09-25T12:17:15",
+            "dateModified": "2024-09-25T12:18:08",
+            "extension": ".csv",
+            "name": "data_001"
+        },
+        {
+            "@id": "sample/data/data_002.csv",
+            "@type": "File",
+            "contentSize": 41,
+            "dateCreated": "2024-09-25T12:17:48",
+            "dateModified": "2024-09-25T12:18:05",
+            "extension": ".csv",
+            "name": "data_002"
+        },
+        {
+            "@id": "sample/hogehoge/",
+            "@type": "Dataset",
+            "dateCreated": "2024-09-25T12:16:46",
+            "dateModified": "2024-11-10T16:39:53",
+            "hasPart": [
+                "sample/hogehoge/data/",
+                "sample/hogehoge/fuga.txt"
+            ],
+            "name": "hogehoge"
+        },
+        {
+            "@id": "sample/hogehoge/data/",
+            "@type": "Dataset",
+            "dateCreated": "2024-11-10T16:39:53",
+            "dateModified": "2024-11-10T16:40:12",
+            "hasPart": [
+                "sample/hogehoge/data/data_002.csv",
+                "sample/hogehoge/data/data_003.csv"
+            ],
+            "name": "data"
+        },
+        {
+            "@id": "sample/hogehoge/data/data_002.csv",
+            "@type": "File",
+            "contentSize": 41,
+            "dateCreated": "2024-11-10T16:40:03",
+            "dateModified": "2024-09-25T12:18:05",
+            "extension": ".csv",
+            "name": "data_002"
+        },
+        {
+            "@id": "sample/hogehoge/data/data_003.csv",
+            "@type": "File",
+            "contentSize": 47,
+            "dateCreated": "2024-11-10T16:40:07",
+            "dateModified": "2024-11-10T16:40:30",
+            "extension": ".csv",
+            "name": "data_003"
+        },
+        {
+            "@id": "sample/hogehoge/fuga.txt",
+            "@type": "File",
+            "contentSize": 6,
+            "dateCreated": "2024-09-25T12:16:51",
+            "dateModified": "2024-09-25T12:16:55",
+            "extension": ".txt",
+            "name": "fuga"
+        },
+        {
+            "@id": "sample/readme.md",
+            "@type": "File",
+            "contentSize": 187,
+            "dateCreated": "2024-09-25T12:16:19",
+            "dateModified": "2024-11-10T17:42:20",
+            "extension": ".md",
+            "name": "readme"
+        }
+    ]
+}
