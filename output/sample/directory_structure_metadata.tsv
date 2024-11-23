@@ -1,0 +1,11 @@
+@id	basename	contentSize	creationDatetime	extension	hasPart	modificationDatetime	name	parent	type
+.	sample	4096	2024-09-25T12:16:08		[{'@id': 'data'}, {'@id': 'hogehoge'}, {'@id': 'readme.md'}]	2024-11-23T12:15:26		{}	Directory
+data	data	0	2024-09-25T12:17:06		[{'@id': 'data/data_001.csv'}, {'@id': 'data/data_002.csv'}]	2024-09-25T12:17:53		{'@id': '.'}	Directory
+data/data_001.csv	data_001.csv	42	2024-09-25T12:17:15	.csv		2024-09-25T12:18:08	data_001	{'@id': 'data'}	File
+data/data_002.csv	data_002.csv	41	2024-09-25T12:17:48	.csv		2024-09-25T12:18:05	data_002	{'@id': 'data'}	File
+hogehoge	hogehoge	0	2024-09-25T12:16:46		[{'@id': 'hogehoge/data'}, {'@id': 'hogehoge/fuga.txt'}]	2024-11-10T16:39:53		{'@id': '.'}	Directory
+hogehoge/data	data	0	2024-11-10T16:39:53		[{'@id': 'hogehoge/data/data_002.csv'}, {'@id': 'hogehoge/data/data_003.csv'}]	2024-11-10T16:40:12		{'@id': 'hogehoge'}	Directory
+hogehoge/data/data_002.csv	data_002.csv	41	2024-11-10T16:40:03	.csv		2024-09-25T12:18:05	data_002	{'@id': 'hogehoge/data'}	File
+hogehoge/data/data_003.csv	data_003.csv	47	2024-11-10T16:40:07	.csv		2024-11-10T16:40:30	data_003	{'@id': 'hogehoge/data'}	File
+hogehoge/fuga.txt	fuga.txt	6	2024-09-25T12:16:51	.txt		2024-09-25T12:16:55	fuga	{'@id': 'hogehoge'}	File
+readme.md	readme.md	187	2024-09-25T12:16:19	.md		2024-11-10T17:42:20	readme	{'@id': '.'}	File
