@@ -84,6 +84,7 @@ def get_metadata_of_single_file(path: Path | str, root_path: Path | str = "") ->
     if path.is_file():
         dst["name"] = os.path.splitext(path.name)[0]
         dst["extension"] = os.path.splitext(path.name)[1]
+    dst["hasPart"] = []
     if path.is_dir():
         part: List[str] = [generate_id(p_, root_path) for p_ in path.iterdir()]
         if part:
