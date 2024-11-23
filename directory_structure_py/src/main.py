@@ -17,8 +17,11 @@ from directory_structure_py.src.get_metadata import (
     get_metadata_of_files_in_list_format,
 )
 from directory_structure_py.src.conversion import (
-    list2tree, convert_meta_list_json_to_tsv
+    list2tree,
+    convert_meta_list_json_to_tsv,
+    convert_mata_list_json_to_rocrate
 )
+from rocrate.rocrate import ROCrate
 
 LOG_CONF_PATH: str = os.path.join(
     os.path.dirname(__file__), "../config/logging.json"
@@ -59,8 +62,10 @@ def save(data: Dict[str, Any], dst: str) -> None:
 def main(
     src: Path | str, dst: Path | str,
     include_root_path: bool,
+    in_rocrate: bool = False,
+    to_tsv: bool = False,
+    in_tree: bool = False,
     structure_only: bool = False,
-    in_tree: bool = False, to_tsv: bool = False,
     log_config_path: str = LOG_CONF_PATH,
     log_output_path: str = LOG_OUTPUT_PATH
 ):
@@ -98,11 +103,17 @@ def main(
     )
     if not os.path.exists(os.path.dirname(dst)):
         os.makedirs(os.path.dirname(dst))
-    with open(dst, "w", encoding="utf-8") as ff:
-        json.dump(
-            data, ff,
-            indent=JSON_OUTPUT_INDENT,
-            ensure_ascii=ENSURE_ASCII
+    if not in_rocrate:
+        save(data, dst)
+    else:
+        data["root_path"] = f"{str(Path(src).absolute().as_posix())}"
+        crate: ROCrate = convert_mata_list_json_to_rocrate(data)
+        crate.metadata.write(os.path.dirname(dst))
+        if os.path.exists(dst):
+            os.remove(dst)
+        os.rename(
+            os.path.join(os.path.dirname(dst), crate.metadata.BASENAME),
+            dst
         )
     if to_tsv:
         logger.info("generate a TSV-format file.")
@@ -135,13 +146,16 @@ if __name__ == "__main__":
         "--include_root_path", dest="include_root_path", action="store_true"
     )
     parser.add_argument(
+        "--in_rocrate", dest="in_rocrate", action="store_true"
+    )
+    parser.add_argument(
+        "--to_tsv", dest="to_tsv", action="store_true"
+    )
+    parser.add_argument(
         "--in_tree", dest="in_tree", action="store_true"
     )
     parser.add_argument(
         "--structure_only", dest="structure_only", action="store_true"
-    )
-    parser.add_argument(
-        "--to_tsv", dest="to_tsv", action="store_true"
     )
     parser.add_argument(
         "--log_config_path", dest="log_config_path", type=str, default=LOG_CONF_PATH
@@ -161,6 +175,7 @@ if __name__ == "__main__":
         args.dst = os.path.join(args.dst, DEFAULT_OUTPUT_NAME)
     main(
         args.src, args.dst, args.include_root_path,
-        args.structure_only, args.in_tree, args.to_tsv,
+        args.in_rocrate, args.to_tsv,
+        args.in_tree, args.structure_only,
         args.log_config_path, args.log_output_path
     )

@@ -1,12 +1,13 @@
 """conversion
 """
 
+import datetime
 import json
 import os
 from pathlib import Path
 from typing import Dict, Any, List
 from rocrate.rocrate import ROCrate
-from directory_structure_py.src.constants import OUTPUT_ROOT_KEY
+from directory_structure_py.src.constants import OUTPUT_ROOT_KEY, DATETIME_FMT
 
 
 def convert_meta_list_json_to_tsv(src: str, dst: str = "") -> None:
@@ -142,6 +143,7 @@ def list2tree(src: Dict[str, Any], structure_only: bool = False) -> Dict[str, An
     contents: List[Dict[str, Any]] = src[OUTPUT_ROOT_KEY]
     tree: Dict[str, Any] = {}
     tree[OUTPUT_ROOT_KEY] = _construct_tree(tree, contents, structure_only)
+    tree["dateCreated"] = src["dateCreated"]
     return tree
 
 
@@ -172,3 +174,36 @@ def list2tree_from_file(src: Path | str, structure_only: bool = False) -> Dict[s
     """
     with open(src, "r", encoding="utf-8") as ff:
         return list2tree(json.load(ff), structure_only)
+
+
+def convert_mata_list_json_to_rocrate(
+    src: Dict[str, str | int | List[Dict[str, Any]]]
+) -> ROCrate:
+    crate = ROCrate()
+    _ = crate.add_tree(src["root_path"])
+    meta_list: List[Dict[str, Any]] = src["@graph"]
+    for metadata in meta_list:
+        properties = {}
+        if metadata["type"] == "Directory":
+            for k, v in metadata.items():
+                if k in ["@id", "parent", "type"]:
+                    continue
+                if k == "hasPart":
+                    properties[k] = [p_["@id"] for p_ in v]
+                elif k == "basename":
+                    properties["name"] = v
+                else:
+                    properties[k] = v
+        else:
+            for k, v in metadata.items():
+                if k in ["@id", "parent", "basename", "type"]:
+                    continue
+                if k == "extension":
+                    properties[k] = v
+                else:
+                    properties[k] = v
+        id_ = f"{os.path.basename(src['root_path'])}/{metadata['@id']}"
+        for k, v in properties.items():
+            crate.get(id_)[k] = v
+    crate.datePublished = datetime.datetime.now().strftime(DATETIME_FMT)
+    return crate

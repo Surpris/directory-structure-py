@@ -18,13 +18,16 @@ if __name__ == "__main__":
         "--include_root_path", dest="include_root_path", action="store_true"
     )
     parser.add_argument(
+        "--in_rocrate", dest="in_rocrate", action="store_true"
+    )
+    parser.add_argument(
+        "--to_tsv", dest="to_tsv", action="store_true"
+    )
+    parser.add_argument(
         "--in_tree", dest="in_tree", action="store_true"
     )
     parser.add_argument(
         "--structure_only", dest="structure_only", action="store_true"
-    )
-    parser.add_argument(
-        "--to_tsv", dest="to_tsv", action="store_true"
     )
     parser.add_argument(
         "--log_config_path", dest="log_config_path", type=str, default=LOG_CONF_PATH
@@ -44,6 +47,7 @@ if __name__ == "__main__":
         args.dst = os.path.join(args.dst, DEFAULT_OUTPUT_NAME)
     main(
         args.src, args.dst, args.include_root_path,
-        args.structure_only, args.in_tree, args.to_tsv,
+        args.in_rocrate, args.to_tsv,
+        args.in_tree, args.structure_only,
         args.log_config_path, args.log_output_path
     )

@@ -24,9 +24,13 @@ def generate_id(path: Path | str, root_path: Path | str = "") -> str:
         A string representing the unique ID of the path.
     """
     if not root_path:
+        if path.is_dir():
+            return str(path.absolute().as_posix()) + "/"
         return str(path.absolute().as_posix())
     if path == root_path:
-        return "."
+        return "./"
+    if path.is_dir():
+        return str(path.relative_to(root_path).as_posix()) + "/"
     return str(path.relative_to(root_path).as_posix())
 
 
@@ -77,11 +81,12 @@ def get_metadata_of_single_file(path: Path | str, root_path: Path | str = "") ->
         part: List[str] = [generate_id(p_, root_path) for p_ in path.iterdir()]
         if part:
             dst["hasPart"] = [{"@id": p_} for p_ in part]
-    dst["contentSize"] = path.stat().st_size
-    dst["creationDatetime"] = datetime.datetime.fromtimestamp(
+    if path.is_file():
+        dst["contentSize"] = path.stat().st_size
+    dst["dateCreated"] = datetime.datetime.fromtimestamp(
         path.stat().st_ctime
     ).strftime(DATETIME_FMT)
-    dst["modificationDatetime"] = datetime.datetime.fromtimestamp(
+    dst["dateModified"] = datetime.datetime.fromtimestamp(
         path.stat().st_mtime
     ).strftime(DATETIME_FMT)
     return dst
@@ -123,8 +128,9 @@ def get_metadata_of_files_in_list_format(
     if isinstance(src, str):
         src = Path(src)
     if include_root_path:
-        dst["root_path"] = str(src)
+        dst["root_path"] = f"{str(Path(src).as_posix())}/"
     else:
-        dst["root_path"] = "."
+        dst["root_path"] = "./"
     dst[OUTPUT_ROOT_KEY] = _get_metadata_list(src, root_path=src)
+    dst["dateCreated"] = datetime.datetime.now().strftime(DATETIME_FMT)
     return dst
