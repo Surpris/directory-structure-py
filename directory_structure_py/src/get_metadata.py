@@ -42,59 +42,117 @@ def generate_id(path: Path | str, root_path: Path | str = "") -> str:
 
 
 def get_metadata_of_single_file(path: Path | str, root_path: Path | str = "") -> Dict[str, Any]:
-    """
-    Retrieves metadata for a given file or directory using the Pathlib module.
+    """Generates metadata for a single file.
 
     Args:
-        path (Path or str): The path to the file or directory.
-            This can be a Path object or a string representing the path.
-        root_path (Path or str): The root path to which the path is relative.
-            This is used to set '@id.'
-            If blank, then the absolute path of 'path' is set as '@id.'
+        path (Path | str): The path to the file.
+        root_path (Path | str, optional): The root path. Defaults to "".
+
+    Raises:
+        TypeError: If 'path' is not a file path.
 
     Returns:
-        Dict[str, Any]: A dictionary containing metadata for the file or directory.
-        The metadata includes:
-            - "type": The type of the path, either 'file' or 'directory'.
-            - "name": The name of the file or directory.
-            - "size": The size of the file in bytes.
-            - "creation_datetime": The creation time of the file or directory 
-            formatted as a string.
-            - "modification_datetime": The last modification time of
-            the file or directory formatted as a string.
+        Dict[str, Any]: A dictionary containing the file's metadata.  The dictionary includes:
+            - `@id`: A unique identifier for the file.
+            - `type`: Always "File".
+            - `parent`: A dictionary containing the parent directory's id
+                (or an empty dictionary if it's the root).
+            - `basename`: The filename with extension.
+            - `name`: The filename without extension.
+            - `extension`: The file extension.
+            - `contentSize`: The file size in bytes.
+            - `dateCreated`: The file creation date and time in ISO 8601 format.
+            - `dateModified`: The file last modification date and time in ISO 8601 format.
+
     """
     if isinstance(path, str):
         path = Path(path)
+    if not path.is_file():
+        raise TypeError("'path' must be a file path.")
+
     dst: Dict[str, Any] = {}
-
     dst["@id"] = generate_id(path, root_path)
-
-    dst["type"] = "Unknown"
-    if path.is_file():
-        dst["type"] = "File"
-    elif path.is_dir():
-        dst["type"] = "Directory"
-
+    dst["type"] = "File"
     if str(path) == str(root_path):
         dst["parent"] = {}
     else:
         dst["parent"] = {"@id": generate_id(path.parent, root_path)}
     dst["basename"] = path.name
-    if path.is_file():
-        dst["name"] = os.path.splitext(path.name)[0]
-        dst["extension"] = os.path.splitext(path.name)[1]
-        dst["contentSize"] = path.stat().st_size
-    if path.is_dir():
-        dst["hasPart"] = []
-        part: List[str] = [generate_id(p_, root_path) for p_ in path.iterdir()]
-        if part:
-            dst["hasPart"] = [{"@id": p_} for p_ in part]
+    dst["name"] = os.path.splitext(path.name)[0]
+    dst["extension"] = os.path.splitext(path.name)[1]
+    dst["contentSize"] = path.stat().st_size
     dst["dateCreated"] = datetime.datetime.fromtimestamp(
         path.stat().st_ctime
     ).strftime(DATETIME_FMT)
     dst["dateModified"] = datetime.datetime.fromtimestamp(
         path.stat().st_mtime
     ).strftime(DATETIME_FMT)
+
+    return dst
+
+
+def get_metadata_of_single_directory(
+    path: Path | str, root_path: Path | str = ""
+) -> Dict[str, Any]:
+    """Generates metadata for a single directory.
+
+    Args:
+        path (Path | str): The path to the directory.
+        root_path (Path | str, optional): The root path. Defaults to "".
+
+    Raises:
+        TypeError: If 'path' is not a directory path.
+
+    Returns:
+        Dict[str, Any]: A dictionary containing the directory's metadata. The dictionary includes:
+            - `@id`: A unique identifier for the directory.
+            - `type`: Always "Directory".
+            - `parent`: A dictionary containing the parent directory's id 
+                (or an empty dictionary if it's the root).
+            - `basename`: The directory name.
+            - `hasPart`: A list of dictionaries, each containing
+                the `@id` of a file or subdirectory within this directory.
+            - `dateCreated`: The directory creation date and time in ISO 8601 format.
+            - `dateModified`: The directory last modification date and time in ISO 8601 format.
+
+    """
+    if isinstance(path, str):
+        path = Path(path)
+    if not path.is_dir():
+        raise TypeError("'path' must be a directory path.")
+
+    dst: Dict[str, Any] = {}
+    dst["@id"] = generate_id(path, root_path)
+    dst["type"] = "Directory"
+    if str(path) == str(root_path):
+        dst["parent"] = {}
+    else:
+        dst["parent"] = {"@id": generate_id(path.parent, root_path)}
+    dst["basename"] = path.name
+    part: List[str] = [generate_id(p_, root_path) for p_ in path.iterdir()]
+    dst["hasPart"] = [{"@id": p_} for p_ in part]
+    dst["dateCreated"] = datetime.datetime.fromtimestamp(
+        path.stat().st_ctime
+    ).strftime(DATETIME_FMT)
+    dst["dateModified"] = datetime.datetime.fromtimestamp(
+        path.stat().st_mtime
+    ).strftime(DATETIME_FMT)
+
+    return dst
+
+
+def _get_metadata_list(src: Path, root_path: Path | str = "") -> List[Dict[str, Any]]:
+    dst: List[Dict[str, Any]] = []
+    if src.is_file():
+        dst.append(
+            get_metadata_of_single_file(src, root_path=root_path)
+        )
+        return dst
+    dst.append(
+        get_metadata_of_single_directory(src, root_path=root_path)
+    )
+    for path_ in src.iterdir():
+        dst.extend(_get_metadata_list(path_, root_path=root_path))
     return dst
 
 
@@ -121,17 +179,6 @@ def get_metadata_of_files_in_list_format(
         containing the metadata for the files and directories within it. If `include_root_path`
         is `True`, the 'root_path' key will hold the string representation of the root directory.
     """
-    def _get_metadata_list(src: Path, root_path: Path | str = "") -> List[Dict[str, Any]]:
-        dst: List[Dict[str, Any]] = []
-        dst.append(
-            get_metadata_of_single_file(src, root_path=root_path)
-        )
-        if src.is_file():
-            return dst
-        for path_ in src.iterdir():
-            dst.extend(_get_metadata_list(path_, root_path=root_path))
-        return dst
-
     dst: Dict[str, Any] = {}
     if isinstance(src, str):
         src = Path(src)
