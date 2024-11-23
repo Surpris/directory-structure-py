@@ -1,0 +1,24 @@
+{
+    "contents": {
+        ".": [
+            {
+                "data": [
+                    "data/data_001.csv",
+                    "data/data_002.csv"
+                ]
+            },
+            {
+                "hogehoge": [
+                    {
+                        "hogehoge/data": [
+                            "hogehoge/data/data_002.csv",
+                            "hogehoge/data/data_003.csv"
+                        ]
+                    },
+                    "hogehoge/fuga.txt"
+                ]
+            },
+            "readme.md"
+        ]
+    }
+}
