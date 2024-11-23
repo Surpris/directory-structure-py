@@ -23,15 +23,22 @@ def generate_id(path: Path | str, root_path: Path | str = "") -> str:
     Returns:
         A string representing the unique ID of the path.
     """
+    if isinstance(path, str):
+        path = Path(path)
+
     if not root_path:
         if path.is_dir():
             return str(path.absolute().as_posix()) + "/"
         return str(path.absolute().as_posix())
+    if isinstance(root_path, str):
+        root_path = Path(root_path)
     if path == root_path:
-        return "./"
+        if path.is_dir():
+            return f"{path.name}/"
+        return path.name
     if path.is_dir():
-        return str(path.relative_to(root_path).as_posix()) + "/"
-    return str(path.relative_to(root_path).as_posix())
+        return f"{root_path.name}/{str(path.relative_to(root_path).as_posix())}/"
+    return f"{root_path.name}/{str(path.relative_to(root_path).as_posix())}"
 
 
 def get_metadata_of_single_file(path: Path | str, root_path: Path | str = "") -> Dict[str, Any]:
@@ -117,7 +124,9 @@ def get_metadata_of_files_in_list_format(
     """
     def _get_metadata_list(src: Path, root_path: Path | str = "") -> List[Dict[str, Any]]:
         dst: List[Dict[str, Any]] = []
-        dst.append(get_metadata_of_single_file(src, root_path=root_path))
+        dst.append(
+            get_metadata_of_single_file(src, root_path=root_path)
+        )
         if src.is_file():
             return dst
         for path_ in src.iterdir():

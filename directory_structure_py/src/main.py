@@ -9,7 +9,7 @@ from logging import getLogger, config, Logger
 import os
 from pathlib import Path
 import time
-from typing import Dict, Any
+from typing import Dict, Any, List
 from directory_structure_py.src.constants import (
     DEFAULT_OUTPUT_NAME, ENSURE_ASCII, JSON_OUTPUT_INDENT
 )
@@ -43,7 +43,7 @@ def set_logger(config_path: str, output_log_path: str) -> Logger:
     return logger
 
 
-def save(data: Dict[str, Any], dst: str) -> None:
+def save_dict_to_json(data: Dict[str, Any], dst: str) -> None:
     """Saves a dictionary to a JSON file.
 
     Args:
@@ -57,6 +57,11 @@ def save(data: Dict[str, Any], dst: str) -> None:
             indent=JSON_OUTPUT_INDENT,
             ensure_ascii=ENSURE_ASCII
         )
+
+
+def save_nested_list_to_tsv(data: List[List[str]], dst: str) -> None:
+    with open(dst, "w", encoding="utf-8") as ff:
+        ff.writelines(["\t".join(l) + "\n" for l in data])
 
 
 def main(
@@ -104,20 +109,18 @@ def main(
     if not os.path.exists(os.path.dirname(dst)):
         os.makedirs(os.path.dirname(dst))
     if not in_rocrate:
-        save(data, dst)
+        save_dict_to_json(data, dst)
     else:
         data["root_path"] = f"{str(Path(src).absolute().as_posix())}"
         crate: ROCrate = convert_mata_list_json_to_rocrate(data)
         crate.metadata.write(os.path.dirname(dst))
-        if os.path.exists(dst):
-            os.remove(dst)
-        os.rename(
-            os.path.join(os.path.dirname(dst), crate.metadata.BASENAME),
-            dst
-        )
     if to_tsv:
         logger.info("generate a TSV-format file.")
-        convert_meta_list_json_to_tsv(dst)
+        data_tsv = convert_meta_list_json_to_tsv(data)
+        dst_tsv: str = dst.replace(
+            os.path.splitext(dst)[-1], ".tsv"
+        )
+        save_nested_list_to_tsv(data_tsv, dst_tsv)
     if in_tree:
         logger.info("convert the metadata format from list to tree.")
         data = list2tree(data, structure_only)
@@ -125,12 +128,7 @@ def main(
             os.path.splitext(dst)[-1],
             f"_tree{os.path.splitext(dst)[-1]}"
         )
-        with open(dst_tree, "w", encoding="utf-8") as ff:
-            json.dump(
-                data, ff,
-                indent=JSON_OUTPUT_INDENT,
-                ensure_ascii=ENSURE_ASCII
-            )
+        save_dict_to_json(data, dst_tree)
     logger.info("ended.")
     logger.info("elapsed time: %.*f sec.", 3, time.time() - st)
 

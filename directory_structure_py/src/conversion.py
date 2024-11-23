@@ -3,64 +3,39 @@
 
 import datetime
 import json
-import os
 from pathlib import Path
 from typing import Dict, Any, List
 from rocrate.rocrate import ROCrate
 from directory_structure_py.src.constants import OUTPUT_ROOT_KEY, DATETIME_FMT
 
 
-def convert_meta_list_json_to_tsv(src: str, dst: str = "") -> None:
-    """
-    Converts a JSON file to a TSV (Tab-Separated Values) file.
-
-    The function reads a JSON file specified by `src`, extracts its contents,
-    and writes them into a TSV file. 
-    If the `dst` (destination) parameter is not provided, the output TSV file will
-    have the same name as the source file but with a `.tsv` extension.
-
-    The JSON structure is expected to contain a OUTPUT_ROOT_KEY key,
-    which holds a list of dictionaries. 
-    The function gathers all the unique keys from these dictionaries to form the columns of
-    the TSV file. 
-    For each row (content), it writes values corresponding to these keys. If a key is missing in
-    a particular row, an empty string is used.
-
-    Args:
-        src (str): Path to the source JSON file.
-        dst (str, optional): Path to the destination TSV file.
-            Defaults to a file with the same name as `src` but with a `.tsv` extension.
-
-    Returns:
-        None: The function writes directly to a file and does not return a value.
-
-    Raises:
-        FileNotFoundError: If the source file does not exist.
-        JSONDecodeError: If the source file is not a valid JSON.
-        OSError: If there are issues reading from or writing to the file system.
-
-    Example:
-        convert_meta_list_json_to_tsv("data.json", "output.tsv")
-    """
-
+def convert_meta_list_json_to_tsv(src: Dict[str, Any]) -> List[List[str]]:
     buff: List[List[int | str]] = []
     columns: List[str] = []
+
+    # extract all keys
+    columns: List[str] = []
+    for content in src[OUTPUT_ROOT_KEY]:
+        columns.extend(list(content.keys()))
+    columns = sorted(list(set(columns)))
+
+    # mapping
+    buff: List[List[int | str]] = []
+    for content in src[OUTPUT_ROOT_KEY]:
+        buff.append([
+            str(content.get(key, "")) for key in columns
+        ])
+    dst: List[str] = [columns]
+    dst.extend(buff)
+    return dst
+
+
+def convert_meta_list_json_to_tsv_from_file(src: str) -> List[List[str]]:
+    output: List[str] = []
     with open(src, "r", encoding="utf-8") as ff:
         data: Dict[str, Any] = json.load(ff)
-        # extract all keys
-        columns: List[str] = []
-        for content in data[OUTPUT_ROOT_KEY]:
-            columns.extend(list(content.keys()))
-        columns = sorted(list(set(columns)))
-        # mapping
-        buff: List[List[int | str]] = []
-        for content in data[OUTPUT_ROOT_KEY]:
-            buff.append([str(content.get(key, "")) for key in columns])
-    if not dst:
-        dst = src.replace(os.path.splitext(src)[-1], ".tsv")
-    with open(dst, "w", encoding="utf-8") as ff:
-        ff.write("\t".join(columns) + "\n")
-        ff.writelines(["\t".join(l) + "\n" for l in buff])
+        output = convert_meta_list_json_to_tsv(data)
+    return output
 
 
 def _construct_tree(
@@ -105,7 +80,9 @@ def _construct_tree(
                     _construct_tree(node, src, structure_only)
                 )
     tree_["hasPart"] = buff
-    return {tree_["@id"]: tree_["hasPart"]}
+    if structure_only:
+        return {tree_["@id"]: tree_["hasPart"]}
+    return {tree_["@id"]: tree_}
 
 
 def list2tree(src: Dict[str, Any], structure_only: bool = False) -> Dict[str, Any]:
@@ -202,8 +179,7 @@ def convert_mata_list_json_to_rocrate(
                     properties[k] = v
                 else:
                     properties[k] = v
-        id_ = f"{os.path.basename(src['root_path'])}/{metadata['@id']}"
         for k, v in properties.items():
-            crate.get(id_)[k] = v
+            crate.get(metadata['@id'])[k] = v
     crate.datePublished = datetime.datetime.now().strftime(DATETIME_FMT)
     return crate
