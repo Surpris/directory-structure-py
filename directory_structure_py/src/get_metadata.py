@@ -69,12 +69,11 @@ def get_metadata_of_single_file(path: Path | str, root_path: Path | str = "") ->
 
     dst["@id"] = generate_id(path, root_path)
 
+    dst["type"] = "Unknown"
     if path.is_file():
         dst["type"] = "File"
     elif path.is_dir():
         dst["type"] = "Directory"
-    else:
-        dst["type"] = "Unknown"
 
     if str(path) == str(root_path):
         dst["parent"] = {}
@@ -84,13 +83,12 @@ def get_metadata_of_single_file(path: Path | str, root_path: Path | str = "") ->
     if path.is_file():
         dst["name"] = os.path.splitext(path.name)[0]
         dst["extension"] = os.path.splitext(path.name)[1]
-    dst["hasPart"] = []
+        dst["contentSize"] = path.stat().st_size
     if path.is_dir():
+        dst["hasPart"] = []
         part: List[str] = [generate_id(p_, root_path) for p_ in path.iterdir()]
         if part:
             dst["hasPart"] = [{"@id": p_} for p_ in part]
-    if path.is_file():
-        dst["contentSize"] = path.stat().st_size
     dst["dateCreated"] = datetime.datetime.fromtimestamp(
         path.stat().st_ctime
     ).strftime(DATETIME_FMT)
