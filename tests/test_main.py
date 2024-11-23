@@ -10,19 +10,9 @@ from directory_structure_py.src.main import list2tree
 def test_list2tree():
     expected = {
         "contents": {
-            "@id": ".",
-            "type": "Directory",
-            "parent": {},
-            "basename": "sample",
-            "hasPart": [
+            ".": [
                 {
-                    "@id": "data",
-                    "type": "Directory",
-                    "parent": {
-                        "@id": "."
-                    },
-                    "basename": "data",
-                    "hasPart": [
+                    "data": [
                         {
                             "@id": "data/data_001.csv",
                             "type": "File",
@@ -49,27 +39,12 @@ def test_list2tree():
                             "creationDatetime": "2024-09-25T12:17:48",
                             "modificationDatetime": "2024-09-25T12:18:05"
                         }
-                    ],
-                    "contentSize": 0,
-                    "creationDatetime": "2024-09-25T12:17:06",
-                    "modificationDatetime": "2024-09-25T12:17:53"
+                    ]
                 },
                 {
-                    "@id": "hogehoge",
-                    "type": "Directory",
-                    "parent": {
-                        "@id": "."
-                    },
-                    "basename": "hogehoge",
-                    "hasPart": [
+                    "hogehoge": [
                         {
-                            "@id": "hogehoge/data",
-                            "type": "Directory",
-                            "parent": {
-                                "@id": "hogehoge"
-                            },
-                            "basename": "data",
-                            "hasPart": [
+                            "hogehoge/data": [
                                 {
                                     "@id": "hogehoge/data/data_002.csv",
                                     "type": "File",
@@ -96,10 +71,7 @@ def test_list2tree():
                                     "creationDatetime": "2024-11-10T16:40:07",
                                     "modificationDatetime": "2024-11-10T16:40:30"
                                 }
-                            ],
-                            "contentSize": 0,
-                            "creationDatetime": "2024-11-10T16:39:53",
-                            "modificationDatetime": "2024-11-10T16:40:12"
+                            ]
                         },
                         {
                             "@id": "hogehoge/fuga.txt",
@@ -114,10 +86,7 @@ def test_list2tree():
                             "creationDatetime": "2024-09-25T12:16:51",
                             "modificationDatetime": "2024-09-25T12:16:55"
                         }
-                    ],
-                    "contentSize": 0,
-                    "creationDatetime": "2024-09-25T12:16:46",
-                    "modificationDatetime": "2024-11-10T16:39:53"
+                    ]
                 },
                 {
                     "@id": "readme.md",
@@ -132,10 +101,7 @@ def test_list2tree():
                     "creationDatetime": "2024-09-25T12:16:19",
                     "modificationDatetime": "2024-11-10T17:42:20"
                 }
-            ],
-            "contentSize": 4096,
-            "creationDatetime": "2024-09-25T12:16:08",
-            "modificationDatetime": "2024-11-10T18:12:28"
+            ]
         }
     }
     src = {
@@ -159,7 +125,7 @@ def test_list2tree():
                 ],
                 "contentSize": 4096,
                 "creationDatetime": "2024-09-25T12:16:08",
-                "modificationDatetime": "2024-11-10T18:12:28"
+                "modificationDatetime": "2024-11-23T12:15:26"
             },
             {
                 "@id": "data",
