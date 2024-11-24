@@ -16,6 +16,7 @@ from directory_structure_py.src.constants import (
 )
 from directory_structure_py.src.get_metadata import (
     get_metadata_of_files_in_list_format,
+    update_statistical_info_to_metadata_list
 )
 from directory_structure_py.src.conversion import (
     list2tree,
@@ -108,6 +109,7 @@ def main(
         data: Dict[str, Any] = get_metadata_of_files_in_list_format(
             src, include_root_path
         )
+        data = update_statistical_info_to_metadata_list(data)
         if not os.path.exists(os.path.dirname(dst)):
             os.makedirs(os.path.dirname(dst))
         if not in_rocrate:

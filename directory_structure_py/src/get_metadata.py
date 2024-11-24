@@ -129,8 +129,22 @@ def get_metadata_of_single_directory(
     else:
         dst["parent"] = {"@id": generate_id(path.parent, root_path)}
     dst["basename"] = path.name
-    part: List[str] = [generate_id(p_, root_path) for p_ in path.iterdir()]
-    dst["hasPart"] = [{"@id": p_} for p_ in part]
+    dst["name"] = path.name
+    dst["extension"] = [
+        os.path.splitext(p_.name)[1] for p_ in path.iterdir()
+        if p_.is_file()
+    ]
+    dst["contentSize"] = sum(
+        p_.stat().st_size for p_ in path.iterdir() if p_.is_file()
+    )
+    dst["hasPart"] = [
+        {"@id": generate_id(p_, root_path)}
+        for p_ in path.iterdir()
+    ]
+    dst["numberOfContents"] = len(dst["hasPart"])
+    dst["numberOfFileContents"] = len([
+        p_ for p_ in path.iterdir() if p_.is_file()
+    ])
     dst["dateCreated"] = datetime.datetime.fromtimestamp(
         path.stat().st_ctime
     ).strftime(DATETIME_FMT)
@@ -189,3 +203,32 @@ def get_metadata_of_files_in_list_format(
     dst[OUTPUT_ROOT_KEY] = _get_metadata_list(src, root_path=src)
     dst["dateCreated"] = datetime.datetime.now().strftime(DATETIME_FMT)
     return dst
+
+
+def _update_statistical_info_of_directory(
+    src: Dict[str, Any], metadata_list: List[Dict]
+) -> Dict[str, Any]:
+    for part in src["hasPart"]:
+        for node in metadata_list:
+            if node["type"] == "File":
+                continue
+            if node["@id"] == part["@id"] and node["parent"]["@id"] == src["@id"]:
+                node = _update_statistical_info_of_directory(
+                    node, metadata_list
+                )
+                src["contentSize"] += node["contentSize"]
+                src["extension"].extend(node["extension"])
+                src["numberOfContents"] += node["numberOfContents"]
+                src["numberOfFileContents"] += node["numberOfFileContents"]
+    return src
+
+
+def update_statistical_info_to_metadata_list(src: Dict[str, Any]) -> Dict[str, Any]:
+    contents: List[Dict[str, Any]] = src[OUTPUT_ROOT_KEY]
+    root: Dict[str, Any] = {}
+    for node in contents:
+        if not node["parent"]:
+            root = node
+            break
+    _ =  _update_statistical_info_of_directory(root, contents)
+    return src
