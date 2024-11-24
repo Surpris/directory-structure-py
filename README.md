@@ -69,7 +69,7 @@ Python function collecting the metadata of a directory and its contents.
 | `convert_meta_list_json_to_tsv_from_file` | Converts a JSON file containing a list of dictionaries into a TSV-compatible list of lists. |
 | `list2tree`                               | Constructs a hierarchical tree structure from a metadata dictionary.                        |
 | `list2tree_from_file`                     | Constructs a hierarchical tree structure from a JSON metadata file.                         |
-| `convert_mata_list_json_to_rocrate`       | Converts a metadata list JSON structure into a Research Object Crate (ROCrate).             |
+| `convert_meta_list_json_to_rocrate`       | Converts a metadata list JSON structure into a Research Object Crate (ROCrate).             |
 
 # Installation
 
@@ -90,6 +90,10 @@ pip install .
 ## portable (only for Windows)
 
 The portable file is also provided only for Windows. You can download it via the release section and decompress it.
+
+### Remarks
+
+In v0.2.0, the option `preview_template_path` must be set when outputting the RO-Crate-format metadata due to a bug that the executable file cannot open the inherent template file because of Permission Error.
 
 # Usage
 
