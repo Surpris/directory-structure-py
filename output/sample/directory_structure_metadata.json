@@ -6,6 +6,8 @@
             "type": "Directory",
             "parent": {},
             "basename": "sample",
+            "name": "sample",
+            "contentSize": 364,
             "hasPart": [
                 {
                     "@id": "sample/data/"
@@ -17,6 +19,18 @@
                     "@id": "sample/readme.md"
                 }
             ],
+            "numberOfContents": 9,
+            "numberOfFileContents": 6,
+            "numberOfFileContentsPerExtension": {
+                ".md": 1,
+                ".csv": 4,
+                ".txt": 1
+            },
+            "extension": [
+                ".md",
+                ".csv",
+                ".txt"
+            ],
             "dateCreated": "2024-09-25T12:16:08",
             "dateModified": "2024-11-23T12:15:26"
         },
@@ -27,6 +41,8 @@
                 "@id": "sample/"
             },
             "basename": "data",
+            "name": "data",
+            "contentSize": 83,
             "hasPart": [
                 {
                     "@id": "sample/data/data_001.csv"
@@ -34,6 +50,14 @@
                 {
                     "@id": "sample/data/data_002.csv"
                 }
+            ],
+            "numberOfContents": 2,
+            "numberOfFileContents": 2,
+            "numberOfFileContentsPerExtension": {
+                ".csv": 2
+            },
+            "extension": [
+                ".csv"
             ],
             "dateCreated": "2024-09-25T12:17:06",
             "dateModified": "2024-09-25T12:17:53"
@@ -71,6 +95,8 @@
                 "@id": "sample/"
             },
             "basename": "hogehoge",
+            "name": "hogehoge",
+            "contentSize": 94,
             "hasPart": [
                 {
                     "@id": "sample/hogehoge/data/"
@@ -78,6 +104,16 @@
                 {
                     "@id": "sample/hogehoge/fuga.txt"
                 }
+            ],
+            "numberOfContents": 4,
+            "numberOfFileContents": 3,
+            "numberOfFileContentsPerExtension": {
+                ".txt": 1,
+                ".csv": 2
+            },
+            "extension": [
+                ".txt",
+                ".csv"
             ],
             "dateCreated": "2024-09-25T12:16:46",
             "dateModified": "2024-11-10T16:39:53"
@@ -89,6 +125,8 @@
                 "@id": "sample/hogehoge/"
             },
             "basename": "data",
+            "name": "data",
+            "contentSize": 88,
             "hasPart": [
                 {
                     "@id": "sample/hogehoge/data/data_002.csv"
@@ -96,6 +134,14 @@
                 {
                     "@id": "sample/hogehoge/data/data_003.csv"
                 }
+            ],
+            "numberOfContents": 2,
+            "numberOfFileContents": 2,
+            "numberOfFileContentsPerExtension": {
+                ".csv": 2
+            },
+            "extension": [
+                ".csv"
             ],
             "dateCreated": "2024-11-10T16:39:53",
             "dateModified": "2024-11-10T16:40:12"
@@ -153,5 +199,5 @@
             "dateModified": "2024-11-10T17:42:20"
         }
     ],
-    "dateCreated": "2024-11-23T19:50:14"
+    "dateCreated": "2024-11-24T21:04:32"
 }
