@@ -117,7 +117,10 @@ def main(
         else:
             data["root_path"] = f"{str(Path(src).absolute().as_posix())}"
             crate: ROCrate = convert_meta_list_json_to_rocrate(data)
+            # crate.write_zip(os.path.dirname(dst))
+            # crate.write(os.path.dirname(dst))
             crate.metadata.write(os.path.dirname(dst))
+            crate.preview.write(os.path.dirname(dst))
         if to_tsv:
             logger.info("generate a TSV-format file.")
             data_tsv = convert_meta_list_json_to_tsv(data)

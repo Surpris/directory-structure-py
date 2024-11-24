@@ -234,7 +234,7 @@ def convert_meta_list_json_to_rocrate(
                 properties[k] = v
         return properties
 
-    crate = ROCrate()
+    crate = ROCrate(gen_preview=True)
     _ = crate.add_tree(src["root_path"])
     meta_list: List[Dict[str, Any]] = src["@graph"]
     for metadata in meta_list:
