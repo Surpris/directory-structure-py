@@ -5,8 +5,9 @@ import datetime
 import json
 from pathlib import Path
 from typing import Dict, Any, List
-from rocrate.rocrate import ROCrate
+# from rocrate.rocrate import ROCrate
 from directory_structure_py.src.constants import OUTPUT_ROOT_KEY, DATETIME_FMT
+from directory_structure_py.src.rocrate_models import ROCrate
 
 
 def convert_meta_list_json_to_tsv(src: Dict[str, Any]) -> List[List[str]]:

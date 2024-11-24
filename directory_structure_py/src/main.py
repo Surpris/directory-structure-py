@@ -23,7 +23,7 @@ from directory_structure_py.src.conversion import (
     convert_meta_list_json_to_tsv,
     convert_meta_list_json_to_rocrate
 )
-from rocrate.rocrate import ROCrate
+from directory_structure_py.src.rocrate_models import ROCrate
 
 LOG_CONF_PATH: str = os.path.join(
     os.path.dirname(__file__), "../config/logging.json"
