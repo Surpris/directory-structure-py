@@ -35,6 +35,9 @@ if __name__ == "__main__":
     parser.add_argument(
         "--log_output_path", dest="log_output_path", type=str, default=LOG_OUTPUT_PATH
     )
+    parser.add_argument(
+        "--preview_template_path", dest="preview_template_path", type=str, default=None
+    )
     args = parser.parse_args()
     if not args.dst:
         if os.path.isdir(args.src):
@@ -49,5 +52,6 @@ if __name__ == "__main__":
         args.src, args.dst, args.include_root_path,
         args.in_rocrate, args.to_tsv,
         args.in_tree, args.structure_only,
-        args.log_config_path, args.log_output_path
+        args.log_config_path, args.log_output_path,
+        args.preview_template_path
     )

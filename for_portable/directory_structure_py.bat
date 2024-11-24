@@ -4,4 +4,5 @@
     --to_tsv ^
     --in_tree --structure_only ^
     --log_config_path %~dp0\logging.json ^
-    --log_output_path %~dp0\log\app.log
+    --log_output_path %~dp0\log\app.log ^
+    --preview_template_path %~dp0\preview_template.html.j2
