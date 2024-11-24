@@ -4,6 +4,7 @@ get the directory tree
 """
 
 import datetime
+import importlib.resources
 import json
 from logging import getLogger, config, Logger
 import os
@@ -11,25 +12,30 @@ from pathlib import Path
 import time
 import traceback
 from typing import Dict, Any, List
-from directory_structure_py.src.constants import (
+from directory_structure_py.constants import (
     DEFAULT_OUTPUT_NAME, ENSURE_ASCII, JSON_OUTPUT_INDENT
 )
-from directory_structure_py.src.get_metadata import (
+from directory_structure_py.get_metadata import (
     get_metadata_of_files_in_list_format,
+    update_statistical_info_to_metadata_list
 )
-from directory_structure_py.src.conversion import (
+from directory_structure_py.conversion import (
     list2tree,
     convert_meta_list_json_to_tsv,
-    convert_mata_list_json_to_rocrate
+    convert_meta_list_json_to_rocrate
 )
+from directory_structure_py.rocrate_models import Preview
 from rocrate.rocrate import ROCrate
 
-LOG_CONF_PATH: str = os.path.join(
-    os.path.dirname(__file__), "../config/logging.json"
-)
+# LOG_CONF_PATH: str = os.path.join(
+#     os.path.dirname(__file__), "config/logging.json"
+# )
+LOG_CONF_PATH: str = importlib.resources.files(
+    __package__
+).joinpath("config/logging.json")
 LOG_OUTPUT_PATH: str = os.path.join(
     os.path.dirname(__file__),
-    f"../log/directory_structure_py_{datetime.datetime.now().strftime('%Y%m%d%H%M%S')}.log"
+    f"log/directory_structure_py_{datetime.datetime.now().strftime('%Y%m%d%H%M%S')}.log"
 )
 
 
@@ -73,7 +79,8 @@ def main(
     in_tree: bool = False,
     structure_only: bool = False,
     log_config_path: str = LOG_CONF_PATH,
-    log_output_path: str = LOG_OUTPUT_PATH
+    log_output_path: str = LOG_OUTPUT_PATH,
+    preview_template_path: str = None
 ):
     """
     Collects metadata from the source directory and writes it to a JSON file.
@@ -108,14 +115,19 @@ def main(
         data: Dict[str, Any] = get_metadata_of_files_in_list_format(
             src, include_root_path
         )
+        data = update_statistical_info_to_metadata_list(data)
         if not os.path.exists(os.path.dirname(dst)):
             os.makedirs(os.path.dirname(dst))
         if not in_rocrate:
             save_dict_to_json(data, dst)
         else:
             data["root_path"] = f"{str(Path(src).absolute().as_posix())}"
-            crate: ROCrate = convert_mata_list_json_to_rocrate(data)
+            crate: ROCrate = convert_meta_list_json_to_rocrate(data)
+            _ = crate.add(Preview(crate))
+            # crate.write_zip(os.path.dirname(dst))
+            # crate.write(os.path.dirname(dst))
             crate.metadata.write(os.path.dirname(dst))
+            crate.preview.write(os.path.dirname(dst), preview_template_path)
         if to_tsv:
             logger.info("generate a TSV-format file.")
             data_tsv = convert_meta_list_json_to_tsv(data)
@@ -166,6 +178,9 @@ if __name__ == "__main__":
     parser.add_argument(
         "--log_output_path", dest="log_output_path", type=str, default=LOG_OUTPUT_PATH
     )
+    parser.add_argument(
+        "--preview_template_path", dest="preview_template_path", type=str, default=None
+    )
     args = parser.parse_args()
     if not args.dst:
         if os.path.isdir(args.src):
@@ -180,5 +195,6 @@ if __name__ == "__main__":
         args.src, args.dst, args.include_root_path,
         args.in_rocrate, args.to_tsv,
         args.in_tree, args.structure_only,
-        args.log_config_path, args.log_output_path
+        args.log_config_path, args.log_output_path,
+        args.preview_template_path
     )

@@ -4,7 +4,7 @@ test code
 """
 
 import pytest
-from directory_structure_py.src.main import list2tree
+from directory_structure_py.conversion import list2tree
 
 
 def test_list2tree():

@@ -6,7 +6,8 @@ import json
 from pathlib import Path
 from typing import Dict, Any, List
 from rocrate.rocrate import ROCrate
-from directory_structure_py.src.constants import OUTPUT_ROOT_KEY, DATETIME_FMT
+from directory_structure_py.constants import OUTPUT_ROOT_KEY, DATETIME_FMT
+# from directory_structure_py.rocrate_models import ROCrate
 
 
 def convert_meta_list_json_to_tsv(src: Dict[str, Any]) -> List[List[str]]:
@@ -189,7 +190,7 @@ def list2tree_from_file(src: Path | str, structure_only: bool = False) -> Dict[s
         return list2tree(json.load(ff), structure_only)
 
 
-def convert_mata_list_json_to_rocrate(
+def convert_meta_list_json_to_rocrate(
     src: Dict[str, str | int | List[Dict[str, Any]]]
 ) -> ROCrate:
     """Converts a metadata list JSON structure into a Research Object Crate (ROCrate).
@@ -210,30 +211,43 @@ def convert_mata_list_json_to_rocrate(
         TypeError: If the input data is not in the expected format.
 
     """
-    crate = ROCrate()
+    def _get_dictionary_props(meta_: Dict[str, Any]) -> Dict[str, Any]:
+        properties = {}
+        for k, v in meta_.items():
+            if k in ["@id", "parent", "type"]:
+                continue
+            if k == "hasPart":
+                properties[k] = [p_["@id"] for p_ in v]
+            elif k == "basename":
+                properties["name"] = v
+            else:
+                properties[k] = v
+        return properties
+
+    def _get_file_props(meta_: Dict[str, Any]) -> Dict[str, Any]:
+        properties = {}
+        for k, v in meta_.items():
+            if k in ["@id", "parent", "basename", "type"]:
+                continue
+            if k == "extension":
+                properties[k] = v
+            else:
+                properties[k] = v
+        return properties
+
+    crate = ROCrate(gen_preview=False)
     _ = crate.add_tree(src["root_path"])
     meta_list: List[Dict[str, Any]] = src["@graph"]
     for metadata in meta_list:
         properties = {}
         if metadata["type"] == "Directory":
-            for k, v in metadata.items():
-                if k in ["@id", "parent", "type"]:
-                    continue
-                if k == "hasPart":
-                    properties[k] = [p_["@id"] for p_ in v]
-                elif k == "basename":
-                    properties["name"] = v
-                else:
-                    properties[k] = v
+            properties = _get_dictionary_props(metadata)
         else:
-            for k, v in metadata.items():
-                if k in ["@id", "parent", "basename", "type"]:
-                    continue
-                if k == "extension":
-                    properties[k] = v
-                else:
-                    properties[k] = v
+            properties = _get_file_props(metadata)
         for k, v in properties.items():
-            crate.get(metadata['@id'])[k] = v
+            if isinstance(v, dict) and "@id" not in list(v.keys()):
+                crate.get(metadata['@id'])[k] = str(v)
+            else:
+                crate.get(metadata['@id'])[k] = v
     crate.datePublished = datetime.datetime.now().strftime(DATETIME_FMT)
     return crate

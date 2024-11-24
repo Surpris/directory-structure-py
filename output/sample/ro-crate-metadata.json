@@ -4,7 +4,7 @@
         {
             "@id": "./",
             "@type": "Dataset",
-            "datePublished": "2024-11-23T19:50:08",
+            "datePublished": "2024-11-24T21:04:57",
             "hasPart": [
                 {
                     "@id": "sample/"
@@ -51,25 +51,41 @@
         {
             "@id": "sample/",
             "@type": "Dataset",
+            "contentSize": 364,
             "dateCreated": "2024-09-25T12:16:08",
             "dateModified": "2024-11-23T12:15:26",
+            "extension": [
+                ".md",
+                ".csv",
+                ".txt"
+            ],
             "hasPart": [
                 "sample/data/",
                 "sample/hogehoge/",
                 "sample/readme.md"
             ],
-            "name": "sample"
+            "name": "sample",
+            "numberOfContents": 9,
+            "numberOfFileContents": 6,
+            "numberOfFileContentsPerExtension": "{'.md': 1, '.csv': 4, '.txt': 1}"
         },
         {
             "@id": "sample/data/",
             "@type": "Dataset",
+            "contentSize": 83,
             "dateCreated": "2024-09-25T12:17:06",
             "dateModified": "2024-09-25T12:17:53",
+            "extension": [
+                ".csv"
+            ],
             "hasPart": [
                 "sample/data/data_001.csv",
                 "sample/data/data_002.csv"
             ],
-            "name": "data"
+            "name": "data",
+            "numberOfContents": 2,
+            "numberOfFileContents": 2,
+            "numberOfFileContentsPerExtension": "{'.csv': 2}"
         },
         {
             "@id": "sample/data/data_001.csv",
@@ -92,24 +108,39 @@
         {
             "@id": "sample/hogehoge/",
             "@type": "Dataset",
+            "contentSize": 94,
             "dateCreated": "2024-09-25T12:16:46",
             "dateModified": "2024-11-10T16:39:53",
+            "extension": [
+                ".txt",
+                ".csv"
+            ],
             "hasPart": [
                 "sample/hogehoge/data/",
                 "sample/hogehoge/fuga.txt"
             ],
-            "name": "hogehoge"
+            "name": "hogehoge",
+            "numberOfContents": 4,
+            "numberOfFileContents": 3,
+            "numberOfFileContentsPerExtension": "{'.txt': 1, '.csv': 2}"
         },
         {
             "@id": "sample/hogehoge/data/",
             "@type": "Dataset",
+            "contentSize": 88,
             "dateCreated": "2024-11-10T16:39:53",
             "dateModified": "2024-11-10T16:40:12",
+            "extension": [
+                ".csv"
+            ],
             "hasPart": [
                 "sample/hogehoge/data/data_002.csv",
                 "sample/hogehoge/data/data_003.csv"
             ],
-            "name": "data"
+            "name": "data",
+            "numberOfContents": 2,
+            "numberOfFileContents": 2,
+            "numberOfFileContentsPerExtension": "{'.csv': 2}"
         },
         {
             "@id": "sample/hogehoge/data/data_002.csv",
@@ -146,6 +177,13 @@
             "dateModified": "2024-11-10T17:42:20",
             "extension": ".md",
             "name": "readme"
+        },
+        {
+            "@id": "ro-crate-preview.html",
+            "@type": "CreativeWork",
+            "about": {
+                "@id": "./"
+            }
         }
     ]
 }

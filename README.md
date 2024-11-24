@@ -30,8 +30,13 @@ Python function collecting the metadata of a directory and its contents.
     "type": "Directory",
     "parent": "parent directory info including '@id'",
     "basename": "basename (ex. test.dat)",
+    "name": "directory name (same as the basename)",
     "hasPart": ["`@id` or metadata of file or directory"],
-    "contentSize": "file size (Byte)",
+    "contentSize": "the total size of files included (Byte)",
+    "extension": ["unique file extension (ex. test.dat -> .dat)"],
+    "numberOfContents": "the number of contents",
+    "numberOfFileContents": "the number of files",
+    "numberOfFileContentsPerExtension": {"key = extension": "value = the number of files with the extension"},
     "creationDatetime": "creation datetime (%Y-%m-%dT%H:%M:%S)",
     "modificationDatetime": "modification datetime (%Y-%m-%dT%H:%M:%S)"
 }
@@ -102,18 +107,20 @@ python -m directory_structure_py <file_or_directory_path> \
     --structure_only \ // option
     --log_config_path <log_config_path> \ // option
     --log_output_path <log_output_path> // option
+    --preview_template_path <preview_template_path> \\ option
 ```
 
 Main options:
 
-| Item                | Type   | Description                                                                                                                      |
-| :------------------ | :----- | :------------------------------------------------------------------------------------------------------------------------------- |
-| `dst`               | str    | destination path of the json output. If empty, the metadata file will be output to the same directory as that of the input file. |
-| `include_root_path` | (bool) | include `file_or_directory_path` with the key `root_path` if this option is set                                                  |
-| `in_rocrate`        | (bool) | output an RO-Crate-format file instead of the list format one if this option is set                                              |
-| `to_tsv`            | (bool) | output a TSV-format file if this option is set                                                                                   |
-| `in_tree`           | (bool) | output the metadata in a tree format if this option is set                                                                       |
-| `structure_only`    | (bool) | output only the structure in a tree format if this option is set                                                                 |
+| Item                    | Type   | Description                                                                                                                      |
+| :---------------------- | :----- | :------------------------------------------------------------------------------------------------------------------------------- |
+| `dst`                   | str    | destination path of the json output. If empty, the metadata file will be output to the same directory as that of the input file. |
+| `include_root_path`     | (bool) | include `file_or_directory_path` with the key `root_path` if this option is set                                                  |
+| `in_rocrate`            | (bool) | output an RO-Crate-format file instead of the list format one if this option is set                                              |
+| `to_tsv`                | (bool) | output a TSV-format file if this option is set                                                                                   |
+| `in_tree`               | (bool) | output the metadata in a tree format if this option is set                                                                       |
+| `structure_only`        | (bool) | output only the structure in a tree format if this option is set                                                                 |
+| `preview_template_path` | str    | file path of the template for the preview file output by the RO-Crate.                                                           |
 
 Logging options:
 
