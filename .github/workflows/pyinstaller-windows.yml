@@ -42,6 +42,7 @@ jobs:
           cp ./for_portable/* ./dist/
           cp ./directory_structure_py/config/logging.json ./dist/
           cp -r ./sample ./dist/
+          cp ./directory_structure_py/templates/preview_template.html.j2 ./dist/
       - name: Upload the built artifact
         uses: actions/upload-artifact@v4
         with:
