@@ -1,3 +1,7 @@
+# Version of the executable file
+
+v0.2.0
+
 # What is for?
 
 This program output the metadata of the files and directories stored in the input path.
@@ -47,7 +51,7 @@ By default, the following files are output to the `output` directory in the dire
 * `directory_structure_metadata_tree.json`: the directory tree is included.
 * `directory_structure_metadata.tsv`: a metadata list is included.
 
-You can change the output formats by modifying the options set in teh batch file.
+You can change the output formats by modifying the options set in the batch file. However, in v0.2.0, the option `preview_template_path` must be set when outputting the RO-Crate-format metadata due to a bug that the executable file cannot open the inherent template file because of Permission Error.
 
 # License
 
