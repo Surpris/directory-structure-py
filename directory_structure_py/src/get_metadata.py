@@ -1,6 +1,7 @@
 """get_metadata
 """
 
+from collections import Counter
 import datetime
 import os
 from pathlib import Path
@@ -130,10 +131,6 @@ def get_metadata_of_single_directory(
         dst["parent"] = {"@id": generate_id(path.parent, root_path)}
     dst["basename"] = path.name
     dst["name"] = path.name
-    dst["extension"] = [
-        os.path.splitext(p_.name)[1] for p_ in path.iterdir()
-        if p_.is_file()
-    ]
     dst["contentSize"] = sum(
         p_.stat().st_size for p_ in path.iterdir() if p_.is_file()
     )
@@ -145,6 +142,11 @@ def get_metadata_of_single_directory(
     dst["numberOfFileContents"] = len([
         p_ for p_ in path.iterdir() if p_.is_file()
     ])
+    dst["numberOfFileContentsPerExtension"] = dict(Counter(
+        os.path.splitext(p_.name)[1] for p_ in path.iterdir()
+        if p_.is_file()
+    ))
+    dst["extension"] = list(dst["numberOfFileContentsPerExtension"].keys())
     dst["dateCreated"] = datetime.datetime.fromtimestamp(
         path.stat().st_ctime
     ).strftime(DATETIME_FMT)
@@ -212,14 +214,21 @@ def _update_statistical_info_of_directory(
         for node in metadata_list:
             if node["type"] == "File":
                 continue
-            if node["@id"] == part["@id"] and node["parent"]["@id"] == src["@id"]:
-                node = _update_statistical_info_of_directory(
-                    node, metadata_list
-                )
-                src["contentSize"] += node["contentSize"]
-                src["extension"].extend(node["extension"])
-                src["numberOfContents"] += node["numberOfContents"]
-                src["numberOfFileContents"] += node["numberOfFileContents"]
+            if node["@id"] != part["@id"] or node["parent"]["@id"] != src["@id"]:
+                continue
+            node = _update_statistical_info_of_directory(
+                node, metadata_list
+            )
+            src["contentSize"] += node["contentSize"]
+            src["numberOfContents"] += node["numberOfContents"]
+            src["numberOfFileContents"] += node["numberOfFileContents"]
+            src["numberOfFileContentsPerExtension"] = dict(
+                Counter(src["numberOfFileContentsPerExtension"]) +
+                Counter(node["numberOfFileContentsPerExtension"])
+            )
+            src["extension"] = list(
+                src["numberOfFileContentsPerExtension"].keys()
+            )
     return src
 
 
@@ -230,5 +239,5 @@ def update_statistical_info_to_metadata_list(src: Dict[str, Any]) -> Dict[str, A
         if not node["parent"]:
             root = node
             break
-    _ =  _update_statistical_info_of_directory(root, contents)
+    _ = _update_statistical_info_of_directory(root, contents)
     return src
