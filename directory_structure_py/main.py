@@ -4,6 +4,7 @@ get the directory tree
 """
 
 import datetime
+import importlib.resources
 import json
 from logging import getLogger, config, Logger
 import os
@@ -11,26 +12,29 @@ from pathlib import Path
 import time
 import traceback
 from typing import Dict, Any, List
-from directory_structure_py.src.constants import (
+from directory_structure_py.constants import (
     DEFAULT_OUTPUT_NAME, ENSURE_ASCII, JSON_OUTPUT_INDENT
 )
-from directory_structure_py.src.get_metadata import (
+from directory_structure_py.get_metadata import (
     get_metadata_of_files_in_list_format,
     update_statistical_info_to_metadata_list
 )
-from directory_structure_py.src.conversion import (
+from directory_structure_py.conversion import (
     list2tree,
     convert_meta_list_json_to_tsv,
     convert_meta_list_json_to_rocrate
 )
-from directory_structure_py.src.rocrate_models import ROCrate
+from directory_structure_py.rocrate_models import ROCrate
 
-LOG_CONF_PATH: str = os.path.join(
-    os.path.dirname(__file__), "../config/logging.json"
-)
+# LOG_CONF_PATH: str = os.path.join(
+#     os.path.dirname(__file__), "config/logging.json"
+# )
+LOG_CONF_PATH: str = importlib.resources.files(
+    __package__
+).joinpath("config/logging.json")
 LOG_OUTPUT_PATH: str = os.path.join(
     os.path.dirname(__file__),
-    f"../log/directory_structure_py_{datetime.datetime.now().strftime('%Y%m%d%H%M%S')}.log"
+    f"log/directory_structure_py_{datetime.datetime.now().strftime('%Y%m%d%H%M%S')}.log"
 )
 
 

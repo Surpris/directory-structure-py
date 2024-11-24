@@ -1,7 +1,7 @@
 """directory_structure_py"""
 
 
-from directory_structure_py.src.main import (
+from directory_structure_py.main import (
     main, DEFAULT_OUTPUT_NAME, LOG_OUTPUT_PATH, LOG_CONF_PATH
 )
 

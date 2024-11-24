@@ -6,7 +6,7 @@ import datetime
 import os
 from pathlib import Path
 from typing import Dict, Any, List
-from directory_structure_py.src.constants import DATETIME_FMT, OUTPUT_ROOT_KEY
+from directory_structure_py.constants import DATETIME_FMT, OUTPUT_ROOT_KEY
 
 
 def generate_id(path: Path | str, root_path: Path | str = "") -> str:

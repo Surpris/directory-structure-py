@@ -3,6 +3,7 @@
 Customized RO-Crate
 """
 
+import importlib.resources
 import os
 from jinja2 import Template
 from rocrate.rocrate import ROCrate as ROCrateOrigin
@@ -17,13 +18,17 @@ class Preview(PreviewOrigin):
     """
 
     def generate_html(self):
-        base_path = os.path.abspath(os.path.dirname(__file__))
-        template_path: str = os.path.join(
-            base_path, '..', 'templates', 'preview_template.html.j2'
-        )
-        src: Template | None = None
-        with open(template_path, "r", encoding="utf-8") as template:
-            src = Template(template.read())
+        # base_path = os.path.abspath(os.path.dirname(__file__))
+        template_str: str = importlib.resources.files(
+            __package__
+        ).joinpath("templates/preview_template.html.j2").read_text("utf8")
+        src: Template = Template(template_str)
+        # template_path: str = os.path.join(
+        #     base_path, 'templates', 'preview_template.html.j2'
+        # )
+        # src: Template | None = None
+        # with open(template_path, "r", encoding="utf-8") as template:
+        #     src = Template(template.read())
 
         def template_function(func):
             src.globals[func.__name__] = func
@@ -50,7 +55,7 @@ class Preview(PreviewOrigin):
             else:
                 return False
 
-        template.close()
+        # template.close()
         context_entities = []
         data_entities = []
         for entity in self.crate.contextual_entities:
