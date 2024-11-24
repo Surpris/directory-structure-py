@@ -21,7 +21,7 @@ from directory_structure_py.src.get_metadata import (
 from directory_structure_py.src.conversion import (
     list2tree,
     convert_meta_list_json_to_tsv,
-    convert_mata_list_json_to_rocrate
+    convert_meta_list_json_to_rocrate
 )
 from rocrate.rocrate import ROCrate
 
@@ -116,7 +116,7 @@ def main(
             save_dict_to_json(data, dst)
         else:
             data["root_path"] = f"{str(Path(src).absolute().as_posix())}"
-            crate: ROCrate = convert_mata_list_json_to_rocrate(data)
+            crate: ROCrate = convert_meta_list_json_to_rocrate(data)
             crate.metadata.write(os.path.dirname(dst))
         if to_tsv:
             logger.info("generate a TSV-format file.")
