@@ -38,7 +38,7 @@ jobs:
            curl https://raw.githubusercontent.com/ResearchObject/ro-crate-py/refs/heads/master/rocrate/data/schema.jsonld -o ./schema.jsonld
       - name: Build an executable file
         run: |
-          pyinstaller ./directory_structure_py/src/main.py --clean --onefile -n directory_structure_py.exe --hidden-import "rocrate" --add-data ./ro-crate.jsonld:./rocrate/data --add-data ./schema.jsonld:./rocrate/data
+          pyinstaller ./directory_structure_py/__main__.py --clean --onefile -n directory_structure_py.exe --hidden-import "rocrate" --add-data ./ro-crate.jsonld:./rocrate/data --add-data ./schema.jsonld:./rocrate/data
           cp ./for_portable/* ./dist/
           cp ./directory_structure_py/config/logging.json ./dist/
           cp -r ./sample ./dist/
