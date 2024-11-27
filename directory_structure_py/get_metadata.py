@@ -131,22 +131,39 @@ def get_metadata_of_single_directory(
         dst["parent"] = {"@id": generate_id(path.parent, root_path)}
     dst["basename"] = path.name
     dst["name"] = path.name
-    dst["contentSize"] = sum(
-        p_.stat().st_size for p_ in path.iterdir() if p_.is_file()
-    )
     dst["hasPart"] = [
         {"@id": generate_id(p_, root_path)}
         for p_ in path.iterdir()
     ]
+
+    # children only
+    dst["contentSize"] = sum(
+        p_.stat().st_size for p_ in path.iterdir() if p_.is_file()
+    )
     dst["numberOfContents"] = len(dst["hasPart"])
-    dst["numberOfFileContents"] = len([
+    dst["numberOfFiles"] = len([
         p_ for p_ in path.iterdir() if p_.is_file()
     ])
-    dst["numberOfFileContentsPerExtension"] = dict(Counter(
+    dst["numberOfFilesPerExtension"] = dict(Counter(
         os.path.splitext(p_.name)[1] for p_ in path.iterdir()
         if p_.is_file()
     ))
-    dst["extension"] = list(dst["numberOfFileContentsPerExtension"].keys())
+    dst["extension"] = list(dst["numberOfFilesPerExtension"].keys())
+
+    # all contents
+    dst["contentSizeOfAllFiles"] = sum(
+        p_.stat().st_size for p_ in path.iterdir() if p_.is_file()
+    )
+    dst["numberOfAllContents"] = len(dst["hasPart"])
+    dst["numberOfAllFiles"] = len([
+        p_ for p_ in path.iterdir() if p_.is_file()
+    ])
+    dst["numberOfAllFilesPerExtension"] = dict(Counter(
+        os.path.splitext(p_.name)[1] for p_ in path.iterdir()
+        if p_.is_file()
+    ))
+    dst["extensionsOfAllFiles"] = list(dst["numberOfAllFilesPerExtension"].keys())
+
     dst["dateCreated"] = datetime.datetime.fromtimestamp(
         path.stat().st_ctime
     ).strftime(DATETIME_FMT)
@@ -219,15 +236,15 @@ def _update_statistical_info_of_directory(
             node = _update_statistical_info_of_directory(
                 node, metadata_list
             )
-            src["contentSize"] += node["contentSize"]
-            src["numberOfContents"] += node["numberOfContents"]
-            src["numberOfFileContents"] += node["numberOfFileContents"]
-            src["numberOfFileContentsPerExtension"] = dict(
-                Counter(src["numberOfFileContentsPerExtension"]) +
-                Counter(node["numberOfFileContentsPerExtension"])
+            src["contentSizeOfAllFiles"] += node["contentSizeOfAllFiles"]
+            src["numberOfAllContents"] += node["numberOfAllContents"]
+            src["numberOfAllFiles"] += node["numberOfAllFiles"]
+            src["numberOfAllFilesPerExtension"] = dict(
+                Counter(src["numberOfAllFilesPerExtension"]) +
+                Counter(node["numberOfAllFilesPerExtension"])
             )
-            src["extension"] = list(
-                src["numberOfFileContentsPerExtension"].keys()
+            src["extensionsOfAllFiles"] = list(
+                src["numberOfAllFilesPerExtension"].keys()
             )
     return src
 
