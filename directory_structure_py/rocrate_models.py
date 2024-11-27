@@ -70,15 +70,5 @@ class Preview(PreviewOrigin):
         else:
             write_path = Path(dest_base) / self.id
             out_html = self.generate_html(template_path)
-            with open(write_path, 'w') as outfile:
+            with open(write_path, 'w', encoding="utf-8") as outfile:
                 outfile.write(out_html)
-
-class ROCrate(ROCrateOrigin):
-    """
-    Customized ROCrate class
-    """
-
-    def __init__(self, source=None, gen_preview=False, init=False, exclude=None, template_path: str = None):
-        super().__init__(source, gen_preview=False, init=init, exclude=exclude)
-        if gen_preview:
-            self.add(Preview(self))
