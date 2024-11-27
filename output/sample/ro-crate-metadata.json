@@ -4,7 +4,7 @@
         {
             "@id": "./",
             "@type": "Dataset",
-            "datePublished": "2024-11-24T21:04:57",
+            "datePublished": "2024-11-27T23:25:40",
             "hasPart": [
                 {
                     "@id": "sample/"
@@ -36,7 +36,8 @@
                 {
                     "@id": "sample/readme.md"
                 }
-            ]
+            ],
+            "name": "sample"
         },
         {
             "@id": "ro-crate-metadata.json",
@@ -51,10 +52,14 @@
         {
             "@id": "sample/",
             "@type": "Dataset",
-            "contentSize": 364,
+            "contentSize": 187,
+            "contentSizeOfAllFiles": 364,
             "dateCreated": "2024-09-25T12:16:08",
             "dateModified": "2024-11-23T12:15:26",
             "extension": [
+                ".md"
+            ],
+            "extensionsOfAllFiles": [
                 ".md",
                 ".csv",
                 ".txt"
@@ -65,17 +70,24 @@
                 "sample/readme.md"
             ],
             "name": "sample",
-            "numberOfContents": 9,
-            "numberOfFileContents": 6,
-            "numberOfFileContentsPerExtension": "{'.md': 1, '.csv': 4, '.txt': 1}"
+            "numberOfAllContents": 9,
+            "numberOfAllFiles": 6,
+            "numberOfAllFilesPerExtension": "{'.md': 1, '.csv': 4, '.txt': 1}",
+            "numberOfContents": 3,
+            "numberOfFiles": 1,
+            "numberOfFilesPerExtension": "{'.md': 1}"
         },
         {
             "@id": "sample/data/",
             "@type": "Dataset",
             "contentSize": 83,
+            "contentSizeOfAllFiles": 83,
             "dateCreated": "2024-09-25T12:17:06",
             "dateModified": "2024-09-25T12:17:53",
             "extension": [
+                ".csv"
+            ],
+            "extensionsOfAllFiles": [
                 ".csv"
             ],
             "hasPart": [
@@ -83,9 +95,12 @@
                 "sample/data/data_002.csv"
             ],
             "name": "data",
+            "numberOfAllContents": 2,
+            "numberOfAllFiles": 2,
+            "numberOfAllFilesPerExtension": "{'.csv': 2}",
             "numberOfContents": 2,
-            "numberOfFileContents": 2,
-            "numberOfFileContentsPerExtension": "{'.csv': 2}"
+            "numberOfFiles": 2,
+            "numberOfFilesPerExtension": "{'.csv': 2}"
         },
         {
             "@id": "sample/data/data_001.csv",
@@ -108,10 +123,14 @@
         {
             "@id": "sample/hogehoge/",
             "@type": "Dataset",
-            "contentSize": 94,
+            "contentSize": 6,
+            "contentSizeOfAllFiles": 94,
             "dateCreated": "2024-09-25T12:16:46",
             "dateModified": "2024-11-10T16:39:53",
             "extension": [
+                ".txt"
+            ],
+            "extensionsOfAllFiles": [
                 ".txt",
                 ".csv"
             ],
@@ -120,17 +139,24 @@
                 "sample/hogehoge/fuga.txt"
             ],
             "name": "hogehoge",
-            "numberOfContents": 4,
-            "numberOfFileContents": 3,
-            "numberOfFileContentsPerExtension": "{'.txt': 1, '.csv': 2}"
+            "numberOfAllContents": 4,
+            "numberOfAllFiles": 3,
+            "numberOfAllFilesPerExtension": "{'.txt': 1, '.csv': 2}",
+            "numberOfContents": 2,
+            "numberOfFiles": 1,
+            "numberOfFilesPerExtension": "{'.txt': 1}"
         },
         {
             "@id": "sample/hogehoge/data/",
             "@type": "Dataset",
             "contentSize": 88,
+            "contentSizeOfAllFiles": 88,
             "dateCreated": "2024-11-10T16:39:53",
             "dateModified": "2024-11-10T16:40:12",
             "extension": [
+                ".csv"
+            ],
+            "extensionsOfAllFiles": [
                 ".csv"
             ],
             "hasPart": [
@@ -138,9 +164,12 @@
                 "sample/hogehoge/data/data_003.csv"
             ],
             "name": "data",
+            "numberOfAllContents": 2,
+            "numberOfAllFiles": 2,
+            "numberOfAllFilesPerExtension": "{'.csv': 2}",
             "numberOfContents": 2,
-            "numberOfFileContents": 2,
-            "numberOfFileContentsPerExtension": "{'.csv': 2}"
+            "numberOfFiles": 2,
+            "numberOfFilesPerExtension": "{'.csv': 2}"
         },
         {
             "@id": "sample/hogehoge/data/data_002.csv",
