@@ -176,7 +176,17 @@
         <a class="data-entity-link" href="{{ entry['@id'] }}">{{ entry['@id'] }}</a>
         <p>Type: {{ stringify(entry['@type']) }}</p>
         {% if entry['contentSize'] %}
-          <p>contentSize: {{ entry['contentSize'] }} B</p>
+          {% if entry['contentSize'] < 1000 %}
+            <p>contentSize: {{ entry['contentSize'] }} B</p>
+          {% elif entry['contentSize'] < 1000000 %}
+            <p>contentSize: {{ '%0.1f' | format(entry['contentSize'] / 1000 | float) }} kB</p>
+          {% elif entry['contentSize'] < 1000000000 %}
+            <p>contentSize: {{ '%0.1f' | format(entry['contentSize'] / 1000000 | float) }} MB</p>
+          {% elif entry['contentSize'] < 1000000000000 %}
+            <p>contentSize: {{ '%0.2f' | format(entry['contentSize'] / 1000000000 | float) }} GB</p>
+          {% else %}
+            <p>contentSize: {{ '%0.2f' | format(entry['contentSize'] / 1000000000000 | float) }} TB</p>
+          {% endif %}
         {% endif %}
         {% if entry['dateCreated'] %}
           <p>dateCreated: {{ entry['dateCreated'] }}</p>

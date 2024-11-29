@@ -7,7 +7,6 @@
             "parent": {},
             "basename": "sample",
             "name": "sample",
-            "contentSize": 364,
             "hasPart": [
                 {
                     "@id": "sample/data/"
@@ -19,14 +18,24 @@
                     "@id": "sample/readme.md"
                 }
             ],
-            "numberOfContents": 9,
-            "numberOfFileContents": 6,
-            "numberOfFileContentsPerExtension": {
+            "contentSize": 187,
+            "numberOfContents": 3,
+            "numberOfFiles": 1,
+            "numberOfFilesPerExtension": {
+                ".md": 1
+            },
+            "extension": [
+                ".md"
+            ],
+            "contentSizeOfAllFiles": 364,
+            "numberOfAllContents": 9,
+            "numberOfAllFiles": 6,
+            "numberOfAllFilesPerExtension": {
                 ".md": 1,
                 ".csv": 4,
                 ".txt": 1
             },
-            "extension": [
+            "extensionsOfAllFiles": [
                 ".md",
                 ".csv",
                 ".txt"
@@ -42,7 +51,6 @@
             },
             "basename": "data",
             "name": "data",
-            "contentSize": 83,
             "hasPart": [
                 {
                     "@id": "sample/data/data_001.csv"
@@ -51,12 +59,22 @@
                     "@id": "sample/data/data_002.csv"
                 }
             ],
+            "contentSize": 83,
             "numberOfContents": 2,
-            "numberOfFileContents": 2,
-            "numberOfFileContentsPerExtension": {
+            "numberOfFiles": 2,
+            "numberOfFilesPerExtension": {
                 ".csv": 2
             },
             "extension": [
+                ".csv"
+            ],
+            "contentSizeOfAllFiles": 83,
+            "numberOfAllContents": 2,
+            "numberOfAllFiles": 2,
+            "numberOfAllFilesPerExtension": {
+                ".csv": 2
+            },
+            "extensionsOfAllFiles": [
                 ".csv"
             ],
             "dateCreated": "2024-09-25T12:17:06",
@@ -96,7 +114,6 @@
             },
             "basename": "hogehoge",
             "name": "hogehoge",
-            "contentSize": 94,
             "hasPart": [
                 {
                     "@id": "sample/hogehoge/data/"
@@ -105,13 +122,23 @@
                     "@id": "sample/hogehoge/fuga.txt"
                 }
             ],
-            "numberOfContents": 4,
-            "numberOfFileContents": 3,
-            "numberOfFileContentsPerExtension": {
+            "contentSize": 6,
+            "numberOfContents": 2,
+            "numberOfFiles": 1,
+            "numberOfFilesPerExtension": {
+                ".txt": 1
+            },
+            "extension": [
+                ".txt"
+            ],
+            "contentSizeOfAllFiles": 94,
+            "numberOfAllContents": 4,
+            "numberOfAllFiles": 3,
+            "numberOfAllFilesPerExtension": {
                 ".txt": 1,
                 ".csv": 2
             },
-            "extension": [
+            "extensionsOfAllFiles": [
                 ".txt",
                 ".csv"
             ],
@@ -126,7 +153,6 @@
             },
             "basename": "data",
             "name": "data",
-            "contentSize": 88,
             "hasPart": [
                 {
                     "@id": "sample/hogehoge/data/data_002.csv"
@@ -135,12 +161,22 @@
                     "@id": "sample/hogehoge/data/data_003.csv"
                 }
             ],
+            "contentSize": 88,
             "numberOfContents": 2,
-            "numberOfFileContents": 2,
-            "numberOfFileContentsPerExtension": {
+            "numberOfFiles": 2,
+            "numberOfFilesPerExtension": {
                 ".csv": 2
             },
             "extension": [
+                ".csv"
+            ],
+            "contentSizeOfAllFiles": 88,
+            "numberOfAllContents": 2,
+            "numberOfAllFiles": 2,
+            "numberOfAllFilesPerExtension": {
+                ".csv": 2
+            },
+            "extensionsOfAllFiles": [
                 ".csv"
             ],
             "dateCreated": "2024-11-10T16:39:53",
@@ -199,5 +235,5 @@
             "dateModified": "2024-11-10T17:42:20"
         }
     ],
-    "dateCreated": "2024-11-24T21:04:32"
+    "dateCreated": "2024-11-27T23:26:06"
 }

@@ -1,11 +1,11 @@
-@id	basename	contentSize	dateCreated	dateModified	extension	hasPart	name	numberOfContents	numberOfFileContents	numberOfFileContentsPerExtension	parent	type
-sample/	sample	364	2024-09-25T12:16:08	2024-11-23T12:15:26	['.md', '.csv', '.txt']	[{'@id': 'sample/data/'}, {'@id': 'sample/hogehoge/'}, {'@id': 'sample/readme.md'}]	sample	9	6	{'.md': 1, '.csv': 4, '.txt': 1}	{}	Directory
-sample/data/	data	83	2024-09-25T12:17:06	2024-09-25T12:17:53	['.csv']	[{'@id': 'sample/data/data_001.csv'}, {'@id': 'sample/data/data_002.csv'}]	data	2	2	{'.csv': 2}	{'@id': 'sample/'}	Directory
-sample/data/data_001.csv	data_001.csv	42	2024-09-25T12:17:15	2024-09-25T12:18:08	.csv		data_001				{'@id': 'sample/data/'}	File
-sample/data/data_002.csv	data_002.csv	41	2024-09-25T12:17:48	2024-09-25T12:18:05	.csv		data_002				{'@id': 'sample/data/'}	File
-sample/hogehoge/	hogehoge	94	2024-09-25T12:16:46	2024-11-10T16:39:53	['.txt', '.csv']	[{'@id': 'sample/hogehoge/data/'}, {'@id': 'sample/hogehoge/fuga.txt'}]	hogehoge	4	3	{'.txt': 1, '.csv': 2}	{'@id': 'sample/'}	Directory
-sample/hogehoge/data/	data	88	2024-11-10T16:39:53	2024-11-10T16:40:12	['.csv']	[{'@id': 'sample/hogehoge/data/data_002.csv'}, {'@id': 'sample/hogehoge/data/data_003.csv'}]	data	2	2	{'.csv': 2}	{'@id': 'sample/hogehoge/'}	Directory
-sample/hogehoge/data/data_002.csv	data_002.csv	41	2024-11-10T16:40:03	2024-09-25T12:18:05	.csv		data_002				{'@id': 'sample/hogehoge/data/'}	File
-sample/hogehoge/data/data_003.csv	data_003.csv	47	2024-11-10T16:40:07	2024-11-10T16:40:30	.csv		data_003				{'@id': 'sample/hogehoge/data/'}	File
-sample/hogehoge/fuga.txt	fuga.txt	6	2024-09-25T12:16:51	2024-09-25T12:16:55	.txt		fuga				{'@id': 'sample/hogehoge/'}	File
-sample/readme.md	readme.md	187	2024-09-25T12:16:19	2024-11-10T17:42:20	.md		readme				{'@id': 'sample/'}	File
+@id	basename	contentSize	contentSizeOfAllFiles	dateCreated	dateModified	extension	extensionsOfAllFiles	hasPart	name	numberOfAllContents	numberOfAllFiles	numberOfAllFilesPerExtension	numberOfContents	numberOfFiles	numberOfFilesPerExtension	parent	type
+sample/	sample	187	364	2024-09-25T12:16:08	2024-11-23T12:15:26	['.md']	['.md', '.csv', '.txt']	[{'@id': 'sample/data/'}, {'@id': 'sample/hogehoge/'}, {'@id': 'sample/readme.md'}]	sample	9	6	{'.md': 1, '.csv': 4, '.txt': 1}	3	1	{'.md': 1}	{}	Directory
+sample/data/	data	83	83	2024-09-25T12:17:06	2024-09-25T12:17:53	['.csv']	['.csv']	[{'@id': 'sample/data/data_001.csv'}, {'@id': 'sample/data/data_002.csv'}]	data	2	2	{'.csv': 2}	2	2	{'.csv': 2}	{'@id': 'sample/'}	Directory
+sample/data/data_001.csv	data_001.csv	42		2024-09-25T12:17:15	2024-09-25T12:18:08	.csv			data_001							{'@id': 'sample/data/'}	File
+sample/data/data_002.csv	data_002.csv	41		2024-09-25T12:17:48	2024-09-25T12:18:05	.csv			data_002							{'@id': 'sample/data/'}	File
+sample/hogehoge/	hogehoge	6	94	2024-09-25T12:16:46	2024-11-10T16:39:53	['.txt']	['.txt', '.csv']	[{'@id': 'sample/hogehoge/data/'}, {'@id': 'sample/hogehoge/fuga.txt'}]	hogehoge	4	3	{'.txt': 1, '.csv': 2}	2	1	{'.txt': 1}	{'@id': 'sample/'}	Directory
+sample/hogehoge/data/	data	88	88	2024-11-10T16:39:53	2024-11-10T16:40:12	['.csv']	['.csv']	[{'@id': 'sample/hogehoge/data/data_002.csv'}, {'@id': 'sample/hogehoge/data/data_003.csv'}]	data	2	2	{'.csv': 2}	2	2	{'.csv': 2}	{'@id': 'sample/hogehoge/'}	Directory
+sample/hogehoge/data/data_002.csv	data_002.csv	41		2024-11-10T16:40:03	2024-09-25T12:18:05	.csv			data_002							{'@id': 'sample/hogehoge/data/'}	File
+sample/hogehoge/data/data_003.csv	data_003.csv	47		2024-11-10T16:40:07	2024-11-10T16:40:30	.csv			data_003							{'@id': 'sample/hogehoge/data/'}	File
+sample/hogehoge/fuga.txt	fuga.txt	6		2024-09-25T12:16:51	2024-09-25T12:16:55	.txt			fuga							{'@id': 'sample/hogehoge/'}	File
+sample/readme.md	readme.md	187		2024-09-25T12:16:19	2024-11-10T17:42:20	.md			readme							{'@id': 'sample/'}	File
