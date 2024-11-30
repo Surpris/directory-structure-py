@@ -290,7 +290,7 @@
     let accordionDetails = '.js-details';
     let accordionSummary = '.js-details-summary';
     let accordionContent = '.js-details-content';
-    let speed = 500
+    let speed = 300
 
     $(accordionSummary).each(function() {
     $(this).on("click", function(event) {
@@ -501,6 +501,7 @@
         <div class="tab-content">
             <h2>Contents</h2>
             {% macro render_contents(entry) %}
+                <div class="details-content-item">
                 <p>Type: {{ stringify(entry['@type']) }}</p>
                 {% if entry['contentSizeOfAllFiles'] %}
                     <p>contentSize: {{ format_content_size(entry['contentSizeOfAllFiles']) }}</p>
@@ -529,6 +530,7 @@
                 <button class="go-to-tree-btn" href="#tree_{{ entry['@id'] }}" onclick="switchTab('directory-tree-tab')">
                     Go To Tree
                 </button>
+                </div>
             {% endmacro %}
 
             {% macro render_contents_tree(entry, entity_list, level) %}
@@ -549,7 +551,7 @@
                     {% endif %}
                     </strong>
                     </summary>
-                    <div class="details-content-item js-details-content {{layer_class}}" id="content_{{ entry['@id'] }}">
+                    <div class="details-content js-details-content {{layer_class}}" id="content_{{ entry['@id'] }}">
                         {{ render_contents(entry) }}
                     </div>
                     {% if entry['hasPart'] %}
