@@ -56,11 +56,41 @@
       padding:20px;
     }
     
-    .tree ul li {
+    /* tree table */
+    .tree {
+        padding-top: 5px;
         padding-bottom: 5px;
         font-size: 18px;
+        margin-left: auto;
+        margin-right: auto;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .display_name {
+            text-align: left;
+        }
+        .data_size {
+            text-align: right;
+            margin-right: 0.5em;
+        }
+        tr {
+            position: relative;
+            border-bottom: 1px solid #05D9D2;
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+        tr:first-of-type {
+            border-bottom: 2px solid #00a5a0;
+        }
+        td {
+            .display_name_child {
+                position: relative;
+                padding-left: 15px;
+                text-align: left;
+            }
+        }
     }
-
     /* accordion */
     .details {
         border-top: 2px solid #00a5a0;
@@ -195,22 +225,23 @@
         // font-weight: bold;
     }
     .details-content-item {
+        position: relative;
         padding: 20px;
-        &.layer3 {
-            background-color: #4cc0bc;
-        }
-        &.layer4 {
-            background-color: #19aea9;
-        }
-        &.layer5 {
-            background-color: #19aea9;
-        }
-        &.layer_file {
-            background-color: #B3DFF3;
-        }
-        &:hover {
-            cursor: pointer;
-            background-color: #bee1de;
+        .go-to-tree-btn {
+            border-color: #05D9D2;
+            border-radius: 3px;
+            background: #05D9D2;
+            text-align: center;
+            font-size: 18px;
+            color: #000000;
+            padding: 5px;
+            height: auto;
+            width: auto;
+            margin: auto;
+            &:hover {
+               cursor: pointer;
+                opacity: 0.8;
+            }
         }
     }
 
@@ -405,11 +436,21 @@
         {% elif size < 1000000000 %}
             {{ '%0.1f' | format(size / 1000000 | float) }} MB
         {% elif size < 1000000000000 %}
-            {{ '%0.2f' | format(size / 1000000000 | float) }} GB
+            {{ '%0.1f' | format(size / 1000000000 | float) }} GB
         {% else %}
-            {{ '%0.2f' | format(size / 1000000000000 | float) }} TB
+            {{ '%0.1f' | format(size / 1000000000000 | float) }} TB
         {% endif %}
     {% endmacro %}
+    {% macro format_display_name(entry) %}
+        {% if stringify(entry['@type']) == "File" %}
+            {{ entry['name'] }}{{ entry['extension'] }}
+        {% elif stringify(entry['@type']) == "Dataset" %}
+            {{ entry['name'] }}/
+        {% else %}
+            entry['@id']
+        {% endif %}
+    {% endmacro %}
+
     <div class="tab-switch">
         <label>
             <input id="directory-tree-tab" type="radio" name="TAB" checked>
@@ -417,29 +458,39 @@
         </label>
         <div class="tab-content">
             <h2>Directory tree</h2>
-            <div class="tree">
-                {% macro render_tree(entry, entity_list) %}
-                    <ul>
-                        <li>
-                        <a href="#summary_{{entry['@id']}}" onclick="switchTab('contents-tab')">{{ entry['@id'] }}</a>
-                        {% if entry['contentSizeOfAllFiles'] %}
-                        : {{ format_content_size(entry['contentSizeOfAllFiles']) }} (total)
-                        {% elif entry['contentSize'] %}
-                        : {{ format_content_size(entry['contentSize']) }}
-                        {% endif %}
-                        </li>
-                        {% if entry['hasPart'] %}
-                            {% for child_id in entry['hasPart'] %}
-                                {% for entity in entity_list %}
-                                    {% if entity['@id'] == child_id %}
-                                        {{ render_tree(entity, entity_list) }}
-                                    {% endif %}
-                                {% endfor %}
+            {% macro render_tree(entry, entity_list, level) %}
+                    <tr>
+                    {% set padding_left = level * 20 %}
+                    <td id="tree_{{entry['@id']}}" class="display_name" style="padding-left: {{ padding_left|string }}px;">
+                    <a href="#summary_{{entry['@id']}}" onclick="switchTab('contents-tab')">{{ format_display_name(entry) }}</a>
+                    </td>
+                    <td class="data_size">
+                    {% if entry['contentSizeOfAllFiles'] %}
+                    {{ format_content_size(entry['contentSizeOfAllFiles']) }}
+                    {% elif entry['contentSize'] %}
+                    {{ format_content_size(entry['contentSize']) }}
+                    {% endif %}
+                    </td>
+                    {% if entry['hasPart'] %}
+                        {% for child_id in entry['hasPart'] %}
+                            {% for entity in entity_list %}
+                                {% if entity['@id'] == child_id %}
+                                    {{ render_tree(entity, entity_list, level + 1) }}
+                                {% endif %}
                             {% endfor %}
-                        {% endif %}
-                    </ul>
-                {% endmacro %}
-                {{ render_tree(data[0], data) }}
+                        {% endfor %}
+                    {% endif %}
+            {% endmacro %}
+            <div class="tree">
+                <table>
+                <tbody>
+                    <tr>
+                        <th class="display_name">Display name</th>
+                        <th class="data_size">Data size</th>
+                    <tr>
+                    {{ render_tree(data[0], data, 1) }}
+                </tbody>
+                </table>
             </div>
         </div>
 
@@ -451,7 +502,9 @@
             <h2>Contents</h2>
             {% macro render_contents(entry) %}
                 <p>Type: {{ stringify(entry['@type']) }}</p>
-                {% if entry['contentSize'] %}
+                {% if entry['contentSizeOfAllFiles'] %}
+                    <p>contentSize: {{ format_content_size(entry['contentSizeOfAllFiles']) }}</p>
+                {% elif entry['contentSize'] %}
                     <p>contentSize: {{ format_content_size(entry['contentSize']) }}</p>
                 {% endif %}
                 {% if entry['dateCreated'] %}
@@ -466,6 +519,9 @@
                 {% if entry['programmingLanguage'] %}
                     <p>ProgrammingLanguage: {{ entry['programmingLanguage']['@id'] }}</p>
                 {% endif %}
+                <button class="go-to-tree-btn" href="#tree_{{ entry['@id'] }}" onclick="switchTab('directory-tree-tab')">
+                    Go To Tree
+                </button>
             {% endmacro %}
 
             {% macro render_contents_tree(entry, entity_list, level) %}
@@ -478,15 +534,15 @@
                 {% endif %}
                 <details class="details js-details {{layer_class}}">
                     <summary class="details-summary js-details-summary {{layer_class}}" id="summary_{{ entry['@id'] }}">
-                    <strong>{{ entry['@id'] }}
+                    <strong>{{ format_display_name(entry) }}
                     {% if entry['contentSizeOfAllFiles'] %}
-                    : {{ format_content_size(entry['contentSizeOfAllFiles']) }} (total)
+                    : {{ format_content_size(entry['contentSizeOfAllFiles']) }}
                     {% elif entry['contentSize'] %}
                     : {{ format_content_size(entry['contentSize']) }}
                     {% endif %}
                     </strong>
                     </summary>
-                    <div class="details-content js-details-content {{layer_class}}" id="content_{{ entry['@id'] }}">
+                    <div class="details-content-item js-details-content {{layer_class}}" id="content_{{ entry['@id'] }}">
                         {{ render_contents(entry) }}
                     </div>
                     {% if entry['hasPart'] %}
