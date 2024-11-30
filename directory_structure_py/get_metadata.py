@@ -309,7 +309,7 @@ def update_statistical_info_to_metadata_list(src: Dict[str, Any]) -> Dict[str, A
     root: Dict[str, Any] = {}
     for node in contents:
         node_parent: Dict[str, Any] = node.get("parent", {})
-        if node_parent:
+        if not node_parent:
             root = node
             break
     if not root:
