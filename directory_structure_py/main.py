@@ -12,6 +12,8 @@ from pathlib import Path
 import time
 import traceback
 from typing import Dict, Any, List
+from rocrate.rocrate import ROCrate
+
 from directory_structure_py.constants import (
     DEFAULT_OUTPUT_NAME, ENSURE_ASCII, JSON_OUTPUT_INDENT,
     DEFAULT_PREVIEW_TEMPLATE_PATH
@@ -26,7 +28,6 @@ from directory_structure_py.conversion import (
     convert_meta_list_json_to_rocrate
 )
 from directory_structure_py.rocrate_models import Preview
-from rocrate.rocrate import ROCrate
 
 LOG_CONF_PATH: str = importlib.resources.files(
     __package__
