@@ -93,7 +93,7 @@ The portable file is also provided only for Windows. You can download it via the
 
 ### Remarks
 
-In v0.2.0, the option `preview_template_path` must be set when outputting the RO-Crate-format metadata due to a bug that the executable file cannot open the inherent template file because of Permission Error.
+In v0.2.2, the option `preview_template_path` must be set when outputting the RO-Crate-format metadata due to a bug that the executable file cannot open the inherent template file because of Permission Error.
 
 # Usage
 
