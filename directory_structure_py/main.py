@@ -12,8 +12,11 @@ from pathlib import Path
 import time
 import traceback
 from typing import Dict, Any, List
+from rocrate.rocrate import ROCrate
+
 from directory_structure_py.constants import (
-    DEFAULT_OUTPUT_NAME, ENSURE_ASCII, JSON_OUTPUT_INDENT
+    DEFAULT_OUTPUT_NAME, ENSURE_ASCII, JSON_OUTPUT_INDENT,
+    DEFAULT_PREVIEW_TEMPLATE_PATH
 )
 from directory_structure_py.get_metadata import (
     get_metadata_of_files_in_list_format,
@@ -25,11 +28,7 @@ from directory_structure_py.conversion import (
     convert_meta_list_json_to_rocrate
 )
 from directory_structure_py.rocrate_models import Preview
-from rocrate.rocrate import ROCrate
 
-# LOG_CONF_PATH: str = os.path.join(
-#     os.path.dirname(__file__), "config/logging.json"
-# )
 LOG_CONF_PATH: str = importlib.resources.files(
     __package__
 ).joinpath("config/logging.json")
@@ -179,7 +178,8 @@ if __name__ == "__main__":
         "--log_output_path", dest="log_output_path", type=str, default=LOG_OUTPUT_PATH
     )
     parser.add_argument(
-        "--preview_template_path", dest="preview_template_path", type=str, default=None
+        "--preview_template_path", dest="preview_template_path", type=str,
+        default=DEFAULT_PREVIEW_TEMPLATE_PATH
     )
     args = parser.parse_args()
     if not args.dst:

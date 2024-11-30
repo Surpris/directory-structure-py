@@ -1,6 +1,6 @@
-# Version of the executable file
+# Version of the portable program
 
-v0.2.0
+v0.2.2
 
 # What is for?
 
@@ -51,7 +51,39 @@ By default, the following files are output to the `output` directory in the dire
 * `directory_structure_metadata_tree.json`: the directory tree is included.
 * `directory_structure_metadata.tsv`: a metadata list is included.
 
-You can change the output formats by modifying the options set in the batch file. However, in v0.2.0, the option `preview_template_path` must be set when outputting the RO-Crate-format metadata due to a bug that the executable file cannot open the inherent template file because of Permission Error.
+You can change the output formats by modifying the options set in the batch file. However, in v0.2.2, the option `preview_template_path` must be set when outputting the RO-Crate-format metadata due to a bug that the executable file cannot open the inherent template file because of Permission Error.
+
+# Directory structure of the portable program
+
+```
+<root>
+│   directory_structure_py.bat: batch file
+│   readme.txt: this file
+│   readme_ja.txt: Japanese readme
+│
+├───sample: the sample file(s)
+│   │   readme.md: readme of the sample file(s)
+│   │
+│   ├───data
+│   │       data_001.csv
+│   │       data_002.csv
+│   │
+│   └───hogehoge
+│       │   fuga.txt
+│       │
+│       └───data
+│               data_002.csv
+│               data_003.csv
+│
+└───src: the source directory
+    │   directory_structure_py.exe: the executable file
+    │
+    ├───config: config directory
+    │       logging.json: the config file for logging
+    │
+    └───templates: templates directory
+            preview_template.html.j2: the template file for the RO-Crate HTML preview
+```
 
 # License
 

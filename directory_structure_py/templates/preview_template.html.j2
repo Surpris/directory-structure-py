@@ -55,7 +55,264 @@
       width: 150px;
       padding:20px;
     }
+    
+    /* tree table */
+    .tree {
+        padding-top: 5px;
+        padding-bottom: 5px;
+        font-size: 18px;
+        margin-left: auto;
+        margin-right: auto;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .display_name {
+            text-align: left;
+        }
+        .data_size {
+            text-align: right;
+            margin-right: 0.5em;
+        }
+        tr {
+            position: relative;
+            border-bottom: 1px solid #05D9D2;
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+        tr:first-of-type {
+            border-bottom: 2px solid #00a5a0;
+        }
+        td {
+            .display_name_child {
+                position: relative;
+                padding-left: 15px;
+                text-align: left;
+            }
+        }
+    }
+    /* accordion */
+    .details {
+        border-top: 2px solid #00a5a0;
+        border-left: 2px solid #00a5a0;
+        border-right: 2px solid #00a5a0;
+        &.layer1 {
+            border-top: 2px solid #00a5a0;
+            border-left: 2px solid #00a5a0;
+            border-right: 2px solid #00a5a0;
+            &:last-of-type {
+                border-bottom: 2px solid #00a5a0;
+            } 
+        }
+        &.layer2 {
+            position: relative;
+            margin-left: 10px;
+            &:last-of-type {
+                border-bottom: 2px solid #00a5a0;
+            } 
+        }
+        &.layer3 {
+            position: relative;
+            margin-left: 10px;
+            &:last-of-type {
+                border-bottom: 2px solid #00a5a0;
+            } 
+        }
+        &.layer4 {
+            position: relative;
+            margin-left: 10px;
+            &:last-of-type {
+                border-bottom: 2px solid #00a5a0;
+            } 
+        }
+        &.layer5 {
+            position: relative;
+            margin-left: 10px;
+            &:last-of-type {
+                border-bottom: 2px solid #00a5a0;
+            } 
+        }
+        &.layer_file {
+            position: relative;
+            margin-left: 10px;
+            &:last-of-type {
+                border-bottom: 2px solid #00a5a0;
+            } 
+        }
+    }
+    .details-summary {
+        position: relative;
+        display: block;
+        padding: 10px;
+        font-size: 22px;
+        font-weight: bold;
+        &.layer1 {
+            background-color: #7fd2cf;
+        }
+        &.layer2 {
+            background-color: #7fd2cf;
+            font-size: 20px;
+        }
+        &.layer3 {
+            background-color: #4cc0bc;
+            font-size: 20px;
+        }
+        &.layer4 {
+            background-color: #4cc0bc;
+            font-size: 20px;
+        }
+        &.layer5 {
+            background-color: #4cc0bc;
+            font-size: 20px;
+        }
+        &.layer5 {
+            background-color: #4cc0bc;
+            font-size: 20px;
+        }
+        &.layer_file {
+            background-color: #B3DFF3;
+            font-size: 20px;
+        }
+        &:hover {
+            cursor: pointer;
+            opacity: 0.8;
+        }
+        .btn {
+            position: absolute;
+            top: 37%;
+            left: 10%;
+            width: 18px;
+            height: 18px;
+            transform-origin: center center;
+            transition-duration: 0.2s;
+
+            &:before,
+            &:after {
+                content: "";
+                background-color: #000000;
+                border-radius: 10px;
+                width: 18px;
+                height: 4px;
+                position: absolute;
+                top: 7px;
+                left: 0;
+                transform-origin: center center;
+            }
+            &:before {
+                width: 4px;
+                height: 18px;
+                top: 0;
+                left: 7px;
+            }
+        }
+        &.is-active {
+            .btn {
+                -webkit-transform: rotate(-180deg);
+                transform: rotate(-180deg);
+                &:before {
+                    content: none;
+                }
+            }
+        }
+    }
+
+    .details-summary::-webkit-details-marker {
+        display: none;
+    }
+
+    .details-content {
+        // font-size: 24px;
+        // font-weight: bold;
+    }
+    .details-content-item {
+        position: relative;
+        padding: 20px;
+        .go-to-tree-btn {
+            border-color: #05D9D2;
+            border-radius: 3px;
+            background: #05D9D2;
+            text-align: center;
+            font-size: 18px;
+            color: #000000;
+            padding: 5px;
+            height: auto;
+            width: auto;
+            margin: auto;
+            &:hover {
+               cursor: pointer;
+                opacity: 0.8;
+            }
+        }
+    }
+
+    /* tab menu */
+    .tab-switch {
+        display: flex;
+        flex-wrap: wrap;
+        max-width: 800px;
+        margin: auto;
+        justify-content: center;
+        gap: 5px;
+        font-weight: bold;
+    }
+
+    .tab-switch > label {
+        flex: 1 1 auto;
+        min-width: 70px;
+        order: -1;
+        position: relative;
+        min-width: 70px;
+        padding: .7em 1em;
+        background-color: #f2f3f4;
+        color: #000000;
+        text-align: center;
+        cursor: pointer;
+    }
+
+    .tab-switch > label:hover,
+    .tab-switch label:has(:checked) {
+        background-color: #4cc0bc;
+        color: #fff;
+    }
+    .tab-switch input {
+        display: none;
+    }
+    .tab-switch > div {
+        display: none;
+        width: 100%;
+        padding: 1.5em 1em;
+    }
+    .tab-switch label:has(:checked) + div {
+        display: block;
+    }
   </style>
+  <script>
+    let accordionDetails = '.js-details';
+    let accordionSummary = '.js-details-summary';
+    let accordionContent = '.js-details-content';
+    let speed = 300
+
+    $(accordionSummary).each(function() {
+    $(this).on("click", function(event) {
+        event.preventDefault();
+        $(this).toggleClass("is-active");
+
+        if ($(this).parent($(accordionDetails)).attr("open")) {
+        $(this).nextAll($(accordionContent)).slideUp(speed, function() {
+            $(this).parent($(accordionDetails)).removeAttr("open");
+        });
+        } else {
+        $(this).parent($(accordionDetails)).attr("open", "true");
+        $(this).nextAll($(accordionContent)).hide().slideDown(speed);
+        }
+    })
+    })
+  </script>
+  <script>
+    function switchTab(tabId) {
+        document.getElementById(tabId).checked = true;
+    }
+  </script>
 </head>
 <body>
 <div class='main'>
@@ -102,6 +359,7 @@
       c-3.3-2.6-6.9-6.2-6.4-10.7c0.2-6.9,2.4-13.9,7.3-18.8C253.8,242.4,264.2,238.6,274.5,236.6z"/>
   </svg>
   <h1>{{ crate.name or  "New RO Crate" }}</h1>
+  <h2>Crate properties</h2>
   <p>
   {% if crate.description %}
     {{ crate.description }}
@@ -168,40 +426,151 @@
   {%endif %}
   </dl>
 
-  <h2>Contents</h2>
+  <h2>Entities</h2>
   <div id="contents">
-    {% for entry in data %}
-      <div class="data-entity" id="">
-          <strong>Data entity</strong>
-        <a class="data-entity-link" href="{{ entry['@id'] }}">{{ entry['@id'] }}</a>
-        <p>Type: {{ stringify(entry['@type']) }}</p>
-        {% if entry['contentSize'] %}
-          {% if entry['contentSize'] < 1000 %}
-            <p>contentSize: {{ entry['contentSize'] }} B</p>
-          {% elif entry['contentSize'] < 1000000 %}
-            <p>contentSize: {{ '%0.1f' | format(entry['contentSize'] / 1000 | float) }} kB</p>
-          {% elif entry['contentSize'] < 1000000000 %}
-            <p>contentSize: {{ '%0.1f' | format(entry['contentSize'] / 1000000 | float) }} MB</p>
-          {% elif entry['contentSize'] < 1000000000000 %}
-            <p>contentSize: {{ '%0.2f' | format(entry['contentSize'] / 1000000000 | float) }} GB</p>
-          {% else %}
-            <p>contentSize: {{ '%0.2f' | format(entry['contentSize'] / 1000000000000 | float) }} TB</p>
-          {% endif %}
+    {% macro format_content_size(size) %}
+        {% if size < 1000 %}
+            {{ size }} B
+        {% elif size < 1000000 %}
+            {{ '%0.1f' | format(size / 1000 | float) }} kB
+        {% elif size < 1000000000 %}
+            {{ '%0.1f' | format(size / 1000000 | float) }} MB
+        {% elif size < 1000000000000 %}
+            {{ '%0.1f' | format(size / 1000000000 | float) }} GB
+        {% else %}
+            {{ '%0.1f' | format(size / 1000000000000 | float) }} TB
         {% endif %}
-        {% if entry['dateCreated'] %}
-          <p>dateCreated: {{ entry['dateCreated'] }}</p>
+    {% endmacro %}
+    {% macro format_display_name(entry) %}
+        {% if stringify(entry['@type']) == "File" %}
+            {{ entry['name'] }}{{ entry['extension'] }}
+        {% elif stringify(entry['@type']) == "Dataset" %}
+            {{ entry['name'] }}/
+        {% else %}
+            entry['@id']
         {% endif %}
-        {% if entry['dateModified'] %}
-          <p>dateModified: {{ entry['dateModified'] }}</p>
-        {% endif %}
-        {% if entry['numberOfContents'] %}
-          <p>numberOfContents: {{ entry['numberOfContents'] }}</p>
-        {% endif %}
-        {% if entry['programmingLanguage'] %}
-          <p>ProgrammingLanguage: {{ entry['programmingLanguage']['@id'] }}</p>
-        {% endif %}
-      </div>
-    {% endfor %}
+    {% endmacro %}
+
+    <div class="tab-switch">
+        <label>
+            <input id="directory-tree-tab" type="radio" name="TAB" checked>
+            Directory tree
+        </label>
+        <div class="tab-content">
+            <h2>Directory tree</h2>
+            {% macro render_tree(entry, entity_list, level) %}
+                <tr>
+                {% set padding_left = level * 20 %}
+                <td id="tree_{{entry['@id']}}" class="display_name" style="padding-left: {{ padding_left|string }}px;">
+                <a href="#summary_{{entry['@id']}}" onclick="switchTab('contents-tab')">{{ format_display_name(entry) }}</a>
+                </td>
+                <td class="data_size">
+                {% if entry['contentSizeOfAllFiles'] %}
+                {{ format_content_size(entry['contentSizeOfAllFiles']) }}
+                {% elif entry['contentSize'] %}
+                {{ format_content_size(entry['contentSize']) }}
+                {% endif %}
+                </td>
+                {% if entry['hasPart'] %}
+                    {% for child_id in entry['hasPart'] %}
+                        {% for entity in entity_list %}
+                            {% if entity['@id'] == child_id %}
+                                {{ render_tree(entity, entity_list, level + 1) }}
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                {% endif %}
+            {% endmacro %}
+            <div class="tree">
+                <table>
+                <tbody>
+                    <tr>
+                        <th class="display_name">Display name</th>
+                        <th class="data_size">Data size</th>
+                    <tr>
+                    {{ render_tree(data[0], data, 1) }}
+                </tbody>
+                </table>
+            </div>
+        </div>
+
+        <label>
+            <input id="contents-tab" type="radio" name="TAB">
+            Contents
+        </label>
+        <div class="tab-content">
+            <h2>Contents</h2>
+            {% macro render_contents(entry) %}
+                <div class="details-content-item">
+                <p>Type: {{ stringify(entry['@type']) }}</p>
+                {% if entry['contentSizeOfAllFiles'] %}
+                    <p>contentSize: {{ format_content_size(entry['contentSizeOfAllFiles']) }}</p>
+                {% elif entry['contentSize'] %}
+                    <p>contentSize: {{ format_content_size(entry['contentSize']) }}</p>
+                {% endif %}
+                {% if entry['dateCreated'] %}
+                    <p>dateCreated: {{ entry['dateCreated'] }}</p>
+                {% endif %}
+                {% if entry['dateModified'] %}
+                    <p>dateModified: {{ entry['dateModified'] }}</p>
+                {% endif %}
+                {% if entry['numberOfAllContents'] %}
+                    <p>numberOfContents: {{ entry['numberOfAllContents'] }}</p>
+                {% elif entry['numberOfContents'] %}
+                    <p>numberOfContents: {{ entry['numberOfContents'] }}</p>
+                {% endif %}
+                {% if entry['numberOfAllFilesPerExtension'] %}
+                    <p>extension: {{ entry['numberOfAllFilesPerExtension'] }}</p>
+                {% elif entry['extension'] %}
+                    <p>extension: {{ entry['extension'] }}</p>
+                {% endif %}
+                {% if entry['programmingLanguage'] %}
+                    <p>ProgrammingLanguage: {{ entry['programmingLanguage']['@id'] }}</p>
+                {% endif %}
+                <button class="go-to-tree-btn" href="#tree_{{ entry['@id'] }}" onclick="switchTab('directory-tree-tab')">
+                    Go To Tree
+                </button>
+                </div>
+            {% endmacro %}
+
+            {% macro render_contents_tree(entry, entity_list, level) %}
+                {% set layer_class = "layer" + level|string %}
+                {% if level > 5 %}
+                    {% set layer_class = "layer5" %}
+                {% endif %}
+                {% if stringify(entry['@type']) == "File" %}
+                    {% set layer_class = "layer_file" %}
+                {% endif %}
+                <details class="details js-details {{layer_class}}">
+                    <summary class="details-summary js-details-summary {{layer_class}}" id="summary_{{ entry['@id'] }}">
+                    <strong>{{ format_display_name(entry) }}
+                    {% if entry['contentSizeOfAllFiles'] %}
+                    : {{ format_content_size(entry['contentSizeOfAllFiles']) }}
+                    {% elif entry['contentSize'] %}
+                    : {{ format_content_size(entry['contentSize']) }}
+                    {% endif %}
+                    </strong>
+                    </summary>
+                    <div class="details-content js-details-content {{layer_class}}" id="content_{{ entry['@id'] }}">
+                        {{ render_contents(entry) }}
+                    </div>
+                    {% if entry['hasPart'] %}
+                    {% for child_id in entry['hasPart'] %}
+                            {% for entity in entity_list %}
+                                {% if entity['@id'] == child_id %}
+                                    {{ render_contents_tree(entity, entity_list, level + 1) }}
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                    {% endif %}
+                </details>
+            {% endmacro %}
+
+            <div class="data-entity" id="">
+                {{ render_contents_tree(data[0], data, 1) }}
+            </div>
+        </div>
+    </div>
   </div>
 </div>
 </body>
