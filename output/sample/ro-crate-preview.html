@@ -55,7 +55,264 @@
       width: 150px;
       padding:20px;
     }
+    
+    /* tree table */
+    .tree {
+        padding-top: 5px;
+        padding-bottom: 5px;
+        font-size: 18px;
+        margin-left: auto;
+        margin-right: auto;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .display_name {
+            text-align: left;
+        }
+        .data_size {
+            text-align: right;
+            margin-right: 0.5em;
+        }
+        tr {
+            position: relative;
+            border-bottom: 1px solid #05D9D2;
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+        tr:first-of-type {
+            border-bottom: 2px solid #00a5a0;
+        }
+        td {
+            .display_name_child {
+                position: relative;
+                padding-left: 15px;
+                text-align: left;
+            }
+        }
+    }
+    /* accordion */
+    .details {
+        border-top: 2px solid #00a5a0;
+        border-left: 2px solid #00a5a0;
+        border-right: 2px solid #00a5a0;
+        &.layer1 {
+            border-top: 2px solid #00a5a0;
+            border-left: 2px solid #00a5a0;
+            border-right: 2px solid #00a5a0;
+            &:last-of-type {
+                border-bottom: 2px solid #00a5a0;
+            } 
+        }
+        &.layer2 {
+            position: relative;
+            margin-left: 10px;
+            &:last-of-type {
+                border-bottom: 2px solid #00a5a0;
+            } 
+        }
+        &.layer3 {
+            position: relative;
+            margin-left: 10px;
+            &:last-of-type {
+                border-bottom: 2px solid #00a5a0;
+            } 
+        }
+        &.layer4 {
+            position: relative;
+            margin-left: 10px;
+            &:last-of-type {
+                border-bottom: 2px solid #00a5a0;
+            } 
+        }
+        &.layer5 {
+            position: relative;
+            margin-left: 10px;
+            &:last-of-type {
+                border-bottom: 2px solid #00a5a0;
+            } 
+        }
+        &.layer_file {
+            position: relative;
+            margin-left: 10px;
+            &:last-of-type {
+                border-bottom: 2px solid #00a5a0;
+            } 
+        }
+    }
+    .details-summary {
+        position: relative;
+        display: block;
+        padding: 10px;
+        font-size: 22px;
+        font-weight: bold;
+        &.layer1 {
+            background-color: #7fd2cf;
+        }
+        &.layer2 {
+            background-color: #7fd2cf;
+            font-size: 20px;
+        }
+        &.layer3 {
+            background-color: #4cc0bc;
+            font-size: 20px;
+        }
+        &.layer4 {
+            background-color: #4cc0bc;
+            font-size: 20px;
+        }
+        &.layer5 {
+            background-color: #4cc0bc;
+            font-size: 20px;
+        }
+        &.layer5 {
+            background-color: #4cc0bc;
+            font-size: 20px;
+        }
+        &.layer_file {
+            background-color: #B3DFF3;
+            font-size: 20px;
+        }
+        &:hover {
+            cursor: pointer;
+            opacity: 0.8;
+        }
+        .btn {
+            position: absolute;
+            top: 37%;
+            left: 10%;
+            width: 18px;
+            height: 18px;
+            transform-origin: center center;
+            transition-duration: 0.2s;
+
+            &:before,
+            &:after {
+                content: "";
+                background-color: #000000;
+                border-radius: 10px;
+                width: 18px;
+                height: 4px;
+                position: absolute;
+                top: 7px;
+                left: 0;
+                transform-origin: center center;
+            }
+            &:before {
+                width: 4px;
+                height: 18px;
+                top: 0;
+                left: 7px;
+            }
+        }
+        &.is-active {
+            .btn {
+                -webkit-transform: rotate(-180deg);
+                transform: rotate(-180deg);
+                &:before {
+                    content: none;
+                }
+            }
+        }
+    }
+
+    .details-summary::-webkit-details-marker {
+        display: none;
+    }
+
+    .details-content {
+        // font-size: 24px;
+        // font-weight: bold;
+    }
+    .details-content-item {
+        position: relative;
+        padding: 20px;
+        .go-to-tree-btn {
+            border-color: #05D9D2;
+            border-radius: 3px;
+            background: #05D9D2;
+            text-align: center;
+            font-size: 18px;
+            color: #000000;
+            padding: 5px;
+            height: auto;
+            width: auto;
+            margin: auto;
+            &:hover {
+               cursor: pointer;
+                opacity: 0.8;
+            }
+        }
+    }
+
+    /* tab menu */
+    .tab-switch {
+        display: flex;
+        flex-wrap: wrap;
+        max-width: 800px;
+        margin: auto;
+        justify-content: center;
+        gap: 5px;
+        font-weight: bold;
+    }
+
+    .tab-switch > label {
+        flex: 1 1 auto;
+        min-width: 70px;
+        order: -1;
+        position: relative;
+        min-width: 70px;
+        padding: .7em 1em;
+        background-color: #f2f3f4;
+        color: #000000;
+        text-align: center;
+        cursor: pointer;
+    }
+
+    .tab-switch > label:hover,
+    .tab-switch label:has(:checked) {
+        background-color: #4cc0bc;
+        color: #fff;
+    }
+    .tab-switch input {
+        display: none;
+    }
+    .tab-switch > div {
+        display: none;
+        width: 100%;
+        padding: 1.5em 1em;
+    }
+    .tab-switch label:has(:checked) + div {
+        display: block;
+    }
   </style>
+  <script>
+    let accordionDetails = '.js-details';
+    let accordionSummary = '.js-details-summary';
+    let accordionContent = '.js-details-content';
+    let speed = 300
+
+    $(accordionSummary).each(function() {
+    $(this).on("click", function(event) {
+        event.preventDefault();
+        $(this).toggleClass("is-active");
+
+        if ($(this).parent($(accordionDetails)).attr("open")) {
+        $(this).nextAll($(accordionContent)).slideUp(speed, function() {
+            $(this).parent($(accordionDetails)).removeAttr("open");
+        });
+        } else {
+        $(this).parent($(accordionDetails)).attr("open", "true");
+        $(this).nextAll($(accordionContent)).hide().slideDown(speed);
+        }
+    })
+    })
+  </script>
+  <script>
+    function switchTab(tabId) {
+        document.getElementById(tabId).checked = true;
+    }
+  </script>
 </head>
 <body>
 <div class='main'>
@@ -102,6 +359,7 @@
       c-3.3-2.6-6.9-6.2-6.4-10.7c0.2-6.9,2.4-13.9,7.3-18.8C253.8,242.4,264.2,238.6,274.5,236.6z"/>
   </svg>
   <h1>sample</h1>
+  <h2>Crate properties</h2>
   <p>
   
   </p>
@@ -123,213 +381,1221 @@
 
   
     <dt>datePublished</dt>
-    <dd>2024-11-27 23:25:40</dd>
+    <dd>2024-11-30 18:16:23</dd>
   
 
   
   </dl>
 
-  <h2>Contents</h2>
+  <h2>Entities</h2>
   <div id="contents">
     
-      <div class="data-entity" id="">
-          <strong>Data entity</strong>
-        <a class="data-entity-link" href="sample/">sample/</a>
-        <p>Type: Dataset</p>
-        
-          
-            <p>contentSize: 187 B</p>
-          
-        
-        
-          <p>dateCreated: 2024-09-25T12:16:08</p>
-        
-        
-          <p>dateModified: 2024-11-23T12:15:26</p>
-        
-        
-          <p>numberOfContents: 3</p>
-        
-        
-      </div>
     
-      <div class="data-entity" id="">
-          <strong>Data entity</strong>
-        <a class="data-entity-link" href="sample/data/">sample/data/</a>
-        <p>Type: Dataset</p>
+
+    <div class="tab-switch">
+        <label>
+            <input id="directory-tree-tab" type="radio" name="TAB" checked>
+            Directory tree
+        </label>
+        <div class="tab-content">
+            <h2>Directory tree</h2>
+            
+            <div class="tree">
+                <table>
+                <tbody>
+                    <tr>
+                        <th class="display_name">Display name</th>
+                        <th class="data_size">contentSize</th>
+                    <tr>
+                    
+                <tr>
+                
+                <td id="tree_sample/" class="display_name" style="padding-left: 20px;">
+                <a href="#summary_sample/" onclick="switchTab('contents-tab')">
         
-          
-            <p>contentSize: 83 B</p>
-          
+            sample/
         
+    </a>
+                </td>
+                <td class="data_size">
+                
+                
         
-          <p>dateCreated: 2024-09-25T12:17:06</p>
+            364 B
         
-        
-          <p>dateModified: 2024-09-25T12:17:53</p>
-        
-        
-          <p>numberOfContents: 2</p>
-        
-        
-      </div>
     
-      <div class="data-entity" id="">
-          <strong>Data entity</strong>
-        <a class="data-entity-link" href="sample/data/data_001.csv">sample/data/data_001.csv</a>
-        <p>Type: File</p>
+                
+                </td>
+                
+                    
+                        
+                            
+                        
+                            
+                                
+                <tr>
+                
+                <td id="tree_sample/data/" class="display_name" style="padding-left: 40px;">
+                <a href="#summary_sample/data/" onclick="switchTab('contents-tab')">
         
-          
-            <p>contentSize: 42 B</p>
-          
+            data/
         
+    </a>
+                </td>
+                <td class="data_size">
+                
+                
         
-          <p>dateCreated: 2024-09-25T12:17:15</p>
+            83 B
         
-        
-          <p>dateModified: 2024-09-25T12:18:08</p>
-        
-        
-        
-      </div>
     
-      <div class="data-entity" id="">
-          <strong>Data entity</strong>
-        <a class="data-entity-link" href="sample/data/data_002.csv">sample/data/data_002.csv</a>
-        <p>Type: File</p>
+                
+                </td>
+                
+                    
+                        
+                            
+                        
+                            
+                        
+                            
+                                
+                <tr>
+                
+                <td id="tree_sample/data/data_001.csv" class="display_name" style="padding-left: 60px;">
+                <a href="#summary_sample/data/data_001.csv" onclick="switchTab('contents-tab')">
         
-          
-            <p>contentSize: 41 B</p>
-          
+            data_001.csv
         
+    </a>
+                </td>
+                <td class="data_size">
+                
+                
         
-          <p>dateCreated: 2024-09-25T12:17:48</p>
+            42 B
         
-        
-          <p>dateModified: 2024-09-25T12:18:05</p>
-        
-        
-        
-      </div>
     
-      <div class="data-entity" id="">
-          <strong>Data entity</strong>
-        <a class="data-entity-link" href="sample/hogehoge/">sample/hogehoge/</a>
-        <p>Type: Dataset</p>
+                
+                </td>
+                
+            
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                                
+                <tr>
+                
+                <td id="tree_sample/data/data_002.csv" class="display_name" style="padding-left: 60px;">
+                <a href="#summary_sample/data/data_002.csv" onclick="switchTab('contents-tab')">
         
-          
-            <p>contentSize: 6 B</p>
-          
+            data_002.csv
         
+    </a>
+                </td>
+                <td class="data_size">
+                
+                
         
-          <p>dateCreated: 2024-09-25T12:16:46</p>
+            41 B
         
-        
-          <p>dateModified: 2024-11-10T16:39:53</p>
-        
-        
-          <p>numberOfContents: 2</p>
-        
-        
-      </div>
     
-      <div class="data-entity" id="">
-          <strong>Data entity</strong>
-        <a class="data-entity-link" href="sample/hogehoge/data/">sample/hogehoge/data/</a>
-        <p>Type: Dataset</p>
+                
+                </td>
+                
+            
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                    
+                
+            
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                                
+                <tr>
+                
+                <td id="tree_sample/hogehoge/" class="display_name" style="padding-left: 40px;">
+                <a href="#summary_sample/hogehoge/" onclick="switchTab('contents-tab')">
         
-          
-            <p>contentSize: 88 B</p>
-          
+            hogehoge/
         
+    </a>
+                </td>
+                <td class="data_size">
+                
+                
         
-          <p>dateCreated: 2024-11-10T16:39:53</p>
+            94 B
         
-        
-          <p>dateModified: 2024-11-10T16:40:12</p>
-        
-        
-          <p>numberOfContents: 2</p>
-        
-        
-      </div>
     
-      <div class="data-entity" id="">
-          <strong>Data entity</strong>
-        <a class="data-entity-link" href="sample/hogehoge/data/data_002.csv">sample/hogehoge/data/data_002.csv</a>
-        <p>Type: File</p>
+                
+                </td>
+                
+                    
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                                
+                <tr>
+                
+                <td id="tree_sample/hogehoge/data/" class="display_name" style="padding-left: 60px;">
+                <a href="#summary_sample/hogehoge/data/" onclick="switchTab('contents-tab')">
         
-          
-            <p>contentSize: 41 B</p>
-          
+            data/
         
+    </a>
+                </td>
+                <td class="data_size">
+                
+                
         
-          <p>dateCreated: 2024-11-10T16:40:03</p>
+            88 B
         
-        
-          <p>dateModified: 2024-09-25T12:18:05</p>
-        
-        
-        
-      </div>
     
-      <div class="data-entity" id="">
-          <strong>Data entity</strong>
-        <a class="data-entity-link" href="sample/hogehoge/data/data_003.csv">sample/hogehoge/data/data_003.csv</a>
-        <p>Type: File</p>
+                
+                </td>
+                
+                    
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                                
+                <tr>
+                
+                <td id="tree_sample/hogehoge/data/data_002.csv" class="display_name" style="padding-left: 80px;">
+                <a href="#summary_sample/hogehoge/data/data_002.csv" onclick="switchTab('contents-tab')">
         
-          
-            <p>contentSize: 47 B</p>
-          
+            data_002.csv
         
+    </a>
+                </td>
+                <td class="data_size">
+                
+                
         
-          <p>dateCreated: 2024-11-10T16:40:07</p>
+            41 B
         
-        
-          <p>dateModified: 2024-11-10T16:40:30</p>
-        
-        
-        
-      </div>
     
-      <div class="data-entity" id="">
-          <strong>Data entity</strong>
-        <a class="data-entity-link" href="sample/hogehoge/fuga.txt">sample/hogehoge/fuga.txt</a>
-        <p>Type: File</p>
+                
+                </td>
+                
+            
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                                
+                <tr>
+                
+                <td id="tree_sample/hogehoge/data/data_003.csv" class="display_name" style="padding-left: 80px;">
+                <a href="#summary_sample/hogehoge/data/data_003.csv" onclick="switchTab('contents-tab')">
         
-          
-            <p>contentSize: 6 B</p>
-          
+            data_003.csv
         
+    </a>
+                </td>
+                <td class="data_size">
+                
+                
         
-          <p>dateCreated: 2024-09-25T12:16:51</p>
+            47 B
         
-        
-          <p>dateModified: 2024-09-25T12:16:55</p>
-        
-        
-        
-      </div>
     
-      <div class="data-entity" id="">
-          <strong>Data entity</strong>
-        <a class="data-entity-link" href="sample/readme.md">sample/readme.md</a>
-        <p>Type: File</p>
+                
+                </td>
+                
+            
+                            
+                        
+                            
+                        
+                            
+                        
+                    
+                
+            
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                                
+                <tr>
+                
+                <td id="tree_sample/hogehoge/fuga.txt" class="display_name" style="padding-left: 60px;">
+                <a href="#summary_sample/hogehoge/fuga.txt" onclick="switchTab('contents-tab')">
         
-          
-            <p>contentSize: 187 B</p>
-          
+            fuga.txt
         
+    </a>
+                </td>
+                <td class="data_size">
+                
+                
         
-          <p>dateCreated: 2024-09-25T12:16:19</p>
+            6 B
         
-        
-          <p>dateModified: 2024-11-10T17:42:20</p>
-        
-        
-        
-      </div>
     
+                
+                </td>
+                
+            
+                            
+                        
+                            
+                        
+                    
+                
+            
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                    
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                                
+                <tr>
+                
+                <td id="tree_sample/readme.md" class="display_name" style="padding-left: 40px;">
+                <a href="#summary_sample/readme.md" onclick="switchTab('contents-tab')">
+        
+            readme.md
+        
+    </a>
+                </td>
+                <td class="data_size">
+                
+                
+        
+            187 B
+        
+    
+                
+                </td>
+                
+            
+                            
+                        
+                    
+                
+            
+                </tbody>
+                </table>
+            </div>
+        </div>
+
+        <label>
+            <input id="contents-tab" type="radio" name="TAB">
+            Contents
+        </label>
+        <div class="tab-content">
+            <h2>Contents</h2>
+            
+
+            
+
+            <div class="data-entity" id="">
+                
+                
+                
+                
+                <details class="details js-details layer1">
+                    <summary class="details-summary js-details-summary layer1" id="summary_sample/">
+                    <strong>
+        
+            sample/
+        
+    
+                    
+                    : 
+        
+            364 B
+        
+    
+                    
+                    </strong>
+                    </summary>
+                    <div class="details-content js-details-content layer1" id="content_sample/">
+                        
+                <div class="details-content-item">
+                <p>Type: Dataset</p>
+                
+                    <p>contentSize: 
+        
+            364 B
+        
+    </p>
+                
+                
+                    <p>dateCreated: 2024-09-25T12:16:08</p>
+                
+                
+                    <p>dateModified: 2024-11-23T12:15:26</p>
+                
+                
+                    <p>numberOfContents: 9</p>
+                
+                
+                    <p>extension: {'.md': 1, '.csv': 4, '.txt': 1}</p>
+                
+                
+                <button class="go-to-tree-btn" href="#tree_sample/" onclick="switchTab('directory-tree-tab')">
+                    Go To Tree
+                </button>
+                </div>
+            
+                    </div>
+                    
+                    
+                            
+                                
+                            
+                                
+                                    
+                
+                
+                
+                <details class="details js-details layer2">
+                    <summary class="details-summary js-details-summary layer2" id="summary_sample/data/">
+                    <strong>
+        
+            data/
+        
+    
+                    
+                    : 
+        
+            83 B
+        
+    
+                    
+                    </strong>
+                    </summary>
+                    <div class="details-content js-details-content layer2" id="content_sample/data/">
+                        
+                <div class="details-content-item">
+                <p>Type: Dataset</p>
+                
+                    <p>contentSize: 
+        
+            83 B
+        
+    </p>
+                
+                
+                    <p>dateCreated: 2024-09-25T12:17:06</p>
+                
+                
+                    <p>dateModified: 2024-09-25T12:17:53</p>
+                
+                
+                    <p>numberOfContents: 2</p>
+                
+                
+                    <p>extension: {'.csv': 2}</p>
+                
+                
+                <button class="go-to-tree-btn" href="#tree_sample/data/" onclick="switchTab('directory-tree-tab')">
+                    Go To Tree
+                </button>
+                </div>
+            
+                    </div>
+                    
+                    
+                            
+                                
+                            
+                                
+                            
+                                
+                                    
+                
+                
+                
+                    
+                
+                <details class="details js-details layer_file">
+                    <summary class="details-summary js-details-summary layer_file" id="summary_sample/data/data_001.csv">
+                    <strong>
+        
+            data_001.csv
+        
+    
+                    
+                    : 
+        
+            42 B
+        
+    
+                    
+                    </strong>
+                    </summary>
+                    <div class="details-content js-details-content layer_file" id="content_sample/data/data_001.csv">
+                        
+                <div class="details-content-item">
+                <p>Type: File</p>
+                
+                    <p>contentSize: 
+        
+            42 B
+        
+    </p>
+                
+                
+                    <p>dateCreated: 2024-09-25T12:17:15</p>
+                
+                
+                    <p>dateModified: 2024-09-25T12:18:08</p>
+                
+                
+                
+                    <p>extension: .csv</p>
+                
+                
+                <button class="go-to-tree-btn" href="#tree_sample/data/data_001.csv" onclick="switchTab('directory-tree-tab')">
+                    Go To Tree
+                </button>
+                </div>
+            
+                    </div>
+                    
+                </details>
+            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                        
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                                    
+                
+                
+                
+                    
+                
+                <details class="details js-details layer_file">
+                    <summary class="details-summary js-details-summary layer_file" id="summary_sample/data/data_002.csv">
+                    <strong>
+        
+            data_002.csv
+        
+    
+                    
+                    : 
+        
+            41 B
+        
+    
+                    
+                    </strong>
+                    </summary>
+                    <div class="details-content js-details-content layer_file" id="content_sample/data/data_002.csv">
+                        
+                <div class="details-content-item">
+                <p>Type: File</p>
+                
+                    <p>contentSize: 
+        
+            41 B
+        
+    </p>
+                
+                
+                    <p>dateCreated: 2024-09-25T12:17:48</p>
+                
+                
+                    <p>dateModified: 2024-09-25T12:18:05</p>
+                
+                
+                
+                    <p>extension: .csv</p>
+                
+                
+                <button class="go-to-tree-btn" href="#tree_sample/data/data_002.csv" onclick="switchTab('directory-tree-tab')">
+                    Go To Tree
+                </button>
+                </div>
+            
+                    </div>
+                    
+                </details>
+            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                        
+                    
+                </details>
+            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                        
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                                    
+                
+                
+                
+                <details class="details js-details layer2">
+                    <summary class="details-summary js-details-summary layer2" id="summary_sample/hogehoge/">
+                    <strong>
+        
+            hogehoge/
+        
+    
+                    
+                    : 
+        
+            94 B
+        
+    
+                    
+                    </strong>
+                    </summary>
+                    <div class="details-content js-details-content layer2" id="content_sample/hogehoge/">
+                        
+                <div class="details-content-item">
+                <p>Type: Dataset</p>
+                
+                    <p>contentSize: 
+        
+            94 B
+        
+    </p>
+                
+                
+                    <p>dateCreated: 2024-09-25T12:16:46</p>
+                
+                
+                    <p>dateModified: 2024-11-10T16:39:53</p>
+                
+                
+                    <p>numberOfContents: 4</p>
+                
+                
+                    <p>extension: {'.txt': 1, '.csv': 2}</p>
+                
+                
+                <button class="go-to-tree-btn" href="#tree_sample/hogehoge/" onclick="switchTab('directory-tree-tab')">
+                    Go To Tree
+                </button>
+                </div>
+            
+                    </div>
+                    
+                    
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                                    
+                
+                
+                
+                <details class="details js-details layer3">
+                    <summary class="details-summary js-details-summary layer3" id="summary_sample/hogehoge/data/">
+                    <strong>
+        
+            data/
+        
+    
+                    
+                    : 
+        
+            88 B
+        
+    
+                    
+                    </strong>
+                    </summary>
+                    <div class="details-content js-details-content layer3" id="content_sample/hogehoge/data/">
+                        
+                <div class="details-content-item">
+                <p>Type: Dataset</p>
+                
+                    <p>contentSize: 
+        
+            88 B
+        
+    </p>
+                
+                
+                    <p>dateCreated: 2024-11-10T16:39:53</p>
+                
+                
+                    <p>dateModified: 2024-11-10T16:40:12</p>
+                
+                
+                    <p>numberOfContents: 2</p>
+                
+                
+                    <p>extension: {'.csv': 2}</p>
+                
+                
+                <button class="go-to-tree-btn" href="#tree_sample/hogehoge/data/" onclick="switchTab('directory-tree-tab')">
+                    Go To Tree
+                </button>
+                </div>
+            
+                    </div>
+                    
+                    
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                                    
+                
+                
+                
+                    
+                
+                <details class="details js-details layer_file">
+                    <summary class="details-summary js-details-summary layer_file" id="summary_sample/hogehoge/data/data_002.csv">
+                    <strong>
+        
+            data_002.csv
+        
+    
+                    
+                    : 
+        
+            41 B
+        
+    
+                    
+                    </strong>
+                    </summary>
+                    <div class="details-content js-details-content layer_file" id="content_sample/hogehoge/data/data_002.csv">
+                        
+                <div class="details-content-item">
+                <p>Type: File</p>
+                
+                    <p>contentSize: 
+        
+            41 B
+        
+    </p>
+                
+                
+                    <p>dateCreated: 2024-11-10T16:40:03</p>
+                
+                
+                    <p>dateModified: 2024-09-25T12:18:05</p>
+                
+                
+                
+                    <p>extension: .csv</p>
+                
+                
+                <button class="go-to-tree-btn" href="#tree_sample/hogehoge/data/data_002.csv" onclick="switchTab('directory-tree-tab')">
+                    Go To Tree
+                </button>
+                </div>
+            
+                    </div>
+                    
+                </details>
+            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                        
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                                    
+                
+                
+                
+                    
+                
+                <details class="details js-details layer_file">
+                    <summary class="details-summary js-details-summary layer_file" id="summary_sample/hogehoge/data/data_003.csv">
+                    <strong>
+        
+            data_003.csv
+        
+    
+                    
+                    : 
+        
+            47 B
+        
+    
+                    
+                    </strong>
+                    </summary>
+                    <div class="details-content js-details-content layer_file" id="content_sample/hogehoge/data/data_003.csv">
+                        
+                <div class="details-content-item">
+                <p>Type: File</p>
+                
+                    <p>contentSize: 
+        
+            47 B
+        
+    </p>
+                
+                
+                    <p>dateCreated: 2024-11-10T16:40:07</p>
+                
+                
+                    <p>dateModified: 2024-11-10T16:40:30</p>
+                
+                
+                
+                    <p>extension: .csv</p>
+                
+                
+                <button class="go-to-tree-btn" href="#tree_sample/hogehoge/data/data_003.csv" onclick="switchTab('directory-tree-tab')">
+                    Go To Tree
+                </button>
+                </div>
+            
+                    </div>
+                    
+                </details>
+            
+                                
+                            
+                                
+                            
+                                
+                            
+                        
+                    
+                </details>
+            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                        
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                                    
+                
+                
+                
+                    
+                
+                <details class="details js-details layer_file">
+                    <summary class="details-summary js-details-summary layer_file" id="summary_sample/hogehoge/fuga.txt">
+                    <strong>
+        
+            fuga.txt
+        
+    
+                    
+                    : 
+        
+            6 B
+        
+    
+                    
+                    </strong>
+                    </summary>
+                    <div class="details-content js-details-content layer_file" id="content_sample/hogehoge/fuga.txt">
+                        
+                <div class="details-content-item">
+                <p>Type: File</p>
+                
+                    <p>contentSize: 
+        
+            6 B
+        
+    </p>
+                
+                
+                    <p>dateCreated: 2024-09-25T12:16:51</p>
+                
+                
+                    <p>dateModified: 2024-09-25T12:16:55</p>
+                
+                
+                
+                    <p>extension: .txt</p>
+                
+                
+                <button class="go-to-tree-btn" href="#tree_sample/hogehoge/fuga.txt" onclick="switchTab('directory-tree-tab')">
+                    Go To Tree
+                </button>
+                </div>
+            
+                    </div>
+                    
+                </details>
+            
+                                
+                            
+                                
+                            
+                        
+                    
+                </details>
+            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                        
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                                    
+                
+                
+                
+                    
+                
+                <details class="details js-details layer_file">
+                    <summary class="details-summary js-details-summary layer_file" id="summary_sample/readme.md">
+                    <strong>
+        
+            readme.md
+        
+    
+                    
+                    : 
+        
+            187 B
+        
+    
+                    
+                    </strong>
+                    </summary>
+                    <div class="details-content js-details-content layer_file" id="content_sample/readme.md">
+                        
+                <div class="details-content-item">
+                <p>Type: File</p>
+                
+                    <p>contentSize: 
+        
+            187 B
+        
+    </p>
+                
+                
+                    <p>dateCreated: 2024-09-25T12:16:19</p>
+                
+                
+                    <p>dateModified: 2024-11-10T17:42:20</p>
+                
+                
+                
+                    <p>extension: .md</p>
+                
+                
+                <button class="go-to-tree-btn" href="#tree_sample/readme.md" onclick="switchTab('directory-tree-tab')">
+                    Go To Tree
+                </button>
+                </div>
+            
+                    </div>
+                    
+                </details>
+            
+                                
+                            
+                        
+                    
+                </details>
+            
+            </div>
+        </div>
+    </div>
   </div>
 </div>
 </body>

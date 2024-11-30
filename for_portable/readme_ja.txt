@@ -52,7 +52,27 @@ v0.2.2
 * `directory_structure_metadata.tsv`：メタデータリストが含まれます。
 
 バッチファイル内で設定されているオプションを変えることで出力形式を変更できます。
-ただし、v0.2.2 では、RO-Crate 形式でメタデータを出力する場合、`preview_template_path` を必ず設定する必要があります。これは executable file が内在するテンプレートファイルを読み込めないというバグが存在するためです。
+
+## バッチファイルのオプション
+
+Main options:
+
+| Item                    | Type   | Description                                                                                                                      |
+| :---------------------- | :----- | :------------------------------------------------------------------------------------------------------------------------------- |
+| `dst`                   | str    | destination path of the json output. If empty, the metadata file will be output to the same directory as that of the input file. |
+| `include_root_path`     | (bool) | include `file_or_directory_path` with the key `root_path` if this option is set                                                  |
+| `in_rocrate`            | (bool) | output an RO-Crate-format file instead of the list format one if this option is set                                              |
+| `to_tsv`                | (bool) | output a TSV-format file if this option is set                                                                                   |
+| `in_tree`               | (bool) | output the metadata in a tree format if this option is set                                                                       |
+| `structure_only`        | (bool) | output only the structure in a tree format if this option is set                                                                 |
+| `preview_template_path` | str    | file path of the template for the preview file output by the RO-Crate.                                                           |
+
+Logging options:
+
+| Item              | Type | Description                                                                        |
+| :---------------- | :--- | :--------------------------------------------------------------------------------- |
+| `log_config_path` | str  | a log config path. See `config/logging.json` for the detail of the content format. |
+| `log_output_path` | str  | destination path of the log.                                                       |
 
 # ポータブルプログラムのディレクトリ構造
 

@@ -6,6 +6,7 @@ import datetime
 import os
 from pathlib import Path
 from typing import Dict, Any, List
+import warnings
 from directory_structure_py.constants import DATETIME_FMT, OUTPUT_ROOT_KEY
 
 
@@ -46,25 +47,24 @@ def get_metadata_of_single_file(path: Path | str, root_path: Path | str = "") ->
     """Generates metadata for a single file.
 
     Args:
-        path (Path | str): The path to the file.
-        root_path (Path | str, optional): The root path. Defaults to "".
+        path (Path | str): The path to the file.  Can be a Path object or a string.
+        root_path (Path | str, optional): The root path to generate relative IDs. Defaults to "".
+
+    Returns:
+        Dict[str, Any]: A dictionary containing the file's metadata.  The keys include:
+            - `@id`: A unique identifier for the file, relative to `root_path`.
+            - `type`: Always "File".
+            - `parent`: A dictionary containing the metadata of the parent directory (or an empty dictionary if it's the root).
+            - `basename`: The filename including extension.
+            - `name`: The filename without extension.
+            - `extension`: The file extension (including the leading dot).
+            - `contentSize`: The file size in bytes.
+            - `dateCreated`: The creation date and time in ISO 8601 format.
+            - `dateModified`: The last modification date and time in ISO 8601 format.
+
 
     Raises:
         TypeError: If 'path' is not a file path.
-
-    Returns:
-        Dict[str, Any]: A dictionary containing the file's metadata.  The dictionary includes:
-            - `@id`: A unique identifier for the file.
-            - `type`: Always "File".
-            - `parent`: A dictionary containing the parent directory's id
-                (or an empty dictionary if it's the root).
-            - `basename`: The filename with extension.
-            - `name`: The filename without extension.
-            - `extension`: The file extension.
-            - `contentSize`: The file size in bytes.
-            - `dateCreated`: The file creation date and time in ISO 8601 format.
-            - `dateModified`: The file last modification date and time in ISO 8601 format.
-
     """
     if isinstance(path, str):
         path = Path(path)
@@ -98,24 +98,32 @@ def get_metadata_of_single_directory(
     """Generates metadata for a single directory.
 
     Args:
-        path (Path | str): The path to the directory.
-        root_path (Path | str, optional): The root path. Defaults to "".
+        path (Path | str): The path to the directory. Can be a Path object or a string.
+        root_path (Path | str, optional): The root path to generate relative IDs. Defaults to "".
+
+    Returns:
+        Dict[str, Any]: A dictionary containing the directory's metadata.  The keys include:
+            - `@id`: A unique identifier for the directory, relative to `root_path`.
+            - `type`: Always "Directory".
+            - `parent`: A dictionary containing the metadata of the parent directory (or an empty dictionary if it's the root).
+            - `basename`: The directory name.
+            - `name`: The directory name.
+            - `hasPart`: A list of dictionaries, each containing the `@id` of a child item (file or subdirectory).
+            - `contentSize`: The total size of files within the directory in bytes.
+            - `numberOfContents`: The total number of child items (files and subdirectories).
+            - `numberOfFiles`: The number of files within the directory.
+            - `numberOfFilesPerExtension`: A dictionary mapping file extensions to their counts.
+            - `extension`: A list of file extensions found in the directory.
+            - `contentSizeOfAllFiles`: (Redundant with `contentSize`) The total size of files within the directory in bytes.
+            - `numberOfAllContents`: (Redundant with `numberOfContents`) The total number of child items (files and subdirectories).
+            - `numberOfAllFiles`: (Redundant with `numberOfFiles`) The number of files within the directory.
+            - `numberOfAllFilesPerExtension`: (Redundant with `numberOfFilesPerExtension`) A dictionary mapping file extensions to their counts.
+            - `extensionsOfAllFiles`: (Redundant with `extension`) A list of file extensions found in the directory.
+            - `dateCreated`: The creation date and time in ISO 8601 format.
+            - `dateModified`: The last modification date and time in ISO 8601 format.
 
     Raises:
         TypeError: If 'path' is not a directory path.
-
-    Returns:
-        Dict[str, Any]: A dictionary containing the directory's metadata. The dictionary includes:
-            - `@id`: A unique identifier for the directory.
-            - `type`: Always "Directory".
-            - `parent`: A dictionary containing the parent directory's id 
-                (or an empty dictionary if it's the root).
-            - `basename`: The directory name.
-            - `hasPart`: A list of dictionaries, each containing
-                the `@id` of a file or subdirectory within this directory.
-            - `dateCreated`: The directory creation date and time in ISO 8601 format.
-            - `dateModified`: The directory last modification date and time in ISO 8601 format.
-
     """
     if isinstance(path, str):
         path = Path(path)
@@ -162,7 +170,8 @@ def get_metadata_of_single_directory(
         os.path.splitext(p_.name)[1] for p_ in path.iterdir()
         if p_.is_file()
     ))
-    dst["extensionsOfAllFiles"] = list(dst["numberOfAllFilesPerExtension"].keys())
+    dst["extensionsOfAllFiles"] = list(
+        dst["numberOfAllFilesPerExtension"].keys())
 
     dst["dateCreated"] = datetime.datetime.fromtimestamp(
         path.stat().st_ctime
@@ -175,6 +184,18 @@ def get_metadata_of_single_directory(
 
 
 def _get_metadata_list(src: Path, root_path: Path | str = "") -> List[Dict[str, Any]]:
+    """Recursively generates a list of metadata dictionaries for a given path.
+
+    This function traverses a directory tree, creating metadata for each file and directory encountered.
+
+    Args:
+        src (Path): The path to the file or directory to process.
+        root_path (Path | str, optional): The root path for relative ID generation. Defaults to "".
+
+    Returns:
+        List[Dict[str, Any]]: A list of dictionaries, where each dictionary contains the metadata of a single file or directory.  The structure of each dictionary is defined by `get_metadata_of_single_file` and `get_metadata_of_single_directory`.
+
+    """
     dst: List[Dict[str, Any]] = []
     if src.is_file():
         dst.append(
@@ -192,25 +213,21 @@ def _get_metadata_list(src: Path, root_path: Path | str = "") -> List[Dict[str, 
 def get_metadata_of_files_in_list_format(
     src: Path | str, include_root_path: bool = False
 ) -> Dict[str, Any]:
-    """
-    Recursively retrieves metadata for files and directories within a given path.
+    """Generates metadata for all files and directories within a given path in a list format.
 
-    This function walks through the directory tree starting at the specified source 
-    path (`src`), collecting metadata for each file and directory. The metadata for 
-    each file or directory is gathered using the `get_metadata_of_single_file` function.
-    Optionally, the root path can be included in the returned metadata.
+    This function recursively traverses the directory tree starting at the given source path, 
+    creating metadata for each file and directory encountered. The metadata is organized in a list.
 
     Args:
-        src (Path | str): The root directory or file path as a `pathlib.Path` object 
-        or string, from which to begin the directory traversal.
-        include_root_path (bool): If `True`, includes the root path in the result 
-        under the key 'root_path'. Default is `False`.
+        src (Path | str): The path to the directory or file to process.  Can be a Path object or a string.
+        include_root_path (bool, optional): Whether to include the absolute path of the source directory in the output. Defaults to False.
 
     Returns:
-        Dict[str, Any]: A dictionary where each key represents a directory name 
-        (or file name if no subdirectories exist), and its value is another dictionary 
-        containing the metadata for the files and directories within it. If `include_root_path`
-        is `True`, the 'root_path' key will hold the string representation of the root directory.
+        Dict[str, Any]: A dictionary containing:
+            - `"root_path"`: The root path used for relative ID generation (either the absolute path of `src` or "./").
+            - `${OUTPUT_ROOT_KEY}`: (Where `OUTPUT_ROOT_KEY` is a constant defined elsewhere) A list of dictionaries, each containing the metadata of a single file or directory.
+            - `"dateCreated"`: The date and time the metadata was generated in ISO 8601 format.
+
     """
     dst: Dict[str, Any] = {}
     if isinstance(src, str):
@@ -227,9 +244,34 @@ def get_metadata_of_files_in_list_format(
 def _update_statistical_info_of_directory(
     src: Dict[str, Any], metadata_list: List[Dict]
 ) -> Dict[str, Any]:
-    for part in src["hasPart"]:
+    """Recursively updates the statistical information of a directory metadata.
+
+    This function updates the statistical information (e.g., `contentSizeOfAllFiles`, `numberOfAllFiles`, etc.) of a directory by recursively traversing its subdirectories and aggregating the statistics of its children.
+
+    Args:
+        src (Dict[str, Any]): A dictionary representing the metadata of a directory.  Must contain "type" and "hasPart" keys.
+        metadata_list (List[Dict]): A list of metadata dictionaries for all files and directories.  Used to find the children of the directory.
+
+    Returns:
+        Dict[str, Any]: The updated directory metadata with aggregated statistical information.
+
+    Warnings:
+        If the input `src` is not a directory or if a node in `metadata_list` lacks a "type" property, a warning is issued.
+    """
+    src_type: str = src.get("type", "Unknown")
+    if src_type != "Directory":
+        warnings.warn("'src' must be a Directory metadata. exit.")
+        return src
+    for part in src.get("hasPart", []):
         for node in metadata_list:
-            if node["type"] == "File":
+            node_type: str = node.get("type", "")
+            if not node_type:
+                node_id: str = node.get('@id', 'no id')
+                warnings.warn(
+                    f"the node '{node_id}' does not have the 'type' property. skip."
+                )
+                continue
+            if node_type == "File":
                 continue
             if node["@id"] != part["@id"] or node["parent"]["@id"] != src["@id"]:
                 continue
@@ -250,11 +292,28 @@ def _update_statistical_info_of_directory(
 
 
 def update_statistical_info_to_metadata_list(src: Dict[str, Any]) -> Dict[str, Any]:
+    """Updates the statistical information in a metadata list.
+
+    This function iterates through a list of file and directory metadata, 
+    aggregating statistical information (size, file counts, etc.) for directories.
+    It identifies the root directory and recursively updates its statistics based on its children.
+
+    Args:
+        src (Dict[str, Any]): A dictionary containing a list of metadata under the key specified by `OUTPUT_ROOT_KEY`.
+
+    Returns:
+        Dict[str, Any]: The input dictionary with updated statistical information for directories.  Returns the original dictionary if no root directory is found.
+
+    """
     contents: List[Dict[str, Any]] = src[OUTPUT_ROOT_KEY]
     root: Dict[str, Any] = {}
     for node in contents:
-        if not node["parent"]:
+        node_parent: Dict[str, Any] = node.get("parent", {})
+        if not node_parent:
             root = node
             break
+    if not root:
+        warnings.warn("No root metadata found. exit.")
+        return src
     _ = _update_statistical_info_of_directory(root, contents)
     return src

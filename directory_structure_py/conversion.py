@@ -102,15 +102,18 @@ def _construct_tree(
     """
     if not tree_:
         for node in src:
-            if not node["parent"]:
+            node_parent: Dict[str, Any] = node.get("parent", {})
+            if not node_parent:
                 tree_ = node
                 break
-    if tree_["type"] == "File":
+        if not tree_:
+            raise ValueError("No root directory found.")
+    if tree_.get("type", "Unknown") != "Directory":
         if not structure_only:
             return tree_
-        return tree_["@id"]
+        return tree_.get("@id", "no id")
     buff: List[Dict[str, Any]] = []
-    for part in tree_["hasPart"]:
+    for part in tree_.get("hasPart", []):
         for node in src:
             if node["@id"] == part["@id"] and node["parent"]["@id"] == tree_["@id"]:
                 buff.append(

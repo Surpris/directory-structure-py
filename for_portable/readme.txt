@@ -51,7 +51,28 @@ By default, the following files are output to the `output` directory in the dire
 * `directory_structure_metadata_tree.json`: the directory tree is included.
 * `directory_structure_metadata.tsv`: a metadata list is included.
 
-You can change the output formats by modifying the options set in the batch file. However, in v0.2.2, the option `preview_template_path` must be set when outputting the RO-Crate-format metadata due to a bug that the executable file cannot open the inherent template file because of Permission Error.
+You can change the output formats by modifying the options set in the batch file.
+
+## options
+
+Main options:
+
+| Item                    | Type   | Description                                                                                                                      |
+| :---------------------- | :----- | :------------------------------------------------------------------------------------------------------------------------------- |
+| `dst`                   | str    | destination path of the json output. If empty, the metadata file will be output to the same directory as that of the input file. |
+| `include_root_path`     | (bool) | include `file_or_directory_path` with the key `root_path` if this option is set                                                  |
+| `in_rocrate`            | (bool) | output an RO-Crate-format file instead of the list format one if this option is set                                              |
+| `to_tsv`                | (bool) | output a TSV-format file if this option is set                                                                                   |
+| `in_tree`               | (bool) | output the metadata in a tree format if this option is set                                                                       |
+| `structure_only`        | (bool) | output only the structure in a tree format if this option is set                                                                 |
+| `preview_template_path` | str    | file path of the template for the preview file output by the RO-Crate.                                                           |
+
+Logging options:
+
+| Item              | Type | Description                                                                        |
+| :---------------- | :--- | :--------------------------------------------------------------------------------- |
+| `log_config_path` | str  | a log config path. See `config/logging.json` for the detail of the content format. |
+| `log_output_path` | str  | destination path of the log.                                                       |
 
 # Directory structure of the portable program
 
