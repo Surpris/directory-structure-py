@@ -459,27 +459,27 @@
         <div class="tab-content">
             <h2>Directory tree</h2>
             {% macro render_tree(entry, entity_list, level) %}
-                    <tr>
-                    {% set padding_left = level * 20 %}
-                    <td id="tree_{{entry['@id']}}" class="display_name" style="padding-left: {{ padding_left|string }}px;">
-                    <a href="#summary_{{entry['@id']}}" onclick="switchTab('contents-tab')">{{ format_display_name(entry) }}</a>
-                    </td>
-                    <td class="data_size">
-                    {% if entry['contentSizeOfAllFiles'] %}
-                    {{ format_content_size(entry['contentSizeOfAllFiles']) }}
-                    {% elif entry['contentSize'] %}
-                    {{ format_content_size(entry['contentSize']) }}
-                    {% endif %}
-                    </td>
-                    {% if entry['hasPart'] %}
-                        {% for child_id in entry['hasPart'] %}
-                            {% for entity in entity_list %}
-                                {% if entity['@id'] == child_id %}
-                                    {{ render_tree(entity, entity_list, level + 1) }}
-                                {% endif %}
-                            {% endfor %}
+                <tr>
+                {% set padding_left = level * 20 %}
+                <td id="tree_{{entry['@id']}}" class="display_name" style="padding-left: {{ padding_left|string }}px;">
+                <a href="#summary_{{entry['@id']}}" onclick="switchTab('contents-tab')">{{ format_display_name(entry) }}</a>
+                </td>
+                <td class="data_size">
+                {% if entry['contentSizeOfAllFiles'] %}
+                {{ format_content_size(entry['contentSizeOfAllFiles']) }}
+                {% elif entry['contentSize'] %}
+                {{ format_content_size(entry['contentSize']) }}
+                {% endif %}
+                </td>
+                {% if entry['hasPart'] %}
+                    {% for child_id in entry['hasPart'] %}
+                        {% for entity in entity_list %}
+                            {% if entity['@id'] == child_id %}
+                                {{ render_tree(entity, entity_list, level + 1) }}
+                            {% endif %}
                         {% endfor %}
-                    {% endif %}
+                    {% endfor %}
+                {% endif %}
             {% endmacro %}
             <div class="tree">
                 <table>
@@ -513,8 +513,15 @@
                 {% if entry['dateModified'] %}
                     <p>dateModified: {{ entry['dateModified'] }}</p>
                 {% endif %}
-                {% if entry['numberOfContents'] %}
+                {% if entry['numberOfAllContents'] %}
+                    <p>numberOfContents: {{ entry['numberOfAllContents'] }}</p>
+                {% elif entry['numberOfContents'] %}
                     <p>numberOfContents: {{ entry['numberOfContents'] }}</p>
+                {% endif %}
+                {% if entry['numberOfAllFilesPerExtension'] %}
+                    <p>extension: {{ entry['numberOfAllFilesPerExtension'] }}</p>
+                {% elif entry['extension'] %}
+                    <p>extension: {{ entry['extension'] }}</p>
                 {% endif %}
                 {% if entry['programmingLanguage'] %}
                     <p>ProgrammingLanguage: {{ entry['programmingLanguage']['@id'] }}</p>
