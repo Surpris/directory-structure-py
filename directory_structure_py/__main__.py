@@ -2,7 +2,8 @@
 
 
 from directory_structure_py.main import (
-    main, DEFAULT_OUTPUT_NAME, LOG_OUTPUT_PATH, LOG_CONF_PATH
+    main, DEFAULT_OUTPUT_NAME, LOG_OUTPUT_PATH, LOG_CONF_PATH,
+    DEFAULT_PREVIEW_TEMPLATE_PATH
 )
 
 
@@ -36,7 +37,8 @@ if __name__ == "__main__":
         "--log_output_path", dest="log_output_path", type=str, default=LOG_OUTPUT_PATH
     )
     parser.add_argument(
-        "--preview_template_path", dest="preview_template_path", type=str, default=None
+        "--preview_template_path", dest="preview_template_path", type=str,
+        default=DEFAULT_PREVIEW_TEMPLATE_PATH
     )
     args = parser.parse_args()
     if not args.dst:
