@@ -223,6 +223,8 @@ def convert_meta_list_json_to_rocrate(
                 properties[k] = [p_["@id"] for p_ in v]
             elif k == "basename":
                 properties["name"] = v
+            elif k == "mimetype":
+                properties["encodingFormat"] = v
             else:
                 properties[k] = v
         return properties
@@ -234,6 +236,8 @@ def convert_meta_list_json_to_rocrate(
                 continue
             if k == "extension":
                 properties[k] = v
+            elif k == "mimetype":
+                properties["encodingFormat"] = v
             else:
                 properties[k] = v
         return properties

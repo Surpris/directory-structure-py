@@ -2,7 +2,9 @@
 """
 
 from collections import Counter
+import copy
 import datetime
+import mimetypes
 import os
 from pathlib import Path
 from typing import Dict, Any, List
@@ -60,6 +62,7 @@ def get_metadata_of_single_file(
             - `basename`: The filename including extension.
             - `name`: The filename without extension.
             - `extension`: The file extension (including the leading dot).
+            - `mimetype`: The MIME type.
             - `contentSize`: The file size in bytes.
             - `dateCreated`: The creation date and time in ISO 8601 format.
             - `dateModified`: The last modification date and time in ISO 8601 format.
@@ -82,6 +85,9 @@ def get_metadata_of_single_file(
     dst["basename"] = path.name
     dst["name"] = os.path.splitext(path.name)[0]
     dst["extension"] = os.path.splitext(path.name)[1]
+    dst["mimetype"] = mimetypes.guess_type(str(path))[0]
+    if dst["mimetype"] == "null":
+        dst["mimetype"] = "unknown"
     dst["contentSize"] = path.stat().st_size
     dst["dateCreated"] = datetime.datetime.fromtimestamp(
         path.stat().st_ctime
@@ -111,6 +117,7 @@ def generate_blank_metadata(
             - `basename`: The basename including extension.
             - `name`: The name without extension.
             - `extension`: The extension (including the leading dot).
+            - `mimetype`: The MIME type.
             - `contentSize`: The size in bytes.
             - `dateCreated`: The creation date and time in ISO 8601 format.
             - `dateModified`: The last modification date and time in ISO 8601 format.
@@ -127,6 +134,7 @@ def generate_blank_metadata(
     dst["basename"] = os.path.basename(path)
     dst["name"] = os.path.splitext(dst["basename"])[0]
     dst["extension"] = os.path.splitext(dst["basename"])[1]
+    dst["mimetype"] = "unknown"
     dst["contentSize"] = -1
     dst["dateCreated"] = "unknown"
     dst["dateModified"] = "unknown"
@@ -156,6 +164,7 @@ def get_metadata_of_single_directory(
             - `numberOfFiles`: The number of files within the directory.
             - `numberOfFilesPerExtension`: A dictionary mapping file extensions to their counts.
             - `extension`: A list of file extensions found in the directory.
+            - `mimetype`: A list of file MIME types found in the directory. The MIME type.
             - `contentSizeOfAllFiles`: (Redundant with `contentSize`) The total size of files within the directory in bytes.
             - `numberOfAllContents`: (Redundant with `numberOfContents`) The total number of child items (files and subdirectories).
             - `numberOfAllFiles`: (Redundant with `numberOfFiles`) The number of files within the directory.
@@ -199,6 +208,14 @@ def get_metadata_of_single_directory(
         if p_.is_file()
     ))
     dst["extension"] = list(dst["numberOfFilesPerExtension"].keys())
+    dst["numberOfFilesPerMIMEType"] = dict(Counter(
+        mimetypes.guess_type(str(p_))[0] for p_ in path.iterdir()
+        if p_.is_file()
+    ))
+    for key, value in dst["numberOfFilesPerMIMEType"].items():
+        if value == "null":
+            dst[key] = "unknown"
+    dst["mimetype"] = list(dst["numberOfFilesPerMIMEType"].keys())
 
     # all contents
     dst["contentSizeOfAllFiles"] = sum(
@@ -208,12 +225,18 @@ def get_metadata_of_single_directory(
     dst["numberOfAllFiles"] = len([
         p_ for p_ in path.iterdir() if p_.is_file()
     ])
-    dst["numberOfAllFilesPerExtension"] = dict(Counter(
-        os.path.splitext(p_.name)[1] for p_ in path.iterdir()
-        if p_.is_file()
-    ))
+    dst["numberOfAllFilesPerExtension"] = copy.deepcopy(
+        dst["numberOfFilesPerExtension"]
+    )
     dst["extensionsOfAllFiles"] = list(
-        dst["numberOfAllFilesPerExtension"].keys())
+        dst["numberOfAllFilesPerExtension"].keys()
+    )
+    dst["numberOfAllFilesPerMIMEType"] = copy.deepcopy(
+        dst["numberOfFilesPerMIMEType"]
+    )
+    dst["mimetypesOfAllFiles"] = list(
+        dst["numberOfAllFilesPerMIMEType"].keys()
+    )
 
     dst["dateCreated"] = datetime.datetime.fromtimestamp(
         path.stat().st_ctime
@@ -334,6 +357,13 @@ def _update_statistical_info_of_directory(
             )
             src["extensionsOfAllFiles"] = list(
                 src["numberOfAllFilesPerExtension"].keys()
+            )
+            src["numberOfAllFilesPerMIMEType"] = dict(
+                Counter(src["numberOfAllFilesPerMIMEType"]) +
+                Counter(node["numberOfAllFilesPerMIMEType"])
+            )
+            src["mimetypesOfAllFiles"] = list(
+                src["numberOfAllFilesPerMIMEType"].keys()
             )
     return src
 
