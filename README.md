@@ -2,9 +2,15 @@
 
 Python function collecting the metadata of a directory and its contents.
 
+[![Release Notes](https://img.shields.io/github/release/Surpris/directory-structure-py?style=flat-square)](https://github.com/Surpris/directory-structure-py/releases)
+[![CI](https://github.com/Surpris/directory-structure-py/actions/workflows/python-package.yml/badge.svg)](https://github.com/Surpris/directory-structure-py/actions/workflows/python-package.yml)
+[![License](https://img.shields.io/github/license/Surpris/directory-structure-py?style=flat-square)](https://github.com/Surpris/directory-structure-py/license)
+[![GitHub star chart](https://img.shields.io/github/stars/Surpris/directory-structure-py?style=flat-square)](https://star-history.com/#Surpris/directory-structure-py)
+[![Open Issues](https://img.shields.io/github/issues-raw/Surpris/directory-structure-py?style=flat-square)](https://github.com/Surpris/directory-structure-py/issues)
+
 # Requirements
 
-* Python &geq; 3.10
+* Python &geq; 3.12
 
 # Data model of metadata
 
@@ -19,9 +25,11 @@ Python function collecting the metadata of a directory and its contents.
     "basename": "basename (ex. test.dat)",
     "name": "file name (ex. test.dat -> test)",
     "extension": "file extension (ex. test.dat -> .dat)",
+    "mimetype": "MIME type",
     "contentSize": "file size (Byte)",
-    "creationDatetime": "creation datetime (%Y-%m-%dT%H:%M:%S)",
-    "modificationDatetime": "modification datetime (%Y-%m-%dT%H:%M:%S)"
+    "sha256": "SHA-256 hash value",
+    "dateCreated": "creation datetime (%Y-%m-%dT%H:%M:%S)",
+    "dateModified": "modification datetime (%Y-%m-%dT%H:%M:%S)"
 }
 
 // for Directory
@@ -34,11 +42,13 @@ Python function collecting the metadata of a directory and its contents.
     "hasPart": ["`@id` or metadata of file or directory"],
     "contentSize": "the total size of files included (Byte)",
     "extension": ["unique file extension (ex. test.dat -> .dat)"],
+    "mimetype": ["unique MIME type"],
     "numberOfContents": "the number of contents",
     "numberOfFileContents": "the number of files",
     "numberOfFileContentsPerExtension": {"key = extension": "value = the number of files with the extension"},
-    "creationDatetime": "creation datetime (%Y-%m-%dT%H:%M:%S)",
-    "modificationDatetime": "modification datetime (%Y-%m-%dT%H:%M:%S)"
+    "dateCreated": "creation datetime (%Y-%m-%dT%H:%M:%S)",
+    "dateModified": "modification datetime (%Y-%m-%dT%H:%M:%S)",
+    ...
 }
 ```
 

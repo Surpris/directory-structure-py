@@ -1,18 +1,16 @@
 
 [project]
 name = "directory-structure-py"
-version = "0.2.2"
+version = "0.2.3"
 description = "Python function collecting the metadata of a directory and its contents"
 readme = "README.md"
 license = { file = "LICENSE" }
 authors = [{ name = "Surpris", email = "take90-it09-easy27@outlook.jp" }]
 dependencies = ["rocrate"]
-requires-python = ">=3.10"
+requires-python = ">=3.12"
 classifiers = [
     'Development Status :: 3 - Alpha',
     'Intended Audience :: Developers',
-    'Programming Language :: Python :: 3.10',
-    'Programming Language :: Python :: 3.11',
     'Programming Language :: Python :: 3.12',
     "Operating System :: OS Independent",
     "Operating System :: POSIX",
@@ -25,6 +23,7 @@ classifiers = [
 
 [project.optional-dependencies]
 dev = [
+    "pyinstaller",
     "pytest",
     "pylint",
     "autopep8",

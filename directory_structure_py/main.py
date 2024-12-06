@@ -16,7 +16,7 @@ from rocrate.rocrate import ROCrate
 
 from directory_structure_py.constants import (
     DEFAULT_OUTPUT_NAME, ENSURE_ASCII, JSON_OUTPUT_INDENT,
-    DEFAULT_PREVIEW_TEMPLATE_PATH
+    DEFAULT_PREVIEW_TEMPLATE_PATH, WIN_UNC_PREFIX
 )
 from directory_structure_py.get_metadata import (
     get_metadata_of_files_in_list_format,
@@ -27,7 +27,7 @@ from directory_structure_py.conversion import (
     convert_meta_list_json_to_tsv,
     convert_meta_list_json_to_rocrate
 )
-from directory_structure_py.rocrate_models import Preview
+from directory_structure_py.rocrate_models import Preview, Metadata
 
 LOG_CONF_PATH: str = importlib.resources.files(
     __package__
@@ -111,6 +111,10 @@ def main(
     logger.info("starts.")
     logger.info("source path: '%s'.", str(src))
     try:
+        src = os.path.abspath(src)
+        if os.name == "nt" and not str(src).startswith(r"//?/"):
+            src = Path(r"//?/" + src)
+        logger.info("extract the metadata...")
         data: Dict[str, Any] = get_metadata_of_files_in_list_format(
             src, include_root_path
         )
@@ -118,29 +122,42 @@ def main(
         if not os.path.exists(os.path.dirname(dst)):
             os.makedirs(os.path.dirname(dst))
         if not in_rocrate:
+            logger.info("save the metadata in a list format...")
             save_dict_to_json(data, dst)
         else:
+            logger.info("convert the metadata format from list to the RO-Crate... ")
             data["root_path"] = f"{str(Path(src).absolute().as_posix())}"
             crate: ROCrate = convert_meta_list_json_to_rocrate(data)
             _ = crate.add(Preview(crate))
             # crate.write_zip(os.path.dirname(dst))
             # crate.write(os.path.dirname(dst))
             crate.metadata.write(os.path.dirname(dst))
+            logger.info("save the metadata in the RO-Crate format... ")
+            rocrate_metadata: Metadata = Metadata(crate)
+            rocrate_metadata.write(os.path.dirname(dst))
+            logger.info("save the preview for the RO-Crate-format metadata... ")
             crate.preview.write(os.path.dirname(dst), preview_template_path)
         if to_tsv:
-            logger.info("generate a TSV-format file.")
+            logger.info("save the metadata in a TSV format...")
             data_tsv = convert_meta_list_json_to_tsv(data)
             dst_tsv: str = dst.replace(
                 os.path.splitext(dst)[-1], ".tsv"
             )
             save_nested_list_to_tsv(data_tsv, dst_tsv)
         if in_tree:
-            logger.info("convert the metadata format from list to tree.")
+            if structure_only:
+                logger.info("extract the directory structure...")
+            else:
+                logger.info("convert the metadata format from list to tree...")
             data = list2tree(data, structure_only)
             dst_tree: str = dst.replace(
                 os.path.splitext(dst)[-1],
                 f"_tree{os.path.splitext(dst)[-1]}"
             )
+            if structure_only:
+                logger.info("save the directory structure...")
+            else:
+                logger.info("save the metadata in a tree format...")
             save_dict_to_json(data, dst_tree)
     except Exception:
         traceback.print_exc()

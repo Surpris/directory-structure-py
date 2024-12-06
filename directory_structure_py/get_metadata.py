@@ -2,11 +2,14 @@
 """
 
 from collections import Counter
+import copy
 import datetime
+import mimetypes
 import os
 from pathlib import Path
 from typing import Dict, Any, List
 import warnings
+import hashlib
 from directory_structure_py.constants import DATETIME_FMT, OUTPUT_ROOT_KEY
 
 
@@ -43,7 +46,9 @@ def generate_id(path: Path | str, root_path: Path | str = "") -> str:
     return f"{root_path.name}/{str(path.relative_to(root_path).as_posix())}"
 
 
-def get_metadata_of_single_file(path: Path | str, root_path: Path | str = "") -> Dict[str, Any]:
+def get_metadata_of_single_file(
+    path: Path | str, root_path: Path | str = ""
+) -> Dict[str, Any]:
     """Generates metadata for a single file.
 
     Args:
@@ -58,10 +63,11 @@ def get_metadata_of_single_file(path: Path | str, root_path: Path | str = "") ->
             - `basename`: The filename including extension.
             - `name`: The filename without extension.
             - `extension`: The file extension (including the leading dot).
+            - `mimetype`: The MIME type.
             - `contentSize`: The file size in bytes.
+            - `sha256`: The SHA-256 hash value of the file content.
             - `dateCreated`: The creation date and time in ISO 8601 format.
             - `dateModified`: The last modification date and time in ISO 8601 format.
-
 
     Raises:
         TypeError: If 'path' is not a file path.
@@ -69,7 +75,7 @@ def get_metadata_of_single_file(path: Path | str, root_path: Path | str = "") ->
     if isinstance(path, str):
         path = Path(path)
     if not path.is_file():
-        raise TypeError("'path' must be a file path.")
+        raise TypeError(f"{str(path)}: 'path' must be a file path.")
 
     dst: Dict[str, Any] = {}
     dst["@id"] = generate_id(path, root_path)
@@ -81,13 +87,63 @@ def get_metadata_of_single_file(path: Path | str, root_path: Path | str = "") ->
     dst["basename"] = path.name
     dst["name"] = os.path.splitext(path.name)[0]
     dst["extension"] = os.path.splitext(path.name)[1]
+    dst["mimetype"] = mimetypes.guess_type(str(path))[0]
+    if dst["mimetype"] == "null":
+        dst["mimetype"] = "unknown"
     dst["contentSize"] = path.stat().st_size
+    with open(path, "rb") as ff:
+        dst["sha256"] = hashlib.sha256(ff.read()).hexdigest()
     dst["dateCreated"] = datetime.datetime.fromtimestamp(
         path.stat().st_ctime
     ).strftime(DATETIME_FMT)
     dst["dateModified"] = datetime.datetime.fromtimestamp(
         path.stat().st_mtime
     ).strftime(DATETIME_FMT)
+
+    return dst
+
+
+def generate_blank_metadata(
+    path: Path | str, root_path: Path | str = ""
+) -> Dict[str, Any]:
+    """Generates a blank metadata for a single path.
+    This function is supposed to be used if the type of the path is not specified by the pathlib.
+
+    Args:
+        path (Path | str): The path to the file.  Can be a Path object or a string.
+        root_path (Path | str, optional): The root path to generate relative IDs. Defaults to "".
+
+    Returns:
+        Dict[str, Any]: A dictionary containing the file's metadata.  The keys include:
+            - `@id`: A unique identifier for the path, relative to `root_path`.
+            - `type`: Always "Unknown".
+            - `parent`: A dictionary containing the metadata of the parent directory (or an empty dictionary if it's the root).
+            - `basename`: The basename including extension.
+            - `name`: The name without extension.
+            - `extension`: The extension (including the leading dot).
+            - `mimetype`: The MIME type.
+            - `contentSize`: The size in bytes.
+            - `sha256`: The SHA-256 hash value of the file content.
+            - `dateCreated`: The creation date and time in ISO 8601 format.
+            - `dateModified`: The last modification date and time in ISO 8601 format.
+
+    """
+    if isinstance(path, Path):
+        path = str(path)
+
+    dst: Dict[str, Any] = {}
+    dst["@id"] = path.replace(os.path.sep, "/")
+    dst["type"] = "Unknown"
+    parent_id: str = generate_id("/".join(s for s in path.split(os.path.sep)[:-1]), root_path)
+    dst["parent"] = {"@id": parent_id}
+    dst["basename"] = os.path.basename(path)
+    dst["name"] = os.path.splitext(dst["basename"])[0]
+    dst["extension"] = os.path.splitext(dst["basename"])[1]
+    dst["mimetype"] = "unknown"
+    dst["contentSize"] = -1
+    dst["sha256"] = ""
+    dst["dateCreated"] = "unknown"
+    dst["dateModified"] = "unknown"
 
     return dst
 
@@ -114,6 +170,7 @@ def get_metadata_of_single_directory(
             - `numberOfFiles`: The number of files within the directory.
             - `numberOfFilesPerExtension`: A dictionary mapping file extensions to their counts.
             - `extension`: A list of file extensions found in the directory.
+            - `mimetype`: A list of file MIME types found in the directory. The MIME type.
             - `contentSizeOfAllFiles`: (Redundant with `contentSize`) The total size of files within the directory in bytes.
             - `numberOfAllContents`: (Redundant with `numberOfContents`) The total number of child items (files and subdirectories).
             - `numberOfAllFiles`: (Redundant with `numberOfFiles`) The number of files within the directory.
@@ -128,7 +185,7 @@ def get_metadata_of_single_directory(
     if isinstance(path, str):
         path = Path(path)
     if not path.is_dir():
-        raise TypeError("'path' must be a directory path.")
+        raise TypeError(f"{str(path)}: 'path' must be a directory path.")
 
     dst: Dict[str, Any] = {}
     dst["@id"] = generate_id(path, root_path)
@@ -157,6 +214,14 @@ def get_metadata_of_single_directory(
         if p_.is_file()
     ))
     dst["extension"] = list(dst["numberOfFilesPerExtension"].keys())
+    dst["numberOfFilesPerMIMEType"] = dict(Counter(
+        mimetypes.guess_type(str(p_))[0] for p_ in path.iterdir()
+        if p_.is_file()
+    ))
+    for key, value in dst["numberOfFilesPerMIMEType"].items():
+        if value == "null":
+            dst[key] = "unknown"
+    dst["mimetype"] = list(dst["numberOfFilesPerMIMEType"].keys())
 
     # all contents
     dst["contentSizeOfAllFiles"] = sum(
@@ -166,12 +231,18 @@ def get_metadata_of_single_directory(
     dst["numberOfAllFiles"] = len([
         p_ for p_ in path.iterdir() if p_.is_file()
     ])
-    dst["numberOfAllFilesPerExtension"] = dict(Counter(
-        os.path.splitext(p_.name)[1] for p_ in path.iterdir()
-        if p_.is_file()
-    ))
+    dst["numberOfAllFilesPerExtension"] = copy.deepcopy(
+        dst["numberOfFilesPerExtension"]
+    )
     dst["extensionsOfAllFiles"] = list(
-        dst["numberOfAllFilesPerExtension"].keys())
+        dst["numberOfAllFilesPerExtension"].keys()
+    )
+    dst["numberOfAllFilesPerMIMEType"] = copy.deepcopy(
+        dst["numberOfFilesPerMIMEType"]
+    )
+    dst["mimetypesOfAllFiles"] = list(
+        dst["numberOfAllFilesPerMIMEType"].keys()
+    )
 
     dst["dateCreated"] = datetime.datetime.fromtimestamp(
         path.stat().st_ctime
@@ -200,6 +271,11 @@ def _get_metadata_list(src: Path, root_path: Path | str = "") -> List[Dict[str, 
     if src.is_file():
         dst.append(
             get_metadata_of_single_file(src, root_path=root_path)
+        )
+        return dst
+    if not src.is_dir():
+        dst.append(
+            generate_blank_metadata(src, root_path=root_path)
         )
         return dst
     dst.append(
@@ -287,6 +363,13 @@ def _update_statistical_info_of_directory(
             )
             src["extensionsOfAllFiles"] = list(
                 src["numberOfAllFilesPerExtension"].keys()
+            )
+            src["numberOfAllFilesPerMIMEType"] = dict(
+                Counter(src["numberOfAllFilesPerMIMEType"]) +
+                Counter(node["numberOfAllFilesPerMIMEType"])
+            )
+            src["mimetypesOfAllFiles"] = list(
+                src["numberOfAllFilesPerMIMEType"].keys()
             )
     return src
 
