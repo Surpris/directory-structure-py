@@ -508,6 +508,11 @@
                 {% elif entry['contentSize'] %}
                     <p>contentSize: {{ format_content_size(entry['contentSize']) }}</p>
                 {% endif %}
+                {% if stringify(entry['@type']) %}
+                    {% if entry['encodingFormat'] %}
+                        <p>encodingFormat: {{ entry['encodingFormat'] }}</p>
+                    {% endif %}
+                {% endif %}
                 {% if entry['dateCreated'] %}
                     <p>dateCreated: {{ entry['dateCreated'] }}</p>
                 {% endif %}
@@ -523,6 +528,9 @@
                     <p>extension: {{ entry['numberOfAllFilesPerExtension'] }}</p>
                 {% elif entry['extension'] %}
                     <p>extension: {{ entry['extension'] }}</p>
+                {% endif %}
+                {% if entry['sha256'] %}
+                    <p>sha256: {{ entry['sha256'] }}</p>
                 {% endif %}
                 {% if entry['programmingLanguage'] %}
                     <p>ProgrammingLanguage: {{ entry['programmingLanguage']['@id'] }}</p>
