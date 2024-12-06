@@ -27,7 +27,7 @@ from directory_structure_py.conversion import (
     convert_meta_list_json_to_tsv,
     convert_meta_list_json_to_rocrate
 )
-from directory_structure_py.rocrate_models import Preview
+from directory_structure_py.rocrate_models import Preview, Metadata
 
 LOG_CONF_PATH: str = importlib.resources.files(
     __package__
@@ -131,8 +131,10 @@ def main(
             _ = crate.add(Preview(crate))
             # crate.write_zip(os.path.dirname(dst))
             # crate.write(os.path.dirname(dst))
-            logger.info("save the metadata in the RO-Crate format... ")
             crate.metadata.write(os.path.dirname(dst))
+            logger.info("save the metadata in the RO-Crate format... ")
+            rocrate_metadata: Metadata = Metadata(crate)
+            rocrate_metadata.write(os.path.dirname(dst))
             logger.info("save the preview for the RO-Crate-format metadata... ")
             crate.preview.write(os.path.dirname(dst), preview_template_path)
         if to_tsv:

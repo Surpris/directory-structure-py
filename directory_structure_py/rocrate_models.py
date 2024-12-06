@@ -4,16 +4,45 @@ Customized RO-Crate
 """
 
 import importlib.resources
+import json
 import os
 from pathlib import Path
 from jinja2 import Template
-from rocrate.rocrate import ROCrate as ROCrateOrigin
+# from rocrate.rocrate import ROCrate as ROCrateOrigin
 from rocrate.model import Preview as PreviewOrigin
+from rocrate.model import Metadata as MetadataOrigin
+from directory_structure_py.constants import ENSURE_ASCII
+
+
+class Metadata(MetadataOrigin):
+    """
+    Customized RO-Crate metadata file.
+    """
+    BASENAME = "ro-crate-metadata.json"
+    PROFILE = "https://w3id.org/ro/crate/1.1"
+
+    def __init__(self, crate, source=None, dest_path=None, properties=None):
+        if source is None and dest_path is None:
+            dest_path = self.BASENAME
+        super().__init__(
+            crate,
+            source=source,
+            dest_path=dest_path,
+            properties=properties
+        )
+
+    def write(self, base_path):
+        write_path = Path(base_path) / self.id
+        as_jsonld = self.generate()
+        with open(write_path, 'w', encoding="utf-8") as outfile:
+            json.dump(
+                as_jsonld, outfile, indent=4, sort_keys=True, ensure_ascii=ENSURE_ASCII
+            )
 
 
 class Preview(PreviewOrigin):
     """
-    Customized RO-Crate preview file
+    Customized RO-Crate preview file.
 
     This object holds a preview of an RO Crate in HTML format_
     """
