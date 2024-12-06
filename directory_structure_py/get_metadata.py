@@ -43,7 +43,9 @@ def generate_id(path: Path | str, root_path: Path | str = "") -> str:
     return f"{root_path.name}/{str(path.relative_to(root_path).as_posix())}"
 
 
-def get_metadata_of_single_file(path: Path | str, root_path: Path | str = "") -> Dict[str, Any]:
+def get_metadata_of_single_file(
+    path: Path | str, root_path: Path | str = ""
+) -> Dict[str, Any]:
     """Generates metadata for a single file.
 
     Args:
@@ -62,14 +64,13 @@ def get_metadata_of_single_file(path: Path | str, root_path: Path | str = "") ->
             - `dateCreated`: The creation date and time in ISO 8601 format.
             - `dateModified`: The last modification date and time in ISO 8601 format.
 
-
     Raises:
         TypeError: If 'path' is not a file path.
     """
     if isinstance(path, str):
         path = Path(path)
     if not path.is_file():
-        raise TypeError("'path' must be a file path.")
+        raise TypeError(f"{str(path)}: 'path' must be a file path.")
 
     dst: Dict[str, Any] = {}
     dst["@id"] = generate_id(path, root_path)
@@ -88,6 +89,47 @@ def get_metadata_of_single_file(path: Path | str, root_path: Path | str = "") ->
     dst["dateModified"] = datetime.datetime.fromtimestamp(
         path.stat().st_mtime
     ).strftime(DATETIME_FMT)
+
+    return dst
+
+
+def generate_blank_metadata(
+    path: Path | str, root_path: Path | str = ""
+) -> Dict[str, Any]:
+    """Generates a blank metadata for a single path.
+    This function is supposed to be used if the type of the path is not specified by the pathlib.
+
+    Args:
+        path (Path | str): The path to the file.  Can be a Path object or a string.
+        root_path (Path | str, optional): The root path to generate relative IDs. Defaults to "".
+
+    Returns:
+        Dict[str, Any]: A dictionary containing the file's metadata.  The keys include:
+            - `@id`: A unique identifier for the path, relative to `root_path`.
+            - `type`: Always "Unknown".
+            - `parent`: A dictionary containing the metadata of the parent directory (or an empty dictionary if it's the root).
+            - `basename`: The basename including extension.
+            - `name`: The name without extension.
+            - `extension`: The extension (including the leading dot).
+            - `contentSize`: The size in bytes.
+            - `dateCreated`: The creation date and time in ISO 8601 format.
+            - `dateModified`: The last modification date and time in ISO 8601 format.
+
+    """
+    if isinstance(path, Path):
+        path = str(path)
+
+    dst: Dict[str, Any] = {}
+    dst["@id"] = path.replace(os.path.sep, "/")
+    dst["type"] = "Unknown"
+    parent_id: str = generate_id("/".join(s for s in path.split(os.path.sep)[:-1]), root_path)
+    dst["parent"] = {"@id": parent_id}
+    dst["basename"] = os.path.basename(path)
+    dst["name"] = os.path.splitext(dst["basename"])[0]
+    dst["extension"] = os.path.splitext(dst["basename"])[1]
+    dst["contentSize"] = -1
+    dst["dateCreated"] = "unknown"
+    dst["dateModified"] = "unknown"
 
     return dst
 
@@ -128,7 +170,7 @@ def get_metadata_of_single_directory(
     if isinstance(path, str):
         path = Path(path)
     if not path.is_dir():
-        raise TypeError("'path' must be a directory path.")
+        raise TypeError(f"{str(path)}: 'path' must be a directory path.")
 
     dst: Dict[str, Any] = {}
     dst["@id"] = generate_id(path, root_path)
@@ -200,6 +242,11 @@ def _get_metadata_list(src: Path, root_path: Path | str = "") -> List[Dict[str, 
     if src.is_file():
         dst.append(
             get_metadata_of_single_file(src, root_path=root_path)
+        )
+        return dst
+    if not src.is_dir():
+        dst.append(
+            generate_blank_metadata(src, root_path=root_path)
         )
         return dst
     dst.append(
