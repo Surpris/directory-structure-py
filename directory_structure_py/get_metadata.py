@@ -9,6 +9,7 @@ import os
 from pathlib import Path
 from typing import Dict, Any, List
 import warnings
+import hashlib
 from directory_structure_py.constants import DATETIME_FMT, OUTPUT_ROOT_KEY
 
 
@@ -89,6 +90,8 @@ def get_metadata_of_single_file(
     if dst["mimetype"] == "null":
         dst["mimetype"] = "unknown"
     dst["contentSize"] = path.stat().st_size
+    with open(path, "rb") as ff:
+        dst["sha256"] = hashlib.sha256(ff.read()).hexdigest()
     dst["dateCreated"] = datetime.datetime.fromtimestamp(
         path.stat().st_ctime
     ).strftime(DATETIME_FMT)
