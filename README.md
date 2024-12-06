@@ -2,6 +2,12 @@
 
 Python function collecting the metadata of a directory and its contents.
 
+[![Release Notes](https://img.shields.io/github/release/Surpris/directory-structure-py?style=flat-square)](https://github.com/Surpris/directory-structure-py/releases)
+[![CI](https://github.com/Surpris/directory-structure-py/actions/workflows/python-package.yml/badge.svg)](https://github.com/Surpris/directory-structure-py/actions/workflows/python-package.yml)
+[![License](https://img.shields.io/github/license/Surpris/directory-structure-py?style=flat-square)](https://github.com/Surpris/directory-structure-py/license)
+[![GitHub star chart](https://img.shields.io/github/stars/Surpris/directory-structure-py?style=flat-square)](https://star-history.com/#Surpris/directory-structure-py)
+[![Open Issues](https://img.shields.io/github/issues-raw/Surpris/directory-structure-py?style=flat-square)](https://github.com/Surpris/directory-structure-py/issues)
+
 # Requirements
 
 * Python &geq; 3.12
