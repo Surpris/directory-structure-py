@@ -65,6 +65,7 @@ def get_metadata_of_single_file(
             - `extension`: The file extension (including the leading dot).
             - `mimetype`: The MIME type.
             - `contentSize`: The file size in bytes.
+            - `sha256`: The SHA-256 hash value of the file content.
             - `dateCreated`: The creation date and time in ISO 8601 format.
             - `dateModified`: The last modification date and time in ISO 8601 format.
 
