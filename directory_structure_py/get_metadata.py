@@ -123,6 +123,7 @@ def generate_blank_metadata(
             - `extension`: The extension (including the leading dot).
             - `mimetype`: The MIME type.
             - `contentSize`: The size in bytes.
+            - `sha256`: The SHA-256 hash value of the file content.
             - `dateCreated`: The creation date and time in ISO 8601 format.
             - `dateModified`: The last modification date and time in ISO 8601 format.
 
@@ -140,6 +141,7 @@ def generate_blank_metadata(
     dst["extension"] = os.path.splitext(dst["basename"])[1]
     dst["mimetype"] = "unknown"
     dst["contentSize"] = -1
+    dst["sha256"] = ""
     dst["dateCreated"] = "unknown"
     dst["dateModified"] = "unknown"
 
