@@ -168,7 +168,7 @@ metadata: dict = get_metadata_of_single_file(fpath)
 from directory_structure_py.src.get_metadata import get_metadata_of_files_in_list_format
 
 fpath: str = "file_or_directory_path"
-metadata: dict = get_metadata_of_files(fpath)
+metadata: dict = get_metadata_of_files_in_list_format(fpath)
 ```
 
 # Output examples
