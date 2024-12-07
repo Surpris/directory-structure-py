@@ -16,7 +16,7 @@ from rocrate.rocrate import ROCrate
 
 from directory_structure_py.constants import (
     DEFAULT_OUTPUT_NAME, ENSURE_ASCII, JSON_OUTPUT_INDENT,
-    DEFAULT_PREVIEW_TEMPLATE_PATH, WIN_UNC_PREFIX
+    DEFAULT_PREVIEW_TEMPLATE_PATH
 )
 from directory_structure_py.get_metadata import (
     get_metadata_of_files_in_list_format,
