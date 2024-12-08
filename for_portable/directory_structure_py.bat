@@ -1,4 +1,5 @@
 @echo off
+chcp 65001
 "%~dp0\src\directory_structure_py.exe" "%~1" --dst "%~dp0output\%~n1\directory_structure_metadata.json" ^
     --in_rocrate ^
     --to_tsv ^
