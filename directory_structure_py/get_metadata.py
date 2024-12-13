@@ -94,7 +94,7 @@ def get_metadata_of_single_file(
     with open(path, "rb") as ff:
         dst["sha256"] = hashlib.sha256(ff.read()).hexdigest()
     dst["dateCreated"] = datetime.datetime.fromtimestamp(
-        path.stat().st_ctime
+        path.stat().st_birthtime
     ).strftime(DATETIME_FMT)
     dst["dateModified"] = datetime.datetime.fromtimestamp(
         path.stat().st_mtime
@@ -245,7 +245,7 @@ def get_metadata_of_single_directory(
     )
 
     dst["dateCreated"] = datetime.datetime.fromtimestamp(
-        path.stat().st_ctime
+        path.stat().st_birthtime
     ).strftime(DATETIME_FMT)
     dst["dateModified"] = datetime.datetime.fromtimestamp(
         path.stat().st_mtime
