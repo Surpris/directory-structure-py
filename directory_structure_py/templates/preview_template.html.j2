@@ -361,95 +361,95 @@
   <h1>{{ crate.name or  "New RO Crate" }}</h1>
   <h2>Crate properties</h2>
   <p>
-  {% if crate.description %}
+  {%- if crate.description %}
     {{ crate.description }}
-  {%endif %}
+  {%- endif %}
   </p>
 
-  {% if crate.image %}
+  {%- if crate.image %}
     <img src="{{ crate.image }}" class="wf_image"/>
-  {%endif %}
+  {%- endif %}
 
   <dl>
-  {% if crate.creator %}
-    {% if is_object_list(crate.creator) %}
+  {%- if crate.creator %}
+    {%- if is_object_list(crate.creator) %}
     <dt>Creators</dt>
-      {% for obj in crate.creator %}
+      {%- for obj in crate.creator %}
     <dd>{{ stringify(obj) }}</dd>
-      {% endfor %}
-    {% else %}
+      {%- endfor %}
+    {%- else %}
     <dt>Creator</dt>
     <dd>{{ stringify(crate.creator) }}</dd>
-    {%endif %}  
-  {%endif %}  
+    {%- endif %}  
+  {%- endif %}  
 
-  {% if crate.publisher %}
-    {% if is_object_list(crate.publisher) %}
+  {%- if crate.publisher %}
+    {%- if is_object_list(crate.publisher) %}
     <dt>Publishers</dt>
-      {% for obj in crate.publisher %}
+      {%- for obj in crate.publisher %}
     <dd>{{ stringify(obj) }}</dd>
-      {% endfor %}
-    {% else %}
+      {%- endfor %}
+    {%- else %}
     <dt>Publisher</dt>
     <dd>{{ stringify(crate.publisher) }}</dd>
-    {%endif %}  
-  {%endif %} 
+    {%- endif %}  
+  {%- endif %} 
 
-  {% if crate.url %}
+  {%- if crate.url %}
     <dt>URL</dt>
     <dd><a href="{{ crate.url }}" target="{{ crate.url }}"></a></dd>
-  {%endif %}
+  {%- endif %}
 
-  {% if crate.license %}
+  {%- if crate.license %}
     <dt>License</dt>
     <dd>{{ crate.license }}</dd>
-  {%endif %}
+  {%- endif %}
 
-  {% if crate.keywords %}
+  {%- if crate.keywords %}
     <dt>Keyword(s)</dt>
     <dd>{{ stringify(crate.keywords) }}</dd>
-  {%endif %}
+  {%- endif %}
 
-  {% if crate.isBasedOn %}
+  {%- if crate.isBasedOn %}
     <dt>isBasedOn</dt>
     <dd>{{ crate.isBasedOn }}</dd>
-  {%endif %}
+  {%- endif %}
 
-  {% if crate.datePublished %}
+  {%- if crate.datePublished %}
     <dt>datePublished</dt>
     <dd>{{ crate.datePublished }}</dd>
-  {%endif %}
+  {%- endif %}
 
-  {% if crate.creativeWorkStatus %}
+  {%- if crate.creativeWorkStatus %}
     <dt>creativeWorkStatus</dt>
     <dd>{{ crate.creativeWorkStatus }}</dd>
-  {%endif %}
+  {%- endif %}
   </dl>
 
   <h2>Entities</h2>
   <div id="contents">
-    {% macro format_content_size(size) %}
-        {% if size < 1000 %}
+    {%- macro format_content_size(size) %}
+        {%- if size | int < 1000 %}
             {{ size }} B
-        {% elif size < 1000000 %}
-            {{ '%0.1f' | format(size / 1000 | float) }} kB
-        {% elif size < 1000000000 %}
-            {{ '%0.1f' | format(size / 1000000 | float) }} MB
-        {% elif size < 1000000000000 %}
-            {{ '%0.1f' | format(size / 1000000000 | float) }} GB
-        {% else %}
-            {{ '%0.1f' | format(size / 1000000000000 | float) }} TB
-        {% endif %}
-    {% endmacro %}
-    {% macro format_display_name(entry) %}
-        {% if stringify(entry['@type']) == "File" %}
+        {%- elif size | int < 1000000 %}
+            {{ '%0.1f' | format(size | float  / 1000 | float) }} kB
+        {%- elif size | int < 1000000000 %}
+            {{ '%0.1f' | format(size | float  / 1000000 | float) }} MB
+        {%- elif size | int < 1000000000000 %}
+            {{ '%0.1f' | format(size | float / 1000000000 | float) }} GB
+        {%- else %}
+            {{ '%0.1f' | format(size | float  / 1000000000000 | float) }} TB
+        {%- endif %}
+    {%- endmacro %}
+    {%- macro format_display_name(entry) %}
+        {%- if stringify(entry['@type']) == "File" %}
             {{ entry['name'] }}{{ entry['extension'] }}
-        {% elif stringify(entry['@type']) == "Dataset" %}
+        {%- elif stringify(entry['@type']) == "Dataset" %}
             {{ entry['name'] }}/
-        {% else %}
+        {%- else %}
             entry['@id']
-        {% endif %}
-    {% endmacro %}
+        {%- endif %}
+    {%- endmacro %}
 
     <div class="tab-switch">
         <label>
@@ -458,29 +458,29 @@
         </label>
         <div class="tab-content">
             <h2>Directory tree</h2>
-            {% macro render_tree(entry, entity_list, level) %}
+            {%- macro render_tree(entry, entity_list, level) %}
                 <tr>
-                {% set padding_left = level * 20 %}
+                {%- set padding_left = level * 20 %}
                 <td id="tree_{{entry['@id']}}" class="display_name" style="padding-left: {{ padding_left|string }}px;">
                 <a href="#summary_{{entry['@id']}}" onclick="switchTab('contents-tab')">{{ format_display_name(entry) }}</a>
                 </td>
                 <td class="data_size">
-                {% if entry['contentSizeOfAllFiles'] %}
+                {%- if entry['contentSizeOfAllFiles'] %}
                 {{ format_content_size(entry['contentSizeOfAllFiles']) }}
-                {% elif entry['contentSize'] %}
+                {%- elif entry['contentSize'] %}
                 {{ format_content_size(entry['contentSize']) }}
-                {% endif %}
+                {%- endif %}
                 </td>
-                {% if entry['hasPart'] %}
-                    {% for child_id in entry['hasPart'] %}
-                        {% for entity in entity_list %}
-                            {% if entity['@id'] == child_id %}
+                {%- if entry['hasPart'] %}
+                    {%- for child_id in entry['hasPart'] %}
+                        {%- for entity in entity_list %}
+                            {%- if entity['@id'] == child_id %}
                                 {{ render_tree(entity, entity_list, level + 1) }}
-                            {% endif %}
-                        {% endfor %}
-                    {% endfor %}
-                {% endif %}
-            {% endmacro %}
+                            {%- endif %}
+                        {%- endfor %}
+                    {%- endfor %}
+                {%- endif %}
+            {%- endmacro %}
             <div class="tree">
                 <table>
                 <tbody>
@@ -500,79 +500,82 @@
         </label>
         <div class="tab-content">
             <h2>Contents</h2>
-            {% macro render_contents(entry) %}
+            {%- macro render_contents(entry) %}
                 <div class="details-content-item">
                 <p>Type: {{ stringify(entry['@type']) }}</p>
-                {% if entry['contentSizeOfAllFiles'] %}
+                {%- if entry['contentSizeOfAllFiles'] %}
                     <p>contentSize: {{ format_content_size(entry['contentSizeOfAllFiles']) }}</p>
-                {% elif entry['contentSize'] %}
+                {%- elif entry['contentSize'] %}
                     <p>contentSize: {{ format_content_size(entry['contentSize']) }}</p>
-                {% endif %}
-                {% if stringify(entry['@type']) %}
-                    {% if entry['encodingFormat'] %}
+                {%- endif %}
+                {%- if stringify(entry['@type']) %}
+                    {%- if entry['encodingFormat'] %}
                         <p>encodingFormat: {{ entry['encodingFormat'] }}</p>
-                    {% endif %}
-                {% endif %}
-                {% if entry['dateCreated'] %}
+                    {%- endif %}
+                {%- endif %}
+                {%- if entry['dateCreated'] %}
                     <p>dateCreated: {{ entry['dateCreated'] }}</p>
-                {% endif %}
-                {% if entry['dateModified'] %}
+                {%- endif %}
+                {%- if entry['dateModified'] %}
                     <p>dateModified: {{ entry['dateModified'] }}</p>
-                {% endif %}
-                {% if entry['numberOfAllContents'] %}
+                {%- endif %}
+                {%- if entry['numberOfAllContents'] %}
                     <p>numberOfContents: {{ entry['numberOfAllContents'] }}</p>
-                {% elif entry['numberOfContents'] %}
+                {%- elif entry['numberOfContents'] %}
                     <p>numberOfContents: {{ entry['numberOfContents'] }}</p>
-                {% endif %}
-                {% if entry['numberOfAllFilesPerExtension'] %}
+                {%- endif %}
+                {%- if entry['numberOfAllFiles'] %}
+                    <p>numberOfAllFiles: {{ entry['numberOfAllFiles'] }}</p>
+                {%- endif %}
+                {%- if entry['numberOfAllFilesPerExtension'] %}
                     <p>extension: {{ entry['numberOfAllFilesPerExtension'] }}</p>
-                {% elif entry['extension'] %}
+                {%- elif entry['extension'] %}
                     <p>extension: {{ entry['extension'] }}</p>
-                {% endif %}
-                {% if entry['sha256'] %}
+                {%- endif %}
+                {%- if entry['sha256'] %}
                     <p>sha256: {{ entry['sha256'] }}</p>
-                {% endif %}
-                {% if entry['programmingLanguage'] %}
+                {%- endif %}
+                {%- if entry['programmingLanguage'] %}
                     <p>ProgrammingLanguage: {{ entry['programmingLanguage']['@id'] }}</p>
-                {% endif %}
+                {%- endif %}
                 <button class="go-to-tree-btn" href="#tree_{{ entry['@id'] }}" onclick="switchTab('directory-tree-tab')">
                     Go To Tree
                 </button>
                 </div>
-            {% endmacro %}
+            {%- endmacro %}
 
-            {% macro render_contents_tree(entry, entity_list, level) %}
-                {% set layer_class = "layer" + level|string %}
-                {% if level > 5 %}
-                    {% set layer_class = "layer5" %}
-                {% endif %}
-                {% if stringify(entry['@type']) == "File" %}
-                    {% set layer_class = "layer_file" %}
-                {% endif %}
+            {%- macro render_contents_tree(entry, entity_list, level) %}
+                {%- set layer_class = "layer" + level|string %}
+                {%- if level > 5 %}
+                    {%- set layer_class = "layer5" %}
+                {%- endif %}
+                {%- if stringify(entry['@type']) == "File" %}
+                    {%- set layer_class = "layer_file" %}
+                {%- endif %}
                 <details class="details js-details {{layer_class}}">
                     <summary class="details-summary js-details-summary {{layer_class}}" id="summary_{{ entry['@id'] }}">
                     <strong>{{ format_display_name(entry) }}
-                    {% if entry['contentSizeOfAllFiles'] %}
+                    {%- if entry['contentSizeOfAllFiles'] %}
                     : {{ format_content_size(entry['contentSizeOfAllFiles']) }}
-                    {% elif entry['contentSize'] %}
+                    {%- elif entry['contentSize'] %}
                     : {{ format_content_size(entry['contentSize']) }}
-                    {% endif %}
+                    {%- endif %}
                     </strong>
                     </summary>
                     <div class="details-content js-details-content {{layer_class}}" id="content_{{ entry['@id'] }}">
                         {{ render_contents(entry) }}
                     </div>
-                    {% if entry['hasPart'] %}
-                    {% for child_id in entry['hasPart'] %}
-                            {% for entity in entity_list %}
-                                {% if entity['@id'] == child_id %}
+                    {%- if entry['hasPart'] %}
+                    {%- for child_id in entry['hasPart'] %}
+                            {%- for entity in entity_list %}
+                                {%- if entity['@id'] == child_id %}
                                     {{ render_contents_tree(entity, entity_list, level + 1) }}
-                                {% endif %}
-                            {% endfor %}
-                        {% endfor %}
-                    {% endif %}
+                                {%- endif %}
+                            {%- endfor %}
+                        {%- endfor %}
+                    {%- endif %}
                 </details>
-            {% endmacro %}
+            {%- endmacro %}
 
             <div class="data-entity" id="">
                 {{ render_contents_tree(data[0], data, 1) }}
