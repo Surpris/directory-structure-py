@@ -173,7 +173,7 @@ def get_metadata_of_single_directory(
             - `mimetype`: A list of file MIME types found in the directory. The MIME type.
             - `contentSizeOfAllFiles`: (Redundant with `contentSize`) The total size of files within the directory in bytes.
             - `numberOfAllContents`: (Redundant with `numberOfContents`) The total number of child items (files and subdirectories).
-            - `numberOfAllFiles`: (Redundant with `numberOfFiles`) The number of files within the directory.
+            - `numberOfAllFiles`: (Redundant with `numberOfFiles`) The total number of files within the directory.
             - `numberOfAllFilesPerExtension`: (Redundant with `numberOfFilesPerExtension`) A dictionary mapping file extensions to their counts.
             - `extensionsOfAllFiles`: (Redundant with `extension`) A list of file extensions found in the directory.
             - `dateCreated`: The creation date and time in ISO 8601 format.
@@ -338,21 +338,19 @@ def _update_statistical_info_of_directory(
     if src_type != "Directory":
         warnings.warn("'src' must be a Directory metadata. exit.")
         return src
+    metadata_list_: List[Dict] = [
+        m for m in metadata_list if m.get("type", "Unknown") == "Directory"
+    ]
+    src_id: str = src["@id"]
     for part in src.get("hasPart", []):
-        for node in metadata_list:
-            node_type: str = node.get("type", "")
-            if not node_type:
-                node_id: str = node.get('@id', 'no id')
-                warnings.warn(
-                    f"the node '{node_id}' does not have the 'type' property. skip."
-                )
-                continue
-            if node_type == "File":
-                continue
-            if node["@id"] != part["@id"] or node["parent"]["@id"] != src["@id"]:
-                continue
+        part_id: str = part["@id"]
+        node_list: List[Dict] = [
+            node for node in metadata_list_
+            if node["@id"] == part_id and node["parent"]["@id"] == src_id
+        ]
+        for node in node_list:
             node = _update_statistical_info_of_directory(
-                node, metadata_list
+                node, metadata_list_
             )
             src["contentSizeOfAllFiles"] += node["contentSizeOfAllFiles"]
             src["numberOfAllContents"] += node["numberOfAllContents"]
