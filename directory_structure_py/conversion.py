@@ -227,6 +227,8 @@ def convert_meta_list_json_to_rocrate(
                 properties["encodingFormat"] = v
             elif isinstance(v, (int, float)):
                 properties[k] = str(v)
+            elif isinstance(v, dict) and "@id" not in list(v.keys()):
+                properties[k] = str(v)
             else:
                 properties[k] = v
         return properties
@@ -242,6 +244,8 @@ def convert_meta_list_json_to_rocrate(
                 properties["encodingFormat"] = v
             elif isinstance(v, (int, float)):
                 properties[k] = str(v)
+            elif isinstance(v, dict) and "@id" not in list(v.keys()):
+                properties[k] = str(v)
             else:
                 properties[k] = v
         return properties
@@ -251,15 +255,13 @@ def convert_meta_list_json_to_rocrate(
     crate.name = Path(src["root_path"]).name
     meta_list: List[Dict[str, Any]] = src["@graph"]
     for metadata in meta_list:
+        entity: Dict = crate.get(metadata['@id'])
         properties = {}
         if metadata["type"] == "Directory":
             properties = _get_dictionary_props(metadata)
         else:
             properties = _get_file_props(metadata)
         for k, v in properties.items():
-            if isinstance(v, dict) and "@id" not in list(v.keys()):
-                crate.get(metadata['@id'])[k] = str(v)
-            else:
-                crate.get(metadata['@id'])[k] = v
+            entity[k] = v
     crate.datePublished = datetime.datetime.now().strftime(DATETIME_FMT)
     return crate
