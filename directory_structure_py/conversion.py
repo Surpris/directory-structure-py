@@ -8,7 +8,6 @@ from typing import Dict, Any, List
 import warnings
 from rocrate.rocrate import ROCrate
 from directory_structure_py.constants import OUTPUT_ROOT_KEY, DATETIME_FMT
-# from directory_structure_py.rocrate_models import ROCrate
 
 
 def convert_meta_list_json_to_tsv(src: Dict[str, Any]) -> List[List[str]]:
@@ -76,7 +75,7 @@ def convert_meta_list_json_to_tsv_from_file(src: str) -> List[List[str]]:
     return output
 
 
-def _construct_tree(
+def _construct_tree_from_list(
     src: Dict[str, Any], metadata_list: List[Dict[str, Any]],
     structure_only: bool = False
 ) -> Dict[str, Any]:
@@ -101,14 +100,6 @@ def _construct_tree(
             returns only its '@id' as a string.
 
     """
-    # if not src:
-    #     for node in metadata_list:
-    #         node_parent: Dict[str, Any] = node.get("parent", {})
-    #         if not node_parent:
-    #             src = node
-    #             break
-    #     if not src:
-    #         raise ValueError("No root directory found.")
     if src.get("type", "Unknown") != "Directory":
         if not structure_only:
             return src
@@ -122,9 +113,8 @@ def _construct_tree(
             if node["@id"] == part_id and node["parent"]["@id"] == src_id
         ]
         for node in node_list:
-            # if node["@id"] == part["@id"] and node["parent"]["@id"] == src["@id"]:
             buff.append(
-                _construct_tree(node, metadata_list, structure_only)
+                _construct_tree_from_list(node, metadata_list, structure_only)
             )
     src["hasPart"] = buff
     if structure_only:
@@ -140,7 +130,7 @@ def list2tree(src: Dict[str, Any], structure_only: bool = False) -> Dict[str, An
     which holds a list of nodes. Each node is represented as a dictionary with keys
     such as "basename", 
     "parent", "type", and "hasPart". The function uses these nodes to construct a hierarchical tree 
-    by calling the helper function `_construct_tree`.
+    by calling the helper function `_construct_tree_from_list`.
 
     Args:
         src (Dict[str, Any]): A metadata dictionary with a OUTPUT_ROOT_KEY key,
@@ -174,7 +164,7 @@ def list2tree(src: Dict[str, Any], structure_only: bool = False) -> Dict[str, An
     if not root:
         warnings.warn("No root metadata found. exit.")
         return src
-    root = _construct_tree(root, contents, structure_only)
+    root = _construct_tree_from_list(root, contents, structure_only)
     dst: Dict[str, Any] = {}
     dst["root_path"] = src["root_path"]
     dst[OUTPUT_ROOT_KEY] = root

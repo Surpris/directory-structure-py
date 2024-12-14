@@ -152,7 +152,7 @@ def main(
                 logger.info("extract the directory structure...")
             else:
                 logger.info("convert the metadata format from list to tree...")
-            data = list2tree(data, structure_only)
+            data = list2tree(copy.deepcopy(data), structure_only)
             dst_tree: str = dst.replace(
                 os.path.splitext(dst)[-1],
                 f"_tree{os.path.splitext(dst)[-1]}"
@@ -166,7 +166,7 @@ def main(
         traceback.print_exc()
         logger.error(traceback.format_exc())
     logger.info("ended.")
-    logger.info("elapsed time: %.*f sec.", 3, time.time() - st)
+    logger.info("elapsed time: %.*f sec.\n", 3, time.time() - st)
 
 
 if __name__ == "__main__":

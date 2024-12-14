@@ -334,8 +334,7 @@ def _update_statistical_info_of_directory(
     Warnings:
         If the input `src` is not a directory or if a node in `metadata_list` lacks a "type" property, a warning is issued.
     """
-    src_type: str = src.get("type", "Unknown")
-    if src_type != "Directory":
+    if src.get("type", "Unknown") != "Directory":
         warnings.warn("'src' must be a Directory metadata. exit.")
         return src
     metadata_list_: List[Dict] = [
