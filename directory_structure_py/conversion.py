@@ -5,6 +5,7 @@ import datetime
 import json
 from pathlib import Path
 from typing import Dict, Any, List
+import warnings
 from rocrate.rocrate import ROCrate
 from directory_structure_py.constants import OUTPUT_ROOT_KEY, DATETIME_FMT
 # from directory_structure_py.rocrate_models import ROCrate
@@ -76,7 +77,7 @@ def convert_meta_list_json_to_tsv_from_file(src: str) -> List[List[str]]:
 
 
 def _construct_tree(
-    tree_: Dict[str, Any], src: List[Dict[str, Any]],
+    src: Dict[str, Any], metadata_list: List[Dict[str, Any]],
     structure_only: bool = False
 ) -> Dict[str, Any]:
     """Recursively constructs a tree structure from a list of nodes.
@@ -88,8 +89,8 @@ def _construct_tree(
     otherwise, it only returns the '@id' of leaf nodes.
 
     Args:
-        tree_: A dictionary representing a partially constructed tree or an empty dictionary.
-        src: A list of dictionaries, where each dictionary represents a node in the tree.
+        src: A dictionary representing a partially constructed tree or an empty dictionary.
+        metadata_list: A list of dictionaries, where each dictionary represents a node in the tree.
             Each node should have '@id' and 'parent' keys.
         structure_only: A boolean indicating whether to output the structure only.
             in the resulting tree. Defaults to False.
@@ -100,29 +101,35 @@ def _construct_tree(
             returns only its '@id' as a string.
 
     """
-    if not tree_:
-        for node in src:
-            node_parent: Dict[str, Any] = node.get("parent", {})
-            if not node_parent:
-                tree_ = node
-                break
-        if not tree_:
-            raise ValueError("No root directory found.")
-    if tree_.get("type", "Unknown") != "Directory":
+    # if not src:
+    #     for node in metadata_list:
+    #         node_parent: Dict[str, Any] = node.get("parent", {})
+    #         if not node_parent:
+    #             src = node
+    #             break
+    #     if not src:
+    #         raise ValueError("No root directory found.")
+    if src.get("type", "Unknown") != "Directory":
         if not structure_only:
-            return tree_
-        return tree_.get("@id", "no id")
+            return src
+        return src.get("@id", "no id")
     buff: List[Dict[str, Any]] = []
-    for part in tree_.get("hasPart", []):
-        for node in src:
-            if node["@id"] == part["@id"] and node["parent"]["@id"] == tree_["@id"]:
-                buff.append(
-                    _construct_tree(node, src, structure_only)
-                )
-    tree_["hasPart"] = buff
+    src_id: str = src["@id"]
+    for part in src.get("hasPart", []):
+        part_id: str = part["@id"]
+        node_list: List[Dict] = [
+            node for node in metadata_list
+            if node["@id"] == part_id and node["parent"]["@id"] == src_id
+        ]
+        for node in node_list:
+            # if node["@id"] == part["@id"] and node["parent"]["@id"] == src["@id"]:
+            buff.append(
+                _construct_tree(node, metadata_list, structure_only)
+            )
+    src["hasPart"] = buff
     if structure_only:
-        return {tree_["@id"]: tree_["hasPart"]}
-    return {tree_["@id"]: tree_}
+        return {src["@id"]: src["hasPart"]}
+    return {src["@id"]: src}
 
 
 def list2tree(src: Dict[str, Any], structure_only: bool = False) -> Dict[str, Any]:
@@ -158,10 +165,21 @@ def list2tree(src: Dict[str, Any], structure_only: bool = False) -> Dict[str, An
     """
 
     contents: List[Dict[str, Any]] = src[OUTPUT_ROOT_KEY]
-    tree: Dict[str, Any] = {}
-    tree[OUTPUT_ROOT_KEY] = _construct_tree(tree, contents, structure_only)
-    tree["dateCreated"] = src["dateCreated"]
-    return tree
+    root: Dict[str, Any] = {}
+    for node in contents:
+        node_parent: Dict[str, Any] = node.get("parent", {})
+        if not node_parent:
+            root = node
+            break
+    if not root:
+        warnings.warn("No root metadata found. exit.")
+        return src
+    root = _construct_tree(root, contents, structure_only)
+    dst: Dict[str, Any] = {}
+    dst["root_path"] = src["root_path"]
+    dst[OUTPUT_ROOT_KEY] = root
+    dst["dateCreated"] = src["dateCreated"]
+    return dst
 
 
 def list2tree_from_file(src: Path | str, structure_only: bool = False) -> Dict[str, Any]:

@@ -3,6 +3,7 @@
 get the directory tree
 """
 
+import copy
 import datetime
 import importlib.resources
 import json
@@ -126,8 +127,10 @@ def main(
             save_dict_to_json(data, dst)
         else:
             logger.info("convert the metadata format from list to the RO-Crate... ")
+            root_path_original: str = copy.deepcopy(data["root_path"])
             data["root_path"] = f"{str(Path(src).absolute().as_posix())}"
             crate: ROCrate = convert_meta_list_json_to_rocrate(data)
+            data["root_path"] = root_path_original
             _ = crate.add(Preview(crate))
             # crate.write_zip(os.path.dirname(dst))
             # crate.write(os.path.dirname(dst))
