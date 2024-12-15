@@ -495,42 +495,64 @@
             <h2>Contents</h2>
             {%- macro render_contents(entry) %}
                 <div class="details-content-item">
-                <p>Type: {{ stringify(entry['@type']) }}</p>
+                <table>
+                <tr>
+                <td>Type</td><td>:</td><td>{{ stringify(entry['@type']) }}</td>
+                </tr>
+                <tr>
                 {%- if entry['contentSizeOfAllFiles'] %}
-                    <p>contentSize: {{ format_content_size(entry['contentSizeOfAllFiles']) }}</p>
+                    <td>contentSize</td><td>:</td><td>{{ format_content_size(entry['contentSizeOfAllFiles']) }}</td>
                 {%- elif entry['contentSize'] %}
-                    <p>contentSize: {{ format_content_size(entry['contentSize']) }}</p>
+                    <td>contentSize</td><td>:</td><td>{{ format_content_size(entry['contentSize']) }}</td>
                 {%- endif %}
+                </tr>
+                <tr>
                 {%- if stringify(entry['@type']) %}
                     {%- if entry['encodingFormat'] %}
-                        <p>encodingFormat: {{ entry['encodingFormat'] }}</p>
+                        <td>encodingFormat</td><td>:</td><td>{{ entry['encodingFormat'] }}</td>
                     {%- endif %}
                 {%- endif %}
+                </tr>
+                <tr>
                 {%- if entry['dateCreated'] %}
-                    <p>dateCreated: {{ entry['dateCreated'] }}</p>
+                    <td>dateCreated</td><td>:</td><td>{{ entry['dateCreated'] }}</td>
                 {%- endif %}
+                </tr>
+                <tr>
                 {%- if entry['dateModified'] %}
-                    <p>dateModified: {{ entry['dateModified'] }}</p>
+                    <td>dateModified</td><td>:</td><td>{{ entry['dateModified'] }}</td>
                 {%- endif %}
+                </tr>
+                <tr>
                 {%- if entry['numberOfAllContents'] %}
-                    <p>numberOfContents: {{ entry['numberOfAllContents'] }}</p>
+                    <td>numberOfContents</td><td>:</td><td>{{ entry['numberOfAllContents'] }}</td>
                 {%- elif entry['numberOfContents'] %}
-                    <p>numberOfContents: {{ entry['numberOfContents'] }}</p>
+                    <td>numberOfContents</td><td>:</td><td>{{ entry['numberOfContents'] }}</td>
                 {%- endif %}
+                </tr>
+                <tr>
                 {%- if entry['numberOfAllFiles'] %}
-                    <p>numberOfAllFiles: {{ entry['numberOfAllFiles'] }}</p>
+                    <td>numberOfAllFiles</td><td>:</td><td>{{ entry['numberOfAllFiles'] }}</td>
                 {%- endif %}
+                </tr>
+                <tr>
                 {%- if entry['numberOfAllFilesPerExtension'] %}
-                    <p>extension: {{ entry['numberOfAllFilesPerExtension'] }}</p>
+                    <td>extension</td><td>:</td><td>{{ entry['numberOfAllFilesPerExtension'] }}</td>
                 {%- elif entry['extension'] %}
-                    <p>extension: {{ entry['extension'] }}</p>
+                    <td>extension</td><td>:</td><td>{{ entry['extension'] }}</td>
                 {%- endif %}
+                </tr>
+                <tr>
                 {%- if entry['sha256'] %}
-                    <p>sha256: {{ entry['sha256'] }}</p>
+                    <td>sha256</td><td>:</td><td>{{ entry['sha256'] }}</td>
                 {%- endif %}
+                </tr>
+                <tr>
                 {%- if entry['programmingLanguage'] %}
-                    <p>ProgrammingLanguage: {{ entry['programmingLanguage']['@id'] }}</p>
+                    <td>ProgrammingLanguage</td><td>:</td><td>{{ entry['programmingLanguage']['@id'] }}</td>
                 {%- endif %}
+                </tr>
+                </table>
                 <button class="go-to-tree-btn" href="#tree_{{ entry['@id'] }}" onclick="switchTab('directory-tree-tab')">
                     Go To Tree
                 </button>
