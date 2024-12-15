@@ -5,9 +5,9 @@ import datetime
 import json
 from pathlib import Path
 from typing import Dict, Any, List
+import warnings
 from rocrate.rocrate import ROCrate
 from directory_structure_py.constants import OUTPUT_ROOT_KEY, DATETIME_FMT
-# from directory_structure_py.rocrate_models import ROCrate
 
 
 def convert_meta_list_json_to_tsv(src: Dict[str, Any]) -> List[List[str]]:
@@ -75,8 +75,8 @@ def convert_meta_list_json_to_tsv_from_file(src: str) -> List[List[str]]:
     return output
 
 
-def _construct_tree(
-    tree_: Dict[str, Any], src: List[Dict[str, Any]],
+def _construct_tree_from_list(
+    src: Dict[str, Any], metadata_list: List[Dict[str, Any]],
     structure_only: bool = False
 ) -> Dict[str, Any]:
     """Recursively constructs a tree structure from a list of nodes.
@@ -88,8 +88,8 @@ def _construct_tree(
     otherwise, it only returns the '@id' of leaf nodes.
 
     Args:
-        tree_: A dictionary representing a partially constructed tree or an empty dictionary.
-        src: A list of dictionaries, where each dictionary represents a node in the tree.
+        src: A dictionary representing a partially constructed tree or an empty dictionary.
+        metadata_list: A list of dictionaries, where each dictionary represents a node in the tree.
             Each node should have '@id' and 'parent' keys.
         structure_only: A boolean indicating whether to output the structure only.
             in the resulting tree. Defaults to False.
@@ -100,29 +100,26 @@ def _construct_tree(
             returns only its '@id' as a string.
 
     """
-    if not tree_:
-        for node in src:
-            node_parent: Dict[str, Any] = node.get("parent", {})
-            if not node_parent:
-                tree_ = node
-                break
-        if not tree_:
-            raise ValueError("No root directory found.")
-    if tree_.get("type", "Unknown") != "Directory":
+    if src.get("type", "Unknown") != "Directory":
         if not structure_only:
-            return tree_
-        return tree_.get("@id", "no id")
+            return src
+        return src.get("@id", "no id")
     buff: List[Dict[str, Any]] = []
-    for part in tree_.get("hasPart", []):
-        for node in src:
-            if node["@id"] == part["@id"] and node["parent"]["@id"] == tree_["@id"]:
-                buff.append(
-                    _construct_tree(node, src, structure_only)
-                )
-    tree_["hasPart"] = buff
+    src_id: str = src["@id"]
+    for part in src.get("hasPart", []):
+        part_id: str = part["@id"]
+        node_list: List[Dict] = [
+            node for node in metadata_list
+            if node["@id"] == part_id and node["parent"]["@id"] == src_id
+        ]
+        for node in node_list:
+            buff.append(
+                _construct_tree_from_list(node, metadata_list, structure_only)
+            )
+    src["hasPart"] = buff
     if structure_only:
-        return {tree_["@id"]: tree_["hasPart"]}
-    return {tree_["@id"]: tree_}
+        return {src["@id"]: src["hasPart"]}
+    return {src["@id"]: src}
 
 
 def list2tree(src: Dict[str, Any], structure_only: bool = False) -> Dict[str, Any]:
@@ -133,7 +130,7 @@ def list2tree(src: Dict[str, Any], structure_only: bool = False) -> Dict[str, An
     which holds a list of nodes. Each node is represented as a dictionary with keys
     such as "basename", 
     "parent", "type", and "hasPart". The function uses these nodes to construct a hierarchical tree 
-    by calling the helper function `_construct_tree`.
+    by calling the helper function `_construct_tree_from_list`.
 
     Args:
         src (Dict[str, Any]): A metadata dictionary with a OUTPUT_ROOT_KEY key,
@@ -158,10 +155,21 @@ def list2tree(src: Dict[str, Any], structure_only: bool = False) -> Dict[str, An
     """
 
     contents: List[Dict[str, Any]] = src[OUTPUT_ROOT_KEY]
-    tree: Dict[str, Any] = {}
-    tree[OUTPUT_ROOT_KEY] = _construct_tree(tree, contents, structure_only)
-    tree["dateCreated"] = src["dateCreated"]
-    return tree
+    root: Dict[str, Any] = {}
+    for node in contents:
+        node_parent: Dict[str, Any] = node.get("parent", {})
+        if not node_parent:
+            root = node
+            break
+    if not root:
+        warnings.warn("No root metadata found. exit.")
+        return src
+    root = _construct_tree_from_list(root, contents, structure_only)
+    dst: Dict[str, Any] = {}
+    dst["root_path"] = src["root_path"]
+    dst[OUTPUT_ROOT_KEY] = root
+    dst["dateCreated"] = src["dateCreated"]
+    return dst
 
 
 def list2tree_from_file(src: Path | str, structure_only: bool = False) -> Dict[str, Any]:
@@ -225,6 +233,10 @@ def convert_meta_list_json_to_rocrate(
                 properties["name"] = v
             elif k == "mimetype":
                 properties["encodingFormat"] = v
+            elif isinstance(v, (int, float)):
+                properties[k] = str(v)
+            elif isinstance(v, dict) and "@id" not in list(v.keys()):
+                properties[k] = str(v)
             else:
                 properties[k] = v
         return properties
@@ -238,6 +250,10 @@ def convert_meta_list_json_to_rocrate(
                 properties[k] = v
             elif k == "mimetype":
                 properties["encodingFormat"] = v
+            elif isinstance(v, (int, float)):
+                properties[k] = str(v)
+            elif isinstance(v, dict) and "@id" not in list(v.keys()):
+                properties[k] = str(v)
             else:
                 properties[k] = v
         return properties
@@ -247,15 +263,13 @@ def convert_meta_list_json_to_rocrate(
     crate.name = Path(src["root_path"]).name
     meta_list: List[Dict[str, Any]] = src["@graph"]
     for metadata in meta_list:
+        entity: Dict = crate.get(metadata['@id'])
         properties = {}
         if metadata["type"] == "Directory":
             properties = _get_dictionary_props(metadata)
         else:
             properties = _get_file_props(metadata)
         for k, v in properties.items():
-            if isinstance(v, dict) and "@id" not in list(v.keys()):
-                crate.get(metadata['@id'])[k] = str(v)
-            else:
-                crate.get(metadata['@id'])[k] = v
+            entity[k] = v
     crate.datePublished = datetime.datetime.now().strftime(DATETIME_FMT)
     return crate

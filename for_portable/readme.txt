@@ -1,6 +1,6 @@
 # Version of the portable program
 
-v0.2.3
+v0.2.4
 
 # What is for?
 

@@ -1,7 +1,7 @@
 
 [project]
 name = "directory-structure-py"
-version = "0.2.3"
+version = "0.2.4"
 description = "Python function collecting the metadata of a directory and its contents"
 readme = "README.md"
 license = { file = "LICENSE" }
@@ -23,6 +23,7 @@ classifiers = [
 
 [project.optional-dependencies]
 dev = [
+    "line_profiler",
     "pyinstaller",
     "pytest",
     "pylint",

@@ -1,4 +1,5 @@
 {
+    "root_path": "./",
     "@graph": {
         "sample/": {
             "@id": "sample/",
@@ -279,5 +280,5 @@
             "dateModified": "2024-11-23T12:15:26"
         }
     },
-    "dateCreated": "2024-12-07T00:20:57"
+    "dateCreated": "2024-12-15T23:25:03"
 }

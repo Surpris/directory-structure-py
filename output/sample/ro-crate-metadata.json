@@ -4,7 +4,7 @@
         {
             "@id": "./",
             "@type": "Dataset",
-            "datePublished": "2024-12-07T00:20:57",
+            "datePublished": "2024-12-15T23:25:03",
             "hasPart": [
                 {
                     "@id": "sample/"
@@ -52,8 +52,8 @@
         {
             "@id": "sample/",
             "@type": "Dataset",
-            "contentSize": 187,
-            "contentSizeOfAllFiles": 364,
+            "contentSize": "187",
+            "contentSizeOfAllFiles": "364",
             "dateCreated": "2024-09-25T12:16:08",
             "dateModified": "2024-11-23T12:15:26",
             "encodingFormat": [
@@ -78,20 +78,20 @@
                 "text/plain"
             ],
             "name": "sample",
-            "numberOfAllContents": 9,
-            "numberOfAllFiles": 6,
+            "numberOfAllContents": "9",
+            "numberOfAllFiles": "6",
             "numberOfAllFilesPerExtension": "{'.md': 1, '.csv': 4, '.txt': 1}",
             "numberOfAllFilesPerMIMEType": "{'text/markdown': 1, 'application/vnd.ms-excel': 4, 'text/plain': 1}",
-            "numberOfContents": 3,
-            "numberOfFiles": 1,
+            "numberOfContents": "3",
+            "numberOfFiles": "1",
             "numberOfFilesPerExtension": "{'.md': 1}",
             "numberOfFilesPerMIMEType": "{'text/markdown': 1}"
         },
         {
             "@id": "sample/data/",
             "@type": "Dataset",
-            "contentSize": 83,
-            "contentSizeOfAllFiles": 83,
+            "contentSize": "83",
+            "contentSizeOfAllFiles": "83",
             "dateCreated": "2024-09-25T12:17:06",
             "dateModified": "2024-09-25T12:17:53",
             "encodingFormat": [
@@ -111,19 +111,19 @@
                 "application/vnd.ms-excel"
             ],
             "name": "data",
-            "numberOfAllContents": 2,
-            "numberOfAllFiles": 2,
+            "numberOfAllContents": "2",
+            "numberOfAllFiles": "2",
             "numberOfAllFilesPerExtension": "{'.csv': 2}",
             "numberOfAllFilesPerMIMEType": "{'application/vnd.ms-excel': 2}",
-            "numberOfContents": 2,
-            "numberOfFiles": 2,
+            "numberOfContents": "2",
+            "numberOfFiles": "2",
             "numberOfFilesPerExtension": "{'.csv': 2}",
             "numberOfFilesPerMIMEType": "{'application/vnd.ms-excel': 2}"
         },
         {
             "@id": "sample/data/data_001.csv",
             "@type": "File",
-            "contentSize": 42,
+            "contentSize": "42",
             "dateCreated": "2024-09-25T12:17:15",
             "dateModified": "2024-09-25T12:18:08",
             "encodingFormat": "application/vnd.ms-excel",
@@ -134,7 +134,7 @@
         {
             "@id": "sample/data/data_002.csv",
             "@type": "File",
-            "contentSize": 41,
+            "contentSize": "41",
             "dateCreated": "2024-09-25T12:17:48",
             "dateModified": "2024-09-25T12:18:05",
             "encodingFormat": "application/vnd.ms-excel",
@@ -145,8 +145,8 @@
         {
             "@id": "sample/hogehoge/",
             "@type": "Dataset",
-            "contentSize": 6,
-            "contentSizeOfAllFiles": 94,
+            "contentSize": "6",
+            "contentSizeOfAllFiles": "94",
             "dateCreated": "2024-09-25T12:16:46",
             "dateModified": "2024-11-10T16:39:53",
             "encodingFormat": [
@@ -168,20 +168,20 @@
                 "application/vnd.ms-excel"
             ],
             "name": "hogehoge",
-            "numberOfAllContents": 4,
-            "numberOfAllFiles": 3,
+            "numberOfAllContents": "4",
+            "numberOfAllFiles": "3",
             "numberOfAllFilesPerExtension": "{'.txt': 1, '.csv': 2}",
             "numberOfAllFilesPerMIMEType": "{'text/plain': 1, 'application/vnd.ms-excel': 2}",
-            "numberOfContents": 2,
-            "numberOfFiles": 1,
+            "numberOfContents": "2",
+            "numberOfFiles": "1",
             "numberOfFilesPerExtension": "{'.txt': 1}",
             "numberOfFilesPerMIMEType": "{'text/plain': 1}"
         },
         {
             "@id": "sample/hogehoge/data/",
             "@type": "Dataset",
-            "contentSize": 88,
-            "contentSizeOfAllFiles": 88,
+            "contentSize": "88",
+            "contentSizeOfAllFiles": "88",
             "dateCreated": "2024-11-10T16:39:53",
             "dateModified": "2024-11-10T16:40:12",
             "encodingFormat": [
@@ -201,19 +201,19 @@
                 "application/vnd.ms-excel"
             ],
             "name": "data",
-            "numberOfAllContents": 2,
-            "numberOfAllFiles": 2,
+            "numberOfAllContents": "2",
+            "numberOfAllFiles": "2",
             "numberOfAllFilesPerExtension": "{'.csv': 2}",
             "numberOfAllFilesPerMIMEType": "{'application/vnd.ms-excel': 2}",
-            "numberOfContents": 2,
-            "numberOfFiles": 2,
+            "numberOfContents": "2",
+            "numberOfFiles": "2",
             "numberOfFilesPerExtension": "{'.csv': 2}",
             "numberOfFilesPerMIMEType": "{'application/vnd.ms-excel': 2}"
         },
         {
             "@id": "sample/hogehoge/data/data_002.csv",
             "@type": "File",
-            "contentSize": 41,
+            "contentSize": "41",
             "dateCreated": "2024-11-10T16:40:03",
             "dateModified": "2024-09-25T12:18:05",
             "encodingFormat": "application/vnd.ms-excel",
@@ -224,7 +224,7 @@
         {
             "@id": "sample/hogehoge/data/data_003.csv",
             "@type": "File",
-            "contentSize": 47,
+            "contentSize": "47",
             "dateCreated": "2024-11-10T16:40:07",
             "dateModified": "2024-11-10T16:40:30",
             "encodingFormat": "application/vnd.ms-excel",
@@ -235,7 +235,7 @@
         {
             "@id": "sample/hogehoge/fuga.txt",
             "@type": "File",
-            "contentSize": 6,
+            "contentSize": "6",
             "dateCreated": "2024-09-25T12:16:51",
             "dateModified": "2024-09-25T12:16:55",
             "encodingFormat": "text/plain",
@@ -246,7 +246,7 @@
         {
             "@id": "sample/readme.md",
             "@type": "File",
-            "contentSize": 187,
+            "contentSize": "187",
             "dateCreated": "2024-09-25T12:16:19",
             "dateModified": "2024-11-10T17:42:20",
             "encodingFormat": "text/markdown",

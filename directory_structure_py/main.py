@@ -3,6 +3,7 @@
 get the directory tree
 """
 
+import copy
 import datetime
 import importlib.resources
 import json
@@ -16,7 +17,7 @@ from rocrate.rocrate import ROCrate
 
 from directory_structure_py.constants import (
     DEFAULT_OUTPUT_NAME, ENSURE_ASCII, JSON_OUTPUT_INDENT,
-    DEFAULT_PREVIEW_TEMPLATE_PATH, WIN_UNC_PREFIX
+    DEFAULT_PREVIEW_TEMPLATE_PATH
 )
 from directory_structure_py.get_metadata import (
     get_metadata_of_files_in_list_format,
@@ -126,8 +127,10 @@ def main(
             save_dict_to_json(data, dst)
         else:
             logger.info("convert the metadata format from list to the RO-Crate... ")
+            root_path_original: str = copy.deepcopy(data["root_path"])
             data["root_path"] = f"{str(Path(src).absolute().as_posix())}"
             crate: ROCrate = convert_meta_list_json_to_rocrate(data)
+            data["root_path"] = root_path_original
             _ = crate.add(Preview(crate))
             # crate.write_zip(os.path.dirname(dst))
             # crate.write(os.path.dirname(dst))
@@ -149,7 +152,7 @@ def main(
                 logger.info("extract the directory structure...")
             else:
                 logger.info("convert the metadata format from list to tree...")
-            data = list2tree(data, structure_only)
+            data = list2tree(copy.deepcopy(data), structure_only)
             dst_tree: str = dst.replace(
                 os.path.splitext(dst)[-1],
                 f"_tree{os.path.splitext(dst)[-1]}"
@@ -163,7 +166,7 @@ def main(
         traceback.print_exc()
         logger.error(traceback.format_exc())
     logger.info("ended.")
-    logger.info("elapsed time: %.*f sec.", 3, time.time() - st)
+    logger.info("elapsed time: %.*f sec.\n", 3, time.time() - st)
 
 
 if __name__ == "__main__":
