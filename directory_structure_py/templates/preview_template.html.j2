@@ -503,23 +503,11 @@
         <div class="tab-content">
             <h2>Contents</h2>
             {%- macro render_extensions_in_detail_section(entry) %}
-                <tr>
                 {%- if entry['numberOfAllFilesPerExtension'] %}
-                    {%- if is_object_dict(entry.numberOfAllFilesPerExtension) %}
-                        <td>extension</td><td>:</td><td>
-                        <table class="extension-table">
-                        {%- for ext, count in entry.numberOfAllFilesPerExtension.items() %}
-                            <tr><td>{{- ext }}</td><td>:</td><td>{{- count }}</td><tr>
-                        {%- endfor %}
-                        </table>
-                        </td>
-                    {%- else %}
-                        <td>extension</td><td>:</td><td>{{ entry['numberOfAllFilesPerExtension'] }}</td>
-                    {%- endif %}
+                    <tr><td>extension</td><td>:</td><td>{{ entry['numberOfAllFilesPerExtension'] }}</td></tr>
                 {%- elif entry['extension'] %}
-                    <td>extension</td><td>:</td><td>{{ entry['extension'] }}</td>
+                    <tr><td>extension</td><td>:</td><td>{{ entry['extension'] }}</td></tr>
                 {%- endif %}
-                </tr>
             {%- endmacro %}
             {%- macro render_contents(entry) %}
                 <div class="details-content-item">
