@@ -536,7 +536,12 @@
                 </button>
                 </div>
             {%- endmacro %}
-            {%- macro render_content_size_in_detail_section(entry} %}
+            {%- macro render_content_size_in_detail_section(entry) %}
+                {%- if entry['contentSizeOfAllFiles'] %}
+                    {{- format_content_size(entry['contentSizeOfAllFiles']) }}
+                {%- elif entry['contentSize'] %}
+                    {{- format_content_size(entry['contentSize']) }}
+                {%- endif %}
             {%- endmacro %}
             {%- macro render_contents_tree(entry, entity_list, level) %}
                 {%- set layer_class = "layer" + level|string %}
@@ -548,13 +553,7 @@
                 {%- endif %}
                 <details class="details js-details {{layer_class}}">
                     <summary class="details-summary js-details-summary {{layer_class}}" id="summary_{{- entry['@id'] }}">
-                    <strong>{{- format_display_name(entry) }}
-                    {%- if entry['contentSizeOfAllFiles'] %}
-                    : {{ format_content_size(entry['contentSizeOfAllFiles']) }}
-                    {%- elif entry['contentSize'] %}
-                    : {{ format_content_size(entry['contentSize']) }}
-                    {%- endif %}
-                    </strong>
+                    <strong>{{- format_display_name(entry) }}: {{ render_content_size_in_detail_section(entry) }}</strong>
                     </summary>
                     <div class="details-content js-details-content {{layer_class}}" id="content_{{- entry['@id'] }}">
                         {{- render_contents(entry) }}
