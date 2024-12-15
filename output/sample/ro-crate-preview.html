@@ -220,10 +220,6 @@
         display: none;
     }
 
-    .details-content {
-        /* font-size: 24px; */
-        /* font-weight: bold; */
-    }
     .details-content-item {
         position: relative;
         padding: 20px;
@@ -242,6 +238,15 @@
                cursor: pointer;
                 opacity: 0.8;
             }
+        }
+        table {
+            .extension-table {
+                background-color: #DDDDDD;
+                width: auto;
+            }
+        }
+        tr {
+            vertical-align: top;
         }
     }
 
@@ -360,17 +365,14 @@
   </svg>
   <h1>sample</h1>
   <h2>Crate properties</h2>
-  <p>
-  </p>
 
   <dl>
     <dt>datePublished</dt>
-    <dd>2024-12-14 22:51:58</dd>
+    <dd>2024-12-15 23:25:03</dd>
   </dl>
 
   <h2>Entities</h2>
   <div id="contents">
-
     <div class="tab-switch">
         <label>
             <input id="directory-tree-tab" type="radio" name="TAB" checked>
@@ -385,105 +387,75 @@
                         <th class="display_name">Display name</th>
                         <th class="data_size">contentSize</th>
                     <tr>
-                    
                 <tr>
                 <td id="tree_sample/" class="display_name" style="padding-left: 20px;">
-                <a href="#summary_sample/" onclick="switchTab('contents-tab')">
-            sample/</a>
+                <a href="#summary_sample/" onclick="switchTab('contents-tab')">sample/</a>
                 </td>
                 <td class="data_size">
-                
-            364 B
+                  364 B
                 </td>
-                                
                 <tr>
                 <td id="tree_sample/data/" class="display_name" style="padding-left: 40px;">
-                <a href="#summary_sample/data/" onclick="switchTab('contents-tab')">
-            data/</a>
+                <a href="#summary_sample/data/" onclick="switchTab('contents-tab')">data/</a>
                 </td>
                 <td class="data_size">
-                
-            83 B
+                  83 B
                 </td>
-                                
                 <tr>
                 <td id="tree_sample/data/data_001.csv" class="display_name" style="padding-left: 60px;">
-                <a href="#summary_sample/data/data_001.csv" onclick="switchTab('contents-tab')">
-            data_001.csv</a>
+                <a href="#summary_sample/data/data_001.csv" onclick="switchTab('contents-tab')">data_001.csv</a>
                 </td>
                 <td class="data_size">
-                
-            42 B
+                  42 B
                 </td>
-                                
                 <tr>
                 <td id="tree_sample/data/data_002.csv" class="display_name" style="padding-left: 60px;">
-                <a href="#summary_sample/data/data_002.csv" onclick="switchTab('contents-tab')">
-            data_002.csv</a>
+                <a href="#summary_sample/data/data_002.csv" onclick="switchTab('contents-tab')">data_002.csv</a>
                 </td>
                 <td class="data_size">
-                
-            41 B
+                  41 B
                 </td>
-                                
                 <tr>
                 <td id="tree_sample/hogehoge/" class="display_name" style="padding-left: 40px;">
-                <a href="#summary_sample/hogehoge/" onclick="switchTab('contents-tab')">
-            hogehoge/</a>
+                <a href="#summary_sample/hogehoge/" onclick="switchTab('contents-tab')">hogehoge/</a>
                 </td>
                 <td class="data_size">
-                
-            94 B
+                  94 B
                 </td>
-                                
                 <tr>
                 <td id="tree_sample/hogehoge/data/" class="display_name" style="padding-left: 60px;">
-                <a href="#summary_sample/hogehoge/data/" onclick="switchTab('contents-tab')">
-            data/</a>
+                <a href="#summary_sample/hogehoge/data/" onclick="switchTab('contents-tab')">data/</a>
                 </td>
                 <td class="data_size">
-                
-            88 B
+                  88 B
                 </td>
-                                
                 <tr>
                 <td id="tree_sample/hogehoge/data/data_002.csv" class="display_name" style="padding-left: 80px;">
-                <a href="#summary_sample/hogehoge/data/data_002.csv" onclick="switchTab('contents-tab')">
-            data_002.csv</a>
+                <a href="#summary_sample/hogehoge/data/data_002.csv" onclick="switchTab('contents-tab')">data_002.csv</a>
                 </td>
                 <td class="data_size">
-                
-            41 B
+                  41 B
                 </td>
-                                
                 <tr>
                 <td id="tree_sample/hogehoge/data/data_003.csv" class="display_name" style="padding-left: 80px;">
-                <a href="#summary_sample/hogehoge/data/data_003.csv" onclick="switchTab('contents-tab')">
-            data_003.csv</a>
+                <a href="#summary_sample/hogehoge/data/data_003.csv" onclick="switchTab('contents-tab')">data_003.csv</a>
                 </td>
                 <td class="data_size">
-                
-            47 B
+                  47 B
                 </td>
-                                
                 <tr>
                 <td id="tree_sample/hogehoge/fuga.txt" class="display_name" style="padding-left: 60px;">
-                <a href="#summary_sample/hogehoge/fuga.txt" onclick="switchTab('contents-tab')">
-            fuga.txt</a>
+                <a href="#summary_sample/hogehoge/fuga.txt" onclick="switchTab('contents-tab')">fuga.txt</a>
                 </td>
                 <td class="data_size">
-                
-            6 B
+                  6 B
                 </td>
-                                
                 <tr>
                 <td id="tree_sample/readme.md" class="display_name" style="padding-left: 40px;">
-                <a href="#summary_sample/readme.md" onclick="switchTab('contents-tab')">
-            readme.md</a>
+                <a href="#summary_sample/readme.md" onclick="switchTab('contents-tab')">readme.md</a>
                 </td>
                 <td class="data_size">
-                
-            187 B
+                  187 B
                 </td>
                 </tbody>
                 </table>
@@ -498,104 +470,90 @@
             <h2>Contents</h2>
 
             <div class="data-entity" id="">
-                
                 <details class="details js-details layer1">
                     <summary class="details-summary js-details-summary layer1" id="summary_sample/">
-                    <strong>
-            sample/
-                    : 
-            364 B
-                    </strong>
+                    <strong>sample/: 364 B</strong>
                     </summary>
                     <div class="details-content js-details-content layer1" id="content_sample/">
-                        
                 <div class="details-content-item">
-                <p>Type: Dataset</p>
-                    <p>contentSize: 
-            364 B</p>
-                        <p>encodingFormat: ['text/markdown']</p>
-                    <p>dateCreated: 2024-09-25T12:16:08</p>
-                    <p>dateModified: 2024-11-23T12:15:26</p>
-                    <p>numberOfContents: 9</p>
-                    <p>numberOfAllFiles: 6</p>
-                    <p>extension: {'.md': 1, '.csv': 4, '.txt': 1}</p>
+                <table>
+                <tr>
+                <td>Type</td><td>:</td><td>Dataset</td>
+                </tr>
+                    <tr><td>contentSize</td><td>:</td><td>364 B</td></tr>
+                    <tr><td>dateCreated</td><td>:</td><td>2024-09-25T12:16:08</td></tr>
+                    <tr><td>dateModified</td><td>:</td><td>2024-11-23T12:15:26</td></tr>
+                    <tr><td>numberOfContents</td><td>:</td><td>9</td></tr>
+                    <tr><td>numberOfAllFiles</td><td>:</td><td>6</td></tr>
+                    <tr><td>extension</td><td>:</td><td>{'.md': 1, '.csv': 4, '.txt': 1}</td></tr>
+                </table>
                 <button class="go-to-tree-btn" href="#tree_sample/" onclick="switchTab('directory-tree-tab')">
                     Go To Tree
                 </button>
                 </div>
                     </div>
-                                    
                 <details class="details js-details layer2">
                     <summary class="details-summary js-details-summary layer2" id="summary_sample/data/">
-                    <strong>
-            data/
-                    : 
-            83 B
-                    </strong>
+                    <strong>data/: 83 B</strong>
                     </summary>
                     <div class="details-content js-details-content layer2" id="content_sample/data/">
-                        
                 <div class="details-content-item">
-                <p>Type: Dataset</p>
-                    <p>contentSize: 
-            83 B</p>
-                        <p>encodingFormat: ['application/vnd.ms-excel']</p>
-                    <p>dateCreated: 2024-09-25T12:17:06</p>
-                    <p>dateModified: 2024-09-25T12:17:53</p>
-                    <p>numberOfContents: 2</p>
-                    <p>numberOfAllFiles: 2</p>
-                    <p>extension: {'.csv': 2}</p>
+                <table>
+                <tr>
+                <td>Type</td><td>:</td><td>Dataset</td>
+                </tr>
+                    <tr><td>contentSize</td><td>:</td><td>83 B</td></tr>
+                    <tr><td>dateCreated</td><td>:</td><td>2024-09-25T12:17:06</td></tr>
+                    <tr><td>dateModified</td><td>:</td><td>2024-09-25T12:17:53</td></tr>
+                    <tr><td>numberOfContents</td><td>:</td><td>2</td></tr>
+                    <tr><td>numberOfAllFiles</td><td>:</td><td>2</td></tr>
+                    <tr><td>extension</td><td>:</td><td>{'.csv': 2}</td></tr>
+                </table>
                 <button class="go-to-tree-btn" href="#tree_sample/data/" onclick="switchTab('directory-tree-tab')">
                     Go To Tree
                 </button>
                 </div>
                     </div>
-                                    
                 <details class="details js-details layer_file">
                     <summary class="details-summary js-details-summary layer_file" id="summary_sample/data/data_001.csv">
-                    <strong>
-            data_001.csv
-                    : 
-            42 B
-                    </strong>
+                    <strong>data_001.csv: 42 B</strong>
                     </summary>
                     <div class="details-content js-details-content layer_file" id="content_sample/data/data_001.csv">
-                        
                 <div class="details-content-item">
-                <p>Type: File</p>
-                    <p>contentSize: 
-            42 B</p>
-                        <p>encodingFormat: application/vnd.ms-excel</p>
-                    <p>dateCreated: 2024-09-25T12:17:15</p>
-                    <p>dateModified: 2024-09-25T12:18:08</p>
-                    <p>extension: .csv</p>
-                    <p>sha256: 81bd6ceb41ba6005e367ea487055b61bf177010d60b6354ab21c469dff22cfcd</p>
+                <table>
+                <tr>
+                <td>Type</td><td>:</td><td>File</td>
+                </tr>
+                    <tr><td>contentSize</td><td>:</td><td>42 B</td></tr>
+                        <tr><td>encodingFormat</td><td>:</td><td>application/vnd.ms-excel</td></tr>
+                    <tr><td>dateCreated</td><td>:</td><td>2024-09-25T12:17:15</td></tr>
+                    <tr><td>dateModified</td><td>:</td><td>2024-09-25T12:18:08</td></tr>
+                    <tr><td>sha256</td><td>:</td><td>81bd6ceb41ba6005e367ea487055b61bf177010d60b6354ab21c469dff22cfcd</td></tr>
+                    <tr><td>extension</td><td>:</td><td>.csv</td></tr>
+                </table>
                 <button class="go-to-tree-btn" href="#tree_sample/data/data_001.csv" onclick="switchTab('directory-tree-tab')">
                     Go To Tree
                 </button>
                 </div>
                     </div>
                 </details>
-                                    
                 <details class="details js-details layer_file">
                     <summary class="details-summary js-details-summary layer_file" id="summary_sample/data/data_002.csv">
-                    <strong>
-            data_002.csv
-                    : 
-            41 B
-                    </strong>
+                    <strong>data_002.csv: 41 B</strong>
                     </summary>
                     <div class="details-content js-details-content layer_file" id="content_sample/data/data_002.csv">
-                        
                 <div class="details-content-item">
-                <p>Type: File</p>
-                    <p>contentSize: 
-            41 B</p>
-                        <p>encodingFormat: application/vnd.ms-excel</p>
-                    <p>dateCreated: 2024-09-25T12:17:48</p>
-                    <p>dateModified: 2024-09-25T12:18:05</p>
-                    <p>extension: .csv</p>
-                    <p>sha256: a8681eaa42ac69b9281ce9d0c75221084336d2fc2f1b3d8b9807eb2bb6e0ac5b</p>
+                <table>
+                <tr>
+                <td>Type</td><td>:</td><td>File</td>
+                </tr>
+                    <tr><td>contentSize</td><td>:</td><td>41 B</td></tr>
+                        <tr><td>encodingFormat</td><td>:</td><td>application/vnd.ms-excel</td></tr>
+                    <tr><td>dateCreated</td><td>:</td><td>2024-09-25T12:17:48</td></tr>
+                    <tr><td>dateModified</td><td>:</td><td>2024-09-25T12:18:05</td></tr>
+                    <tr><td>sha256</td><td>:</td><td>a8681eaa42ac69b9281ce9d0c75221084336d2fc2f1b3d8b9807eb2bb6e0ac5b</td></tr>
+                    <tr><td>extension</td><td>:</td><td>.csv</td></tr>
+                </table>
                 <button class="go-to-tree-btn" href="#tree_sample/data/data_002.csv" onclick="switchTab('directory-tree-tab')">
                     Go To Tree
                 </button>
@@ -603,104 +561,90 @@
                     </div>
                 </details>
                 </details>
-                                    
                 <details class="details js-details layer2">
                     <summary class="details-summary js-details-summary layer2" id="summary_sample/hogehoge/">
-                    <strong>
-            hogehoge/
-                    : 
-            94 B
-                    </strong>
+                    <strong>hogehoge/: 94 B</strong>
                     </summary>
                     <div class="details-content js-details-content layer2" id="content_sample/hogehoge/">
-                        
                 <div class="details-content-item">
-                <p>Type: Dataset</p>
-                    <p>contentSize: 
-            94 B</p>
-                        <p>encodingFormat: ['text/plain']</p>
-                    <p>dateCreated: 2024-09-25T12:16:46</p>
-                    <p>dateModified: 2024-11-10T16:39:53</p>
-                    <p>numberOfContents: 4</p>
-                    <p>numberOfAllFiles: 3</p>
-                    <p>extension: {'.txt': 1, '.csv': 2}</p>
+                <table>
+                <tr>
+                <td>Type</td><td>:</td><td>Dataset</td>
+                </tr>
+                    <tr><td>contentSize</td><td>:</td><td>94 B</td></tr>
+                    <tr><td>dateCreated</td><td>:</td><td>2024-09-25T12:16:46</td></tr>
+                    <tr><td>dateModified</td><td>:</td><td>2024-11-10T16:39:53</td></tr>
+                    <tr><td>numberOfContents</td><td>:</td><td>4</td></tr>
+                    <tr><td>numberOfAllFiles</td><td>:</td><td>3</td></tr>
+                    <tr><td>extension</td><td>:</td><td>{'.txt': 1, '.csv': 2}</td></tr>
+                </table>
                 <button class="go-to-tree-btn" href="#tree_sample/hogehoge/" onclick="switchTab('directory-tree-tab')">
                     Go To Tree
                 </button>
                 </div>
                     </div>
-                                    
                 <details class="details js-details layer3">
                     <summary class="details-summary js-details-summary layer3" id="summary_sample/hogehoge/data/">
-                    <strong>
-            data/
-                    : 
-            88 B
-                    </strong>
+                    <strong>data/: 88 B</strong>
                     </summary>
                     <div class="details-content js-details-content layer3" id="content_sample/hogehoge/data/">
-                        
                 <div class="details-content-item">
-                <p>Type: Dataset</p>
-                    <p>contentSize: 
-            88 B</p>
-                        <p>encodingFormat: ['application/vnd.ms-excel']</p>
-                    <p>dateCreated: 2024-11-10T16:39:53</p>
-                    <p>dateModified: 2024-11-10T16:40:12</p>
-                    <p>numberOfContents: 2</p>
-                    <p>numberOfAllFiles: 2</p>
-                    <p>extension: {'.csv': 2}</p>
+                <table>
+                <tr>
+                <td>Type</td><td>:</td><td>Dataset</td>
+                </tr>
+                    <tr><td>contentSize</td><td>:</td><td>88 B</td></tr>
+                    <tr><td>dateCreated</td><td>:</td><td>2024-11-10T16:39:53</td></tr>
+                    <tr><td>dateModified</td><td>:</td><td>2024-11-10T16:40:12</td></tr>
+                    <tr><td>numberOfContents</td><td>:</td><td>2</td></tr>
+                    <tr><td>numberOfAllFiles</td><td>:</td><td>2</td></tr>
+                    <tr><td>extension</td><td>:</td><td>{'.csv': 2}</td></tr>
+                </table>
                 <button class="go-to-tree-btn" href="#tree_sample/hogehoge/data/" onclick="switchTab('directory-tree-tab')">
                     Go To Tree
                 </button>
                 </div>
                     </div>
-                                    
                 <details class="details js-details layer_file">
                     <summary class="details-summary js-details-summary layer_file" id="summary_sample/hogehoge/data/data_002.csv">
-                    <strong>
-            data_002.csv
-                    : 
-            41 B
-                    </strong>
+                    <strong>data_002.csv: 41 B</strong>
                     </summary>
                     <div class="details-content js-details-content layer_file" id="content_sample/hogehoge/data/data_002.csv">
-                        
                 <div class="details-content-item">
-                <p>Type: File</p>
-                    <p>contentSize: 
-            41 B</p>
-                        <p>encodingFormat: application/vnd.ms-excel</p>
-                    <p>dateCreated: 2024-11-10T16:40:03</p>
-                    <p>dateModified: 2024-09-25T12:18:05</p>
-                    <p>extension: .csv</p>
-                    <p>sha256: a8681eaa42ac69b9281ce9d0c75221084336d2fc2f1b3d8b9807eb2bb6e0ac5b</p>
+                <table>
+                <tr>
+                <td>Type</td><td>:</td><td>File</td>
+                </tr>
+                    <tr><td>contentSize</td><td>:</td><td>41 B</td></tr>
+                        <tr><td>encodingFormat</td><td>:</td><td>application/vnd.ms-excel</td></tr>
+                    <tr><td>dateCreated</td><td>:</td><td>2024-11-10T16:40:03</td></tr>
+                    <tr><td>dateModified</td><td>:</td><td>2024-09-25T12:18:05</td></tr>
+                    <tr><td>sha256</td><td>:</td><td>a8681eaa42ac69b9281ce9d0c75221084336d2fc2f1b3d8b9807eb2bb6e0ac5b</td></tr>
+                    <tr><td>extension</td><td>:</td><td>.csv</td></tr>
+                </table>
                 <button class="go-to-tree-btn" href="#tree_sample/hogehoge/data/data_002.csv" onclick="switchTab('directory-tree-tab')">
                     Go To Tree
                 </button>
                 </div>
                     </div>
                 </details>
-                                    
                 <details class="details js-details layer_file">
                     <summary class="details-summary js-details-summary layer_file" id="summary_sample/hogehoge/data/data_003.csv">
-                    <strong>
-            data_003.csv
-                    : 
-            47 B
-                    </strong>
+                    <strong>data_003.csv: 47 B</strong>
                     </summary>
                     <div class="details-content js-details-content layer_file" id="content_sample/hogehoge/data/data_003.csv">
-                        
                 <div class="details-content-item">
-                <p>Type: File</p>
-                    <p>contentSize: 
-            47 B</p>
-                        <p>encodingFormat: application/vnd.ms-excel</p>
-                    <p>dateCreated: 2024-11-10T16:40:07</p>
-                    <p>dateModified: 2024-11-10T16:40:30</p>
-                    <p>extension: .csv</p>
-                    <p>sha256: 885135f677ffdb7d34bdb7294669b7310f63fc13ee29d7fe29b80267e16f09a2</p>
+                <table>
+                <tr>
+                <td>Type</td><td>:</td><td>File</td>
+                </tr>
+                    <tr><td>contentSize</td><td>:</td><td>47 B</td></tr>
+                        <tr><td>encodingFormat</td><td>:</td><td>application/vnd.ms-excel</td></tr>
+                    <tr><td>dateCreated</td><td>:</td><td>2024-11-10T16:40:07</td></tr>
+                    <tr><td>dateModified</td><td>:</td><td>2024-11-10T16:40:30</td></tr>
+                    <tr><td>sha256</td><td>:</td><td>885135f677ffdb7d34bdb7294669b7310f63fc13ee29d7fe29b80267e16f09a2</td></tr>
+                    <tr><td>extension</td><td>:</td><td>.csv</td></tr>
+                </table>
                 <button class="go-to-tree-btn" href="#tree_sample/hogehoge/data/data_003.csv" onclick="switchTab('directory-tree-tab')">
                     Go To Tree
                 </button>
@@ -708,26 +652,23 @@
                     </div>
                 </details>
                 </details>
-                                    
                 <details class="details js-details layer_file">
                     <summary class="details-summary js-details-summary layer_file" id="summary_sample/hogehoge/fuga.txt">
-                    <strong>
-            fuga.txt
-                    : 
-            6 B
-                    </strong>
+                    <strong>fuga.txt: 6 B</strong>
                     </summary>
                     <div class="details-content js-details-content layer_file" id="content_sample/hogehoge/fuga.txt">
-                        
                 <div class="details-content-item">
-                <p>Type: File</p>
-                    <p>contentSize: 
-            6 B</p>
-                        <p>encodingFormat: text/plain</p>
-                    <p>dateCreated: 2024-09-25T12:16:51</p>
-                    <p>dateModified: 2024-09-25T12:16:55</p>
-                    <p>extension: .txt</p>
-                    <p>sha256: 487e0520fb988a5475fae2cd9abdcc2454cc96b5540ef1847ac3115265c02038</p>
+                <table>
+                <tr>
+                <td>Type</td><td>:</td><td>File</td>
+                </tr>
+                    <tr><td>contentSize</td><td>:</td><td>6 B</td></tr>
+                        <tr><td>encodingFormat</td><td>:</td><td>text/plain</td></tr>
+                    <tr><td>dateCreated</td><td>:</td><td>2024-09-25T12:16:51</td></tr>
+                    <tr><td>dateModified</td><td>:</td><td>2024-09-25T12:16:55</td></tr>
+                    <tr><td>sha256</td><td>:</td><td>487e0520fb988a5475fae2cd9abdcc2454cc96b5540ef1847ac3115265c02038</td></tr>
+                    <tr><td>extension</td><td>:</td><td>.txt</td></tr>
+                </table>
                 <button class="go-to-tree-btn" href="#tree_sample/hogehoge/fuga.txt" onclick="switchTab('directory-tree-tab')">
                     Go To Tree
                 </button>
@@ -735,26 +676,23 @@
                     </div>
                 </details>
                 </details>
-                                    
                 <details class="details js-details layer_file">
                     <summary class="details-summary js-details-summary layer_file" id="summary_sample/readme.md">
-                    <strong>
-            readme.md
-                    : 
-            187 B
-                    </strong>
+                    <strong>readme.md: 187 B</strong>
                     </summary>
                     <div class="details-content js-details-content layer_file" id="content_sample/readme.md">
-                        
                 <div class="details-content-item">
-                <p>Type: File</p>
-                    <p>contentSize: 
-            187 B</p>
-                        <p>encodingFormat: text/markdown</p>
-                    <p>dateCreated: 2024-09-25T12:16:19</p>
-                    <p>dateModified: 2024-11-10T17:42:20</p>
-                    <p>extension: .md</p>
-                    <p>sha256: 0252adf6bb7bf5c8882f666bf0539acfe19eb372fc90739b86e14df92eef79a6</p>
+                <table>
+                <tr>
+                <td>Type</td><td>:</td><td>File</td>
+                </tr>
+                    <tr><td>contentSize</td><td>:</td><td>187 B</td></tr>
+                        <tr><td>encodingFormat</td><td>:</td><td>text/markdown</td></tr>
+                    <tr><td>dateCreated</td><td>:</td><td>2024-09-25T12:16:19</td></tr>
+                    <tr><td>dateModified</td><td>:</td><td>2024-11-10T17:42:20</td></tr>
+                    <tr><td>sha256</td><td>:</td><td>0252adf6bb7bf5c8882f666bf0539acfe19eb372fc90739b86e14df92eef79a6</td></tr>
+                    <tr><td>extension</td><td>:</td><td>.md</td></tr>
+                </table>
                 <button class="go-to-tree-btn" href="#tree_sample/readme.md" onclick="switchTab('directory-tree-tab')">
                     Go To Tree
                 </button>
