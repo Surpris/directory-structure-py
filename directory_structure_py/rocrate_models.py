@@ -3,14 +3,17 @@
 Customized RO-Crate
 """
 
+import copy
 import importlib.resources
 import json
 import os
 from pathlib import Path
+from typing import Dict
 from jinja2 import Template
-# from rocrate.rocrate import ROCrate as ROCrateOrigin
-from rocrate.model import Preview as PreviewOrigin
-from rocrate.model import Metadata as MetadataOrigin
+from rocrate.model import (
+    Metadata as MetadataOrigin,
+    Preview as PreviewOrigin
+)
 from directory_structure_py.constants import ENSURE_ASCII
 
 
@@ -63,32 +66,48 @@ class Preview(PreviewOrigin):
 
         @template_function
         def stringify(a):
-            if type(a) is list:
+            if isinstance(a, list):
                 return ', '.join(a)
-            elif type(a) is str:
+            if isinstance(a, str):
                 return a
-            else:
-                if a._jsonld and a._jsonld['name']:
-                    return a._jsonld['name']
-                else:
-                    return a
+            if a.as_jsonld() and a.as_jsonld()['name']:
+                return a.as_jsonld()['name']
+            return a
 
         @template_function
         def is_object_list(a):
-            if type(a) is list:
+            if isinstance(a, list):
                 for obj in a:
-                    if obj is not str:
+                    if not isinstance(obj, str):
                         return True
-            else:
-                return False
+            return False
 
-        # template.close()
+        @template_function
+        def is_object_dict(a):
+            if isinstance(a, Dict):
+                return True
+            return False
+
         context_entities = []
         data_entities = []
         for entity in self.crate.contextual_entities:
-            context_entities.append(entity._jsonld)
+            context_entities.append(entity.as_jsonld())
         for entity in self.crate.data_entities:
-            data_entities.append(entity._jsonld)
+            entity_: Dict = copy.deepcopy(entity.as_jsonld())
+            for k, v in entity_.items():
+                if not isinstance(v, str):
+                    continue
+                v_ = v.replace("'", "\"")
+                try:
+                    v_ = json.loads(v_)
+                    if isinstance(v_, Dict):
+                        entity_[k] = v_
+                except TypeError:
+                    continue
+                except json.JSONDecodeError:
+                    continue
+            # data_entities.append(entity.as_jsonld())
+            data_entities.append(entity_)
         out_html = src.render(
             crate=self.crate, context=context_entities, data=data_entities)
         return out_html

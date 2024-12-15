@@ -239,6 +239,15 @@
                 opacity: 0.8;
             }
         }
+        table {
+            .extension-table {
+                background-color: #DDDDDD;
+                width: auto;
+            }
+        }
+        tr {
+            vertical-align: top;
+        }
     }
 
     /* tab menu */
@@ -493,65 +502,62 @@
         </label>
         <div class="tab-content">
             <h2>Contents</h2>
+            {%- macro render_extensions_in_detail_section(entry) %}
+                <tr>
+                {%- if entry['numberOfAllFilesPerExtension'] %}
+                    {%- if is_object_dict(entry.numberOfAllFilesPerExtension) %}
+                        <td>extension</td><td>:</td><td>
+                        <table class="extension-table">
+                        {%- for ext, count in entry.numberOfAllFilesPerExtension.items() %}
+                            <tr><td>{{- ext }}</td><td>:</td><td>{{- count }}</td><tr>
+                        {%- endfor %}
+                        </table>
+                        </td>
+                    {%- else %}
+                        <td>extension</td><td>:</td><td>{{ entry['numberOfAllFilesPerExtension'] }}</td>
+                    {%- endif %}
+                {%- elif entry['extension'] %}
+                    <td>extension</td><td>:</td><td>{{ entry['extension'] }}</td>
+                {%- endif %}
+                </tr>
+            {%- endmacro %}
             {%- macro render_contents(entry) %}
                 <div class="details-content-item">
                 <table>
                 <tr>
                 <td>Type</td><td>:</td><td>{{ stringify(entry['@type']) }}</td>
                 </tr>
-                <tr>
                 {%- if entry['contentSizeOfAllFiles'] %}
-                    <td>contentSize</td><td>:</td><td>{{ format_content_size(entry['contentSizeOfAllFiles']) }}</td>
+                    <tr><td>contentSize</td><td>:</td><td>{{ format_content_size(entry['contentSizeOfAllFiles']) }}</td></tr>
                 {%- elif entry['contentSize'] %}
-                    <td>contentSize</td><td>:</td><td>{{ format_content_size(entry['contentSize']) }}</td>
+                    <tr><td>contentSize</td><td>:</td><td>{{ format_content_size(entry['contentSize']) }}</td></tr>
                 {%- endif %}
-                </tr>
-                <tr>
-                {%- if stringify(entry['@type']) %}
+                {%- if stringify(entry['@type']) == "File" %}
                     {%- if entry['encodingFormat'] %}
-                        <td>encodingFormat</td><td>:</td><td>{{ entry['encodingFormat'] }}</td>
+                        <tr><td>encodingFormat</td><td>:</td><td>{{ entry['encodingFormat'] }}</td></tr>
                     {%- endif %}
                 {%- endif %}
-                </tr>
-                <tr>
                 {%- if entry['dateCreated'] %}
-                    <td>dateCreated</td><td>:</td><td>{{ entry['dateCreated'] }}</td>
+                    <tr><td>dateCreated</td><td>:</td><td>{{ entry['dateCreated'] }}</td></tr>
                 {%- endif %}
-                </tr>
-                <tr>
                 {%- if entry['dateModified'] %}
-                    <td>dateModified</td><td>:</td><td>{{ entry['dateModified'] }}</td>
+                    <tr><td>dateModified</td><td>:</td><td>{{ entry['dateModified'] }}</td></tr>
                 {%- endif %}
-                </tr>
-                <tr>
                 {%- if entry['numberOfAllContents'] %}
-                    <td>numberOfContents</td><td>:</td><td>{{ entry['numberOfAllContents'] }}</td>
+                    <tr><td>numberOfContents</td><td>:</td><td>{{ entry['numberOfAllContents'] }}</td></tr>
                 {%- elif entry['numberOfContents'] %}
-                    <td>numberOfContents</td><td>:</td><td>{{ entry['numberOfContents'] }}</td>
+                    <tr><td>numberOfContents</td><td>:</td><td>{{ entry['numberOfContents'] }}</td></tr>
                 {%- endif %}
-                </tr>
-                <tr>
                 {%- if entry['numberOfAllFiles'] %}
-                    <td>numberOfAllFiles</td><td>:</td><td>{{ entry['numberOfAllFiles'] }}</td>
+                    <tr><td>numberOfAllFiles</td><td>:</td><td>{{ entry['numberOfAllFiles'] }}</td></tr>
                 {%- endif %}
-                </tr>
-                <tr>
-                {%- if entry['numberOfAllFilesPerExtension'] %}
-                    <td>extension</td><td>:</td><td>{{ entry['numberOfAllFilesPerExtension'] }}</td>
-                {%- elif entry['extension'] %}
-                    <td>extension</td><td>:</td><td>{{ entry['extension'] }}</td>
-                {%- endif %}
-                </tr>
-                <tr>
                 {%- if entry['sha256'] %}
-                    <td>sha256</td><td>:</td><td>{{ entry['sha256'] }}</td>
+                    <tr><td>sha256</td><td>:</td><td>{{ entry['sha256'] }}</td></tr>
                 {%- endif %}
-                </tr>
-                <tr>
+                {{- render_extensions_in_detail_section(entry) }}
                 {%- if entry['programmingLanguage'] %}
-                    <td>ProgrammingLanguage</td><td>:</td><td>{{ entry['programmingLanguage']['@id'] }}</td>
+                    <tr><td>ProgrammingLanguage</td><td>:</td><td>{{ entry['programmingLanguage']['@id'] }}</td></tr>
                 {%- endif %}
-                </tr>
                 </table>
                 <button class="go-to-tree-btn" href="#tree_{{ entry['@id'] }}" onclick="switchTab('directory-tree-tab')">
                     Go To Tree
