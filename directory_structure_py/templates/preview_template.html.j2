@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>{{ crate.name or  "New RO Crate" }}</title>
+  <title>{{- crate.name or  "New RO Crate" }}</title>
   <meta name="keywords" content="RO Crate">
   <style type="text/css">
     html {
@@ -220,10 +220,6 @@
         display: none;
     }
 
-    .details-content {
-        // font-size: 24px;
-        // font-weight: bold;
-    }
     .details-content-item {
         position: relative;
         padding: 20px;
@@ -360,11 +356,9 @@
   </svg>
   <h1>{{ crate.name or  "New RO Crate" }}</h1>
   <h2>Crate properties</h2>
-  <p>
   {%- if crate.description %}
-    {{ crate.description }}
+  <p>Description: {{ crate.description }}</p>
   {%- endif %}
-  </p>
 
   {%- if crate.image %}
     <img src="{{ crate.image }}" class="wf_image"/>
@@ -430,27 +424,26 @@
   <div id="contents">
     {%- macro format_content_size(size) %}
         {%- if size | int < 1000 %}
-            {{ size }} B
+            {{- size }} B
         {%- elif size | int < 1000000 %}
-            {{ '%0.1f' | format(size | float  / 1000 | float) }} kB
+            {{- '%0.1f' | format(size | float  / 1000 | float) }} kB
         {%- elif size | int < 1000000000 %}
-            {{ '%0.1f' | format(size | float  / 1000000 | float) }} MB
+            {{- '%0.1f' | format(size | float  / 1000000 | float) }} MB
         {%- elif size | int < 1000000000000 %}
-            {{ '%0.1f' | format(size | float / 1000000000 | float) }} GB
+            {{- '%0.1f' | format(size | float / 1000000000 | float) }} GB
         {%- else %}
-            {{ '%0.1f' | format(size | float  / 1000000000000 | float) }} TB
+            {{- '%0.1f' | format(size | float  / 1000000000000 | float) }} TB
         {%- endif %}
     {%- endmacro %}
     {%- macro format_display_name(entry) %}
         {%- if stringify(entry['@type']) == "File" %}
-            {{ entry['name'] }}{{ entry['extension'] }}
+            {{- entry['name'] }}{{- entry['extension'] }}
         {%- elif stringify(entry['@type']) == "Dataset" %}
-            {{ entry['name'] }}/
+            {{- entry['name'] }}/
         {%- else %}
-            entry['@id']
+            {{ entry['@id'] }}
         {%- endif %}
     {%- endmacro %}
-
     <div class="tab-switch">
         <label>
             <input id="directory-tree-tab" type="radio" name="TAB" checked>
@@ -466,16 +459,16 @@
                 </td>
                 <td class="data_size">
                 {%- if entry['contentSizeOfAllFiles'] %}
-                {{ format_content_size(entry['contentSizeOfAllFiles']) }}
+                  {{ format_content_size(entry['contentSizeOfAllFiles']) }}
                 {%- elif entry['contentSize'] %}
-                {{ format_content_size(entry['contentSize']) }}
+                  {{ format_content_size(entry['contentSize']) }}
                 {%- endif %}
                 </td>
                 {%- if entry['hasPart'] %}
                     {%- for child_id in entry['hasPart'] %}
                         {%- for entity in entity_list %}
                             {%- if entity['@id'] == child_id %}
-                                {{ render_tree(entity, entity_list, level + 1) }}
+                                {{- render_tree(entity, entity_list, level + 1) }}
                             {%- endif %}
                         {%- endfor %}
                     {%- endfor %}
@@ -488,7 +481,7 @@
                         <th class="display_name">Display name</th>
                         <th class="data_size">contentSize</th>
                     <tr>
-                    {{ render_tree(data[0], data, 1) }}
+                    {{- render_tree(data[0], data, 1) }}
                 </tbody>
                 </table>
             </div>
@@ -543,7 +536,8 @@
                 </button>
                 </div>
             {%- endmacro %}
-
+            {%- macro render_content_size_in_detail_section(entry} %}
+            {%- endmacro %}
             {%- macro render_contents_tree(entry, entity_list, level) %}
                 {%- set layer_class = "layer" + level|string %}
                 {%- if level > 5 %}
@@ -553,8 +547,8 @@
                     {%- set layer_class = "layer_file" %}
                 {%- endif %}
                 <details class="details js-details {{layer_class}}">
-                    <summary class="details-summary js-details-summary {{layer_class}}" id="summary_{{ entry['@id'] }}">
-                    <strong>{{ format_display_name(entry) }}
+                    <summary class="details-summary js-details-summary {{layer_class}}" id="summary_{{- entry['@id'] }}">
+                    <strong>{{- format_display_name(entry) }}
                     {%- if entry['contentSizeOfAllFiles'] %}
                     : {{ format_content_size(entry['contentSizeOfAllFiles']) }}
                     {%- elif entry['contentSize'] %}
@@ -562,14 +556,14 @@
                     {%- endif %}
                     </strong>
                     </summary>
-                    <div class="details-content js-details-content {{layer_class}}" id="content_{{ entry['@id'] }}">
-                        {{ render_contents(entry) }}
+                    <div class="details-content js-details-content {{layer_class}}" id="content_{{- entry['@id'] }}">
+                        {{- render_contents(entry) }}
                     </div>
                     {%- if entry['hasPart'] %}
                     {%- for child_id in entry['hasPart'] %}
                             {%- for entity in entity_list %}
                                 {%- if entity['@id'] == child_id %}
-                                    {{ render_contents_tree(entity, entity_list, level + 1) }}
+                                    {{- render_contents_tree(entity, entity_list, level + 1) }}
                                 {%- endif %}
                             {%- endfor %}
                         {%- endfor %}
@@ -578,7 +572,7 @@
             {%- endmacro %}
 
             <div class="data-entity" id="">
-                {{ render_contents_tree(data[0], data, 1) }}
+                {{- render_contents_tree(data[0], data, 1) }}
             </div>
         </div>
     </div>
