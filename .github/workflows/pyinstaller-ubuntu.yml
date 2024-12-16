@@ -44,3 +44,6 @@ jobs:
           cp -r ./directory_structure_py/templates ./dist/src/
       - name: Upload the built artifact
         uses: actions/upload-artifact@v4
+        with:
+          name: portable-windows
+          path: ./dist/*
