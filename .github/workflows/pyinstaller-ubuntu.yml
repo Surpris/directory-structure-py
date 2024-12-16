@@ -1,0 +1,46 @@
+# This workflow will build an Ubuntu executable file
+
+name: Build-and-Upload-for-Ubuntu
+
+on:
+  pull_request:
+    branches: [ "main" ]
+    types:
+      - closed
+  push:
+    branches: [ "main" ]
+
+jobs:
+  ubuntu-build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        shell: bash
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pyinstaller
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          python -m pip install --no-cache-dir --progress-bar off -U .
+      - name: Download files for RO-Crate
+        run: |
+           curl https://raw.githubusercontent.com/ResearchObject/ro-crate-py/refs/heads/master/rocrate/data/ro-crate.jsonld -o ./ro-crate.jsonld
+           curl https://raw.githubusercontent.com/ResearchObject/ro-crate-py/refs/heads/master/rocrate/data/schema.jsonld -o ./schema.jsonld
+      - name: Build an executable file
+        run: |
+          pyinstaller ./directory_structure_py/__main__.py --clean --onefile -n directory_structure_py.exe --hidden-import "rocrate" --add-data ./ro-crate.jsonld:./rocrate/data --add-data ./schema.jsonld:./rocrate/data --add-data ./directory_structure_py/templates/preview_template.html.j2:./directory_structure_py/templates --add-data ./directory_structure_py/config/logging.json:./directory_structure_py/config --distpath ./dist/src
+          cp ./for_portable/* ./dist/
+          cp -r ./directory_structure_py/config ./dist/src/
+          cp -r ./sample ./dist/
+          cp -r ./directory_structure_py/templates ./dist/src/
+      - name: Upload the built artifact
+        uses: actions/upload-artifact@v4
