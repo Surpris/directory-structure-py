@@ -42,4 +42,4 @@ Repository = "https://github.com/Surpris/directory-structure-py"
 "Bug Tracker" = "https://github.com/Surpris/directory-structure-py/issues"
 
 [tool.setuptools.packages.find]
-exclude = ["sample", "for_portable"]
+exclude = ["for_portable", "sample", "scripts"]
