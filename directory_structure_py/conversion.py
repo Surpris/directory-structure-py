@@ -271,5 +271,7 @@ def convert_meta_list_json_to_rocrate(
             properties = _get_file_props(metadata)
         for k, v in properties.items():
             entity[k] = v
-    crate.datePublished = datetime.datetime.now().strftime(DATETIME_FMT)
+    crate.datePublished = src.get(
+        "dateCreated", datetime.datetime.now().strftime(DATETIME_FMT)
+    )
     return crate
