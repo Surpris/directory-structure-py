@@ -1,6 +1,6 @@
-"""test_main.py
+"""test_conversion.py
 
-test code
+test functions for conversion.py
 """
 
 import json
@@ -18,6 +18,7 @@ from directory_structure_py.conversion import (
     list2tree_from_file,
     convert_meta_list_json_to_rocrate
 )
+
 
 def test_convert_meta_list_json_to_tsv():
     """test function for convert_meta_list_json_to_tsv"""
@@ -52,6 +53,7 @@ def test_convert_meta_list_json_to_tsv_from_file():
             expected.append(line.rstrip("\n").split("\t"))
     dst = convert_meta_list_json_to_tsv_from_file(src_path)
     assert dst == expected
+
 
 def test_list2tree():
     """test function for list2tree"""
