@@ -122,10 +122,11 @@ def main(
         data = update_statistical_info_to_metadata_list(data)
         if not os.path.exists(os.path.dirname(dst)):
             os.makedirs(os.path.dirname(dst))
-        if not in_rocrate:
-            logger.info("save the metadata in a list format...")
-            save_dict_to_json(data, dst)
-        else:
+
+        logger.info("save the metadata in a list format...")
+        save_dict_to_json(data, dst)
+
+        if in_rocrate:
             logger.info("convert the metadata format from list to the RO-Crate... ")
             root_path_original: str = copy.deepcopy(data["root_path"])
             data["root_path"] = f"{str(Path(src).absolute().as_posix())}"
@@ -140,6 +141,7 @@ def main(
             rocrate_metadata.write(os.path.dirname(dst))
             logger.info("save the preview for the RO-Crate-format metadata... ")
             crate.preview.write(os.path.dirname(dst), preview_template_path)
+
         if to_tsv:
             logger.info("save the metadata in a TSV format...")
             data_tsv = convert_meta_list_json_to_tsv(data)
@@ -147,6 +149,7 @@ def main(
                 os.path.splitext(dst)[-1], ".tsv"
             )
             save_nested_list_to_tsv(data_tsv, dst_tsv)
+
         if in_tree:
             if structure_only:
                 logger.info("extract the directory structure...")
