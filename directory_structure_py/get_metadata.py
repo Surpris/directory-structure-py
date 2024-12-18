@@ -171,11 +171,11 @@ def get_metadata_of_single_directory(
             - `numberOfFilesPerExtension`: A dictionary mapping file extensions to their counts.
             - `extension`: A list of file extensions found in the directory.
             - `mimetype`: A list of file MIME types found in the directory. The MIME type.
-            - `contentSizeOfAllFiles`: (Redundant with `contentSize`) The total size of files within the directory in bytes.
-            - `numberOfAllContents`: (Redundant with `numberOfContents`) The total number of child items (files and subdirectories).
-            - `numberOfAllFiles`: (Redundant with `numberOfFiles`) The total number of files within the directory.
-            - `numberOfAllFilesPerExtension`: (Redundant with `numberOfFilesPerExtension`) A dictionary mapping file extensions to their counts.
-            - `extensionsOfAllFiles`: (Redundant with `extension`) A list of file extensions found in the directory.
+            - `contentSizeOfAllFiles`: The total size of files within the directory and all its descendant directories in bytes.
+            - `numberOfAllContents`: The total number of child items (files and subdirectories) within the directory and all its descendant directories.
+            - `numberOfAllFiles`: The total number of files within the directory and all its descendant directories.
+            - `numberOfAllFilesPerExtension`: A dictionary mapping file extensions found in the directory and all its descendant directories to their counts.
+            - `extensionsOfAllFiles`: A list of file extensions found in the directory and all its descendant directories.
             - `dateCreated`: The creation date and time in ISO 8601 format.
             - `dateModified`: The last modification date and time in ISO 8601 format.
 
