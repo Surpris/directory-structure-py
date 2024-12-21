@@ -237,7 +237,6 @@
             min-width: 70px;
             order: -1;
             position: relative;
-            min-width: 70px;
             padding: .7em 1em;
             background-color: #f2f3f4;
             color: #000000;
@@ -262,35 +261,12 @@
         .tab-switch>div {
             display: none;
             width: 100%;
-            padding: 10px;
         }
 
         .tab-switch label:has(:checked)+div {
             display: block;
         }
     </style>
-    <script>
-        let accordionDetails = '.js-details';
-        let accordionSummary = '.js-details-summary';
-        let accordionContent = '.js-details-content';
-        let speed = 300
-
-        $(accordionSummary).each(function () {
-            $(this).on("click", function (event) {
-                event.preventDefault();
-                $(this).toggleClass("is-active");
-
-                if ($(this).parent($(accordionDetails)).attr("open")) {
-                    $(this).nextAll($(accordionContent)).slideUp(speed, function () {
-                        $(this).parent($(accordionDetails)).removeAttr("open");
-                    });
-                } else {
-                    $(this).parent($(accordionDetails)).attr("open", "true");
-                    $(this).nextAll($(accordionContent)).hide().slideDown(speed);
-                }
-            })
-        })
-    </script>
     <script>
         function switchTab(tabId) {
             document.getElementById(tabId).checked = true;
