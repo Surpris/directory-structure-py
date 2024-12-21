@@ -1,6 +1,7 @@
 @echo off
 chcp 65001
-"%~dp0\src\directory_structure_py.exe" "%~1" --dst "%~dp0output\%~n1\directory_structure_metadata.json" ^
+set DIRNAME=%~n1%~x1
+"%~dp0\src\directory_structure_py.exe" "%~1" --dst "%~dp0output\%DIRNAME%\directory_structure_metadata.json" ^
     --in_rocrate ^
     --to_tsv ^
     --in_tree --structure_only ^
