@@ -43,12 +43,16 @@ Python function collecting the metadata of a directory and its contents.
     "contentSize": "the total size of files included (Byte)",
     "extension": ["unique file extension (ex. test.dat -> .dat)"],
     "mimetype": ["unique MIME type"],
-    "numberOfContents": "the number of contents",
-    "numberOfFileContents": "the number of files",
-    "numberOfFileContentsPerExtension": {"key = extension": "value = the number of files with the extension"},
+    "numberOfContents": "the number of child contents",
+    "numberOfFiles": "the number of child files",
+    "numberOfFilesPerExtension": {"key = extension": "value = the number of files with the extension"},
+    "contentSizeOfAllFiles": "The total size of files within the directory and all its descendant directories in bytes",
+    "numberOfAllContents": "The total number of child items (files and subdirectories) within the directory and all its descendant directories",
+    "numberOfAllFiles": "The total number of files within the directory and all its descendant directories",
+    "numberOfAllFilesPerExtension": {"key = extension": "value = the number of the descendant files with the extension"},
+    "extensionsOfAllFiles": ["unique file extension (ex. test.dat -> .dat) extracted from the descendant files"],
     "dateCreated": "creation datetime (%Y-%m-%dT%H:%M:%S)",
     "dateModified": "modification datetime (%Y-%m-%dT%H:%M:%S)",
-    ...
 }
 ```
 
@@ -62,12 +66,12 @@ Python function collecting the metadata of a directory and its contents.
 | `get_metadata_of_single_file`          | Retrieves metadata for a given file or directory using the `pathlib` module.  |
 | `get_metadata_of_files_in_list_format` | Recursively retrieves metadata for files and directories within a given path. |
 
-`get_metadata_of_files` returns a dict object with the following format:
+`get_metadata_of_files_in_list_format` returns a dict object with the following format:
 
 ```json
 {
     "root_path": "root path. The value will be '.' if the 'include_root_path' option is not set",
-    "contents": ["metadata returned by get_metadata_of_single_file"]
+    "@graph": ["metadata returned by get_metadata_of_single_file"]
 }
 ```
 
@@ -140,14 +144,16 @@ Logging options:
 | `log_output_path` | str  | destination path of the log.                                                       |
 
 
-## Batch file (only for Windows)
+## Batch file (Windows and Ubuntu)
 
-Drag the directory or file and drop it on the batch file "directory_structure_py.bat".
-By default, the following files are output to the `output` directory in the directory where "directory_structure_py.bat" is located.
+Drag the directory or file and drop it on the batch file `directory_structure_py.bat` or on the shell script `directory_structure_py.sh`.
+By default, the following files are output to the `output` directory in the directory where the batch file or the shell script is located.
 
-* `ro-crate-metadata.json`: a metadata is included in the RO-Crate format.
+* `directory_structure_metadata.json`: the list-formatted metadata is included.
 * `directory_structure_metadata_tree.json`: the directory tree is included.
 * `directory_structure_metadata.tsv`: a metadata list is included.
+* `ro-crate-metadata.json`: a metadata is included in the RO-Crate format.
+* `ro-crate-preview.html`: a preview file of the RO-Crate metadata.
 
 You can change the output formats by modifying the options set in teh batch file.
 

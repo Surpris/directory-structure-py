@@ -259,7 +259,10 @@ def convert_meta_list_json_to_rocrate(
         return properties
 
     crate = ROCrate(gen_preview=False)
-    _ = crate.add_tree(src["root_path"])
+    if Path(src["root_path"]).is_dir():
+        _ = crate.add_tree(src["root_path"])
+    else:
+        _ = crate.add_file(src["root_path"])
     crate.name = Path(src["root_path"]).name
     meta_list: List[Dict[str, Any]] = src["@graph"]
     for metadata in meta_list:
@@ -271,5 +274,7 @@ def convert_meta_list_json_to_rocrate(
             properties = _get_file_props(metadata)
         for k, v in properties.items():
             entity[k] = v
-    crate.datePublished = datetime.datetime.now().strftime(DATETIME_FMT)
+    crate.datePublished = src.get(
+        "dateCreated", datetime.datetime.now().strftime(DATETIME_FMT)
+    )
     return crate

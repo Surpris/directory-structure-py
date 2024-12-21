@@ -1,6 +1,6 @@
 # ポータブルプログラムのバージョン情報
 
-v0.2.4
+v0.2.5
 
 # 何をしてくれるか
 
@@ -34,12 +34,16 @@ v0.2.4
     "contentSize": "the total size of files included (Byte)",
     "extension": ["unique file extension (ex. test.dat -> .dat)"],
     "mimetype": ["unique MIME type"],
-    "numberOfContents": "the number of contents",
-    "numberOfFileContents": "the number of files",
-    "numberOfFileContentsPerExtension": {"key = extension": "value = the number of files with the extension"},
+    "numberOfContents": "the number of child contents",
+    "numberOfFiles": "the number of child files",
+    "numberOfFilesPerExtension": {"key = extension": "value = the number of files with the extension"},
+    "contentSizeOfAllFiles": "The total size of files within the directory and all its descendant directories in bytes",
+    "numberOfAllContents": "The total number of child items (files and subdirectories) within the directory and all its descendant directories",
+    "numberOfAllFiles": "The total number of files within the directory and all its descendant directories",
+    "numberOfAllFilesPerExtension": {"key = extension": "value = the number of the descendant files with the extension"},
+    "extensionsOfAllFiles": ["unique file extension (ex. test.dat -> .dat) extracted from the descendant files"],
     "dateCreated": "creation datetime (%Y-%m-%dT%H:%M:%S)",
     "dateModified": "modification datetime (%Y-%m-%dT%H:%M:%S)",
-    ...
 }
 ```
 
@@ -50,10 +54,11 @@ v0.2.4
 バッチファイル "directory_structure_py.bat" に、メタデータを収集したいディレクトリまたはファイルのパスを drag & drop します。
 デフォルトでは以下の名前のファイルが、"directory_structure_py.bat" が配置されているディレクトリ以下にある `output` ディレクトリに出力されます。
 
-* `ro-crate-metadata.json`：メタデータが RO-Crate 形式で含まれます。
-* `ro-crate-preview.html`: RO-Crate 形式のメタデータのプレビューファイルです。
+* `directory_structure_metadata.json`：リスト形式で収集されたメタデータが含まれます。
 * `directory_structure_metadata_tree.json`：ディレクトリツリーが含まれます。
 * `directory_structure_metadata.tsv`：メタデータリストが含まれます。
+* `ro-crate-metadata.json`：メタデータが RO-Crate 形式で含まれます。
+* `ro-crate-preview.html`: RO-Crate 形式のメタデータのプレビューファイルです。
 
 バッチファイル内で設定されているオプションを変えることで出力形式を変更できます。
 
@@ -82,7 +87,7 @@ Logging options:
 
 ```
 <root>
-│   directory_structure_py.bat: batch file
+│   directory_structure_py.bat or .sh: batch file or shell script
 │   readme.txt: this file
 │   readme_ja.txt: Japanese readme
 │
