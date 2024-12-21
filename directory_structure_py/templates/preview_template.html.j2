@@ -4,6 +4,9 @@
 <head>
     <link rel="alternate" hreflang="ja" lang="ja" href="./ro-crate-preview.html">
     <title>{{- crate.name or "New RO Crate" }}</title>
+    {%- if favicon %}
+        <link rel="icon" href="data:image/png;base64,{{ favicon }}" type="image/png">
+    {%- endif %}
     <meta name="keywords" content="RO Crate">
     <style type="text/css">
         html {

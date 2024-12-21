@@ -3,6 +3,7 @@
 Customized RO-Crate
 """
 
+import base64
 import copy
 import importlib.resources
 import json
@@ -106,10 +107,18 @@ class Preview(PreviewOrigin):
                     continue
                 except json.JSONDecodeError:
                     continue
-            # data_entities.append(entity.as_jsonld())
             data_entities.append(entity_)
+
+        favicon_path: str = str(importlib.resources.files(
+            __package__
+        ).joinpath("docs/favicon.ico"))
+        favicon: str = ""
+        with open(favicon_path, "rb") as image_file:
+            favicon = base64.b64encode(image_file.read()).decode()
         out_html = src.render(
-            crate=self.crate, context=context_entities, data=data_entities)
+            crate=self.crate, context=context_entities, data=data_entities,
+            favicon=favicon
+        )
         return out_html
 
     def write(self, dest_base, template_path: str = None):
