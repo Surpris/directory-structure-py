@@ -37,8 +37,9 @@ jobs:
            curl https://raw.githubusercontent.com/ResearchObject/ro-crate-py/refs/heads/master/rocrate/data/schema.jsonld -o ./schema.jsonld
       - name: Build an executable file
         run: |
-          pyinstaller ./directory_structure_py/__main__.py --clean --onefile -n directory_structure_py --hidden-import "rocrate" --add-data ./ro-crate.jsonld:./rocrate/data --add-data ./schema.jsonld:./rocrate/data --add-data ./directory_structure_py/templates/preview_template.html.j2:./directory_structure_py/templates --add-data ./directory_structure_py/config/logging.json:./directory_structure_py/config --distpath ./dist/src
+          pyinstaller ./directory_structure_py/__main__.py --clean --onefile -n directory_structure_py --hidden-import "rocrate" --add-data ./ro-crate.jsonld:./rocrate/data --add-data ./schema.jsonld:./rocrate/data --add-data ./directory_structure_py/templates/preview_template.html.j2:./directory_structure_py/templates --add-data ./directory_structure_py/config/logging.json:./directory_structure_py/config --add-data ./directory_structure_py/docs/favicon.ico:./directory_structure_py/docs --distpath ./dist/src
           cp ./for_portable/* ./dist/
+          rm ./dist/directory_structure_py.bat
           cp -r ./directory_structure_py/config ./dist/src/
           cp -r ./sample ./dist/
           cp -r ./directory_structure_py/templates ./dist/src/
