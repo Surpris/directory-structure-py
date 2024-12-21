@@ -66,10 +66,10 @@ def test_get_metadata_of_single_file_w_root_path():
             expected = meta_
             break
     properties_existing_only: list = [
-        "dateCreated",
-        "dateModified",
         "sha256",
         "mimetype",
+        "dateCreated",
+        "dateModified",
     ]
     for k, v in dst.items():
         if k in properties_existing_only:
@@ -128,10 +128,11 @@ def test_get_metadata_of_single_directory_w_root_path():
     properties_existing_only: list = [
         "numberOfAllFilesPerMIMEType",
         "mimetypesOfAllFiles",
-        "dateCreated",
-        "dateModified",
+        "numberOfFilesPerMIMEType",
         "sha256",
         "mimetype",
+        "dateCreated",
+        "dateModified",
     ]
     for k, v in dst.items():
         if k in properties_existing_only:
@@ -160,6 +161,7 @@ def test_get_metadata_of_files_in_list_format_w_root_path():
         "extensionsOfAllFiles",
         "numberOfAllFilesPerMIMEType",
         "mimetypesOfAllFiles",
+        "numberOfFilesPerMIMEType",
         "sha256",
         "mimetype",
         "dateCreated",
@@ -188,6 +190,7 @@ def test_update_statistical_info_to_metadata_list():
     properties_existing_only: list = [
         "numberOfAllFilesPerMIMEType",
         "mimetypesOfAllFiles",
+        "numberOfFilesPerMIMEType",
         "sha256",
         "mimetype",
         "dateCreated",
