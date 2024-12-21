@@ -1,6 +1,6 @@
 # Version of the portable program
 
-v0.2.4
+v0.2.5
 
 # What is for?
 
@@ -34,12 +34,16 @@ The following metadata items are collected:
     "contentSize": "the total size of files included (Byte)",
     "extension": ["unique file extension (ex. test.dat -> .dat)"],
     "mimetype": ["unique MIME type"],
-    "numberOfContents": "the number of contents",
-    "numberOfFileContents": "the number of files",
-    "numberOfFileContentsPerExtension": {"key = extension": "value = the number of files with the extension"},
+    "numberOfContents": "the number of child contents",
+    "numberOfFiles": "the number of child files",
+    "numberOfFilesPerExtension": {"key = extension": "value = the number of files with the extension"},
+    "contentSizeOfAllFiles": "The total size of files within the directory and all its descendant directories in bytes",
+    "numberOfAllContents": "The total number of child items (files and subdirectories) within the directory and all its descendant directories",
+    "numberOfAllFiles": "The total number of files within the directory and all its descendant directories",
+    "numberOfAllFilesPerExtension": {"key = extension": "value = the number of the descendant files with the extension"},
+    "extensionsOfAllFiles": ["unique file extension (ex. test.dat -> .dat) extracted from the descendant files"],
     "dateCreated": "creation datetime (%Y-%m-%dT%H:%M:%S)",
     "dateModified": "modification datetime (%Y-%m-%dT%H:%M:%S)",
-    ...
 }
 ```
 
@@ -47,13 +51,14 @@ Please see "# Example" section for the output formats.
 
 # Usage
 
-Drag the directory or file and drop it on the batch file "directory_structure_py.bat".
-By default, the following files are output to the `output` directory in the directory where "directory_structure_py.bat" is located.
+Drag the directory or file and drop it on the batch file `directory_structure_py.bat` or on the shell script `directory_structure_py.sh`.
+By default, the following files are output to the `output` directory in the directory where the batch file or the shell script is located.
 
-* `ro-crate-metadata.json`: a metadata is included in the RO-Crate format.
-* `ro-crate-preview.html`: a preview file of the RO-Crate metadata.
+* `directory_structure_metadata.json`: the list-formatted metadata is included.
 * `directory_structure_metadata_tree.json`: the directory tree is included.
 * `directory_structure_metadata.tsv`: a metadata list is included.
+* `ro-crate-metadata.json`: a metadata is included in the RO-Crate format.
+* `ro-crate-preview.html`: a preview file of the RO-Crate metadata.
 
 You can change the output formats by modifying the options set in the batch file.
 
@@ -82,7 +87,7 @@ Logging options:
 
 ```
 <root>
-│   directory_structure_py.bat: batch file
+│   directory_structure_py.bat or .sh: batch file or shell script
 │   readme.txt: this file
 │   readme_ja.txt: Japanese readme
 │
