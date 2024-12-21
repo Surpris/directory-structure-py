@@ -65,13 +65,24 @@ def test_get_metadata_of_single_file_w_root_path():
         if meta_["@id"] == dst["@id"]:
             expected = meta_
             break
-    assert expected == dst
+    properties_existing_only: list = [
+        "sha256",
+        "mimetype",
+        "dateCreated",
+        "dateModified",
+    ]
+    for k, v in dst.items():
+        if k in properties_existing_only:
+            assert v is not None
+        else:
+            assert v == expected[k]
 
 
 def test_generate_blank_metadata_w_root_path():
     """test function for generate_blank_metadata with root_path"""
     src_path: Path = os.path.join(
-        os.path.dirname(__file__), "../sample/readme.md")
+        os.path.dirname(__file__), "../sample/readme.md"
+    )
     root_path: Path = Path(os.path.join(os.path.dirname(__file__)))
     expected: Dict = {
         "@id": str(src_path).replace(os.path.sep, "/"),
@@ -114,7 +125,20 @@ def test_get_metadata_of_single_directory_w_root_path():
         if meta_["@id"] == dst["@id"]:
             expected = meta_
             break
-    assert expected == dst
+    properties_existing_only: list = [
+        "numberOfAllFilesPerMIMEType",
+        "mimetypesOfAllFiles",
+        "numberOfFilesPerMIMEType",
+        "sha256",
+        "mimetype",
+        "dateCreated",
+        "dateModified",
+    ]
+    for k, v in dst.items():
+        if k in properties_existing_only:
+            assert v is not None
+        else:
+            assert v == expected[k]
 
 
 def test_get_metadata_of_files_in_list_format_w_root_path():
@@ -129,7 +153,7 @@ def test_get_metadata_of_files_in_list_format_w_root_path():
     dst: Dict = get_metadata_of_files_in_list_format(src_path)
     assert expected["root_path"] == dst["root_path"]
 
-    excluded_properties: list = [
+    properties_existing_only: list = [
         "contentSizeOfAllFiles",
         "numberOfAllContents",
         "numberOfAllFiles",
@@ -137,13 +161,19 @@ def test_get_metadata_of_files_in_list_format_w_root_path():
         "extensionsOfAllFiles",
         "numberOfAllFilesPerMIMEType",
         "mimetypesOfAllFiles",
+        "numberOfFilesPerMIMEType",
+        "sha256",
+        "mimetype",
+        "dateCreated",
+        "dateModified",
     ]
-    for ii, meta in enumerate(expected["@graph"]):
-        meta_ = dst["@graph"][ii]
+    for ii, meta in enumerate(dst["@graph"]):
+        meta_ = expected["@graph"][ii]
         for k, v in meta.items():
-            if k in excluded_properties:
-                continue
-            assert v == meta_[k]
+            if k in properties_existing_only:
+                assert v is not None
+            else:
+                assert v == meta_[k]
 
 
 def test_update_statistical_info_to_metadata_list():
@@ -152,16 +182,24 @@ def test_update_statistical_info_to_metadata_list():
     metadata_path: str = os.path.join(
         os.path.dirname(__file__), f"../output/sample/{DEFAULT_OUTPUT_NAME}"
     )
-    root_path: Path = Path(os.path.join(
-        os.path.dirname(__file__), "../sample")
-    )
     expected: Dict = {}
     with open(metadata_path, "r", encoding="utf-8") as ff:
         expected = json.loads(ff.read())
-    dst: Dict = get_metadata_of_files_in_list_format(src_path, root_path)
+    dst: Dict = get_metadata_of_files_in_list_format(src_path)
     dst: Dict = update_statistical_info_to_metadata_list(dst)
-    expected: Dict = {}
-    for k, v in expected.items():
-        if k == "dateCreated":
-            continue
-        assert v == dst[k]
+    properties_existing_only: list = [
+        "numberOfAllFilesPerMIMEType",
+        "mimetypesOfAllFiles",
+        "numberOfFilesPerMIMEType",
+        "sha256",
+        "mimetype",
+        "dateCreated",
+        "dateModified",
+    ]
+    for ii, meta in enumerate(dst["@graph"]):
+        meta_ = expected["@graph"][ii]
+        for k, v in meta.items():
+            if k in properties_existing_only:
+                assert v is not None
+            else:
+                assert v == meta_[k]

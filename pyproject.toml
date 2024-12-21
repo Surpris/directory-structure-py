@@ -1,3 +1,6 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "directory-structure-py"
@@ -42,4 +45,10 @@ Repository = "https://github.com/Surpris/directory-structure-py"
 "Bug Tracker" = "https://github.com/Surpris/directory-structure-py/issues"
 
 [tool.setuptools.packages.find]
-exclude = ["for_portable", "sample", "scripts"]
+where = ["."]
+include = ["directory_structure_py"]
+
+[tool.setuptools.data-files]
+"directory_structure_py/docs" = ["directory_structure_py/docs/*"]
+"directory_structure_py/config" = ["directory_structure_py/config/*"]
+"directory_structure_py/templates" = ["directory_structure_py/templates/*"]
