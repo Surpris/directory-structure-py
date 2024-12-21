@@ -126,6 +126,8 @@ def test_get_metadata_of_single_directory_w_root_path():
             expected = meta_
             break
     properties_existing_only: list = [
+        "numberOfAllFilesPerMIMEType",
+        "mimetypesOfAllFiles",
         "dateCreated",
         "dateModified",
         "sha256",
@@ -184,6 +186,8 @@ def test_update_statistical_info_to_metadata_list():
     dst: Dict = get_metadata_of_files_in_list_format(src_path)
     dst: Dict = update_statistical_info_to_metadata_list(dst)
     properties_existing_only: list = [
+        "numberOfAllFilesPerMIMEType",
+        "mimetypesOfAllFiles",
         "sha256",
         "mimetype",
         "dateCreated",
