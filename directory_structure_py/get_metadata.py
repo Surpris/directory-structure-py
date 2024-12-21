@@ -93,9 +93,14 @@ def get_metadata_of_single_file(
     dst["contentSize"] = path.stat().st_size
     with open(path, "rb") as ff:
         dst["sha256"] = hashlib.sha256(ff.read()).hexdigest()
-    dst["dateCreated"] = datetime.datetime.fromtimestamp(
-        path.stat().st_birthtime
-    ).strftime(DATETIME_FMT)
+    if os.name == "nt":
+        dst["dateCreated"] = datetime.datetime.fromtimestamp(
+            path.stat().st_birthtime
+        ).strftime(DATETIME_FMT)
+    else:
+        dst["dateCreated"] = datetime.datetime.fromtimestamp(
+            path.stat().st_ctime
+        ).strftime(DATETIME_FMT)
     dst["dateModified"] = datetime.datetime.fromtimestamp(
         path.stat().st_mtime
     ).strftime(DATETIME_FMT)
@@ -244,9 +249,14 @@ def get_metadata_of_single_directory(
         dst["numberOfAllFilesPerMIMEType"].keys()
     )
 
-    dst["dateCreated"] = datetime.datetime.fromtimestamp(
-        path.stat().st_birthtime
-    ).strftime(DATETIME_FMT)
+    if os.name == "nt":
+        dst["dateCreated"] = datetime.datetime.fromtimestamp(
+            path.stat().st_birthtime
+        ).strftime(DATETIME_FMT)
+    else:
+        dst["dateCreated"] = datetime.datetime.fromtimestamp(
+            path.stat().st_ctime
+        ).strftime(DATETIME_FMT)
     dst["dateModified"] = datetime.datetime.fromtimestamp(
         path.stat().st_mtime
     ).strftime(DATETIME_FMT)
