@@ -16,8 +16,7 @@ from typing import Dict, Any, List
 from rocrate.rocrate import ROCrate
 
 from directory_structure_py.constants import (
-    DEFAULT_OUTPUT_NAME, ENSURE_ASCII, JSON_OUTPUT_INDENT,
-    DEFAULT_PREVIEW_TEMPLATE_PATH
+    ENSURE_ASCII, JSON_OUTPUT_INDENT
 )
 from directory_structure_py.get_metadata import (
     get_metadata_of_files_in_list_format,
@@ -67,6 +66,13 @@ def save_dict_to_json(data: Dict[str, Any], dst: str) -> None:
 
 
 def save_nested_list_to_tsv(data: List[List[str]], dst: str) -> None:
+    """Saves a nested list to a TSV file.
+    
+    Args:
+        data: The nested list to be saved.
+        dst: The path to the output TSV file.
+            The file will be overwritten if it already exists.
+    """
     with open(dst, "w", encoding="utf-8") as ff:
         ff.writelines(["\t".join(l) + "\n" for l in data])
 
