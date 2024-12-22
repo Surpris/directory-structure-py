@@ -179,7 +179,7 @@ metadata: dict = get_metadata_of_files_in_list_format(fpath)
 
 # Output examples
 
-Please see [output/sample](./output/sample).
+Please see [output/sample](https://github.com/Surpris/directory-structure-py/tree/5dc71273236313cc1935f0204963da6f4c789df5/output/sample) (jump to the GitHub repository).
 
 # Contributions
 
