@@ -16,8 +16,7 @@ from typing import Dict, Any, List
 from rocrate.rocrate import ROCrate
 
 from directory_structure_py.constants import (
-    DEFAULT_OUTPUT_NAME, ENSURE_ASCII, JSON_OUTPUT_INDENT,
-    DEFAULT_PREVIEW_TEMPLATE_PATH
+    ENSURE_ASCII, JSON_OUTPUT_INDENT
 )
 from directory_structure_py.get_metadata import (
     get_metadata_of_files_in_list_format,
@@ -67,6 +66,13 @@ def save_dict_to_json(data: Dict[str, Any], dst: str) -> None:
 
 
 def save_nested_list_to_tsv(data: List[List[str]], dst: str) -> None:
+    """Saves a nested list to a TSV file.
+    
+    Args:
+        data: The nested list to be saved.
+        dst: The path to the output TSV file.
+            The file will be overwritten if it already exists.
+    """
     with open(dst, "w", encoding="utf-8") as ff:
         ff.writelines(["\t".join(l) + "\n" for l in data])
 
@@ -170,54 +176,3 @@ def main(
         logger.error(traceback.format_exc())
     logger.info("ended.")
     logger.info("elapsed time: %.*f sec.\n", 3, time.time() - st)
-
-
-if __name__ == "__main__":
-    import argparse
-    parser = argparse.ArgumentParser()
-    parser.add_argument("src", type=str)
-    parser.add_argument(
-        "--dst", dest="dst", type=str, default=""
-    )
-    parser.add_argument(
-        "--include_root_path", dest="include_root_path", action="store_true"
-    )
-    parser.add_argument(
-        "--in_rocrate", dest="in_rocrate", action="store_true"
-    )
-    parser.add_argument(
-        "--to_tsv", dest="to_tsv", action="store_true"
-    )
-    parser.add_argument(
-        "--in_tree", dest="in_tree", action="store_true"
-    )
-    parser.add_argument(
-        "--structure_only", dest="structure_only", action="store_true"
-    )
-    parser.add_argument(
-        "--log_config_path", dest="log_config_path", type=str, default=LOG_CONF_PATH
-    )
-    parser.add_argument(
-        "--log_output_path", dest="log_output_path", type=str, default=LOG_OUTPUT_PATH
-    )
-    parser.add_argument(
-        "--preview_template_path", dest="preview_template_path", type=str,
-        default=DEFAULT_PREVIEW_TEMPLATE_PATH
-    )
-    args = parser.parse_args()
-    if not args.dst:
-        if os.path.isdir(args.src):
-            args.dst = os.path.join(args.src, DEFAULT_OUTPUT_NAME)
-        else:
-            args.dst = os.path.join(
-                os.path.dirname(args.src), DEFAULT_OUTPUT_NAME
-            )
-    elif os.path.isdir(args.dst):
-        args.dst = os.path.join(args.dst, DEFAULT_OUTPUT_NAME)
-    main(
-        args.src, args.dst, args.include_root_path,
-        args.in_rocrate, args.to_tsv,
-        args.in_tree, args.structure_only,
-        args.log_config_path, args.log_output_path,
-        args.preview_template_path
-    )

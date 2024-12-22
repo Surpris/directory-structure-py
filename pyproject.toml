@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "directory-structure-py"
-version = "0.2.5"
+version = "0.2.6"
 description = "Python function collecting the metadata of a directory and its contents"
 readme = "README.md"
 license = { file = "LICENSE" }
@@ -33,7 +33,8 @@ dev = [
     "autopep8",
     "flake8",
     "jupyter",
-    "jupyterlab"
+    "jupyterlab",
+    "twine"
 ]
 
 [project.scripts]
