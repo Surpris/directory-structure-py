@@ -64,7 +64,8 @@ Python function collecting the metadata of a directory and its contents.
 | Function                               | Overview                                                                      |
 | :------------------------------------- | :---------------------------------------------------------------------------- |
 | `generate_id`                          | Generates a unique ID from a given path, optionally relative to a root path.  |
-| `get_metadata_of_single_file`          | Retrieves metadata for a given file or directory using the `pathlib` module.  |
+| `get_metadata_of_single_file`          | Retrieves metadata for a given file.                                          |
+| `get_metadata_of_single_directory`     | Retrieves metadata for a given directory.                                     |
 | `get_metadata_of_files_in_list_format` | Recursively retrieves metadata for files and directories within a given path. |
 
 `get_metadata_of_files_in_list_format` returns a dict object with the following format:
@@ -87,6 +88,12 @@ Python function collecting the metadata of a directory and its contents.
 | `convert_meta_list_json_to_rocrate`       | Converts a metadata list JSON structure into a Research Object Crate (ROCrate).             |
 
 # Installation
+
+## via PyPI
+
+```sh
+pip install directory-structure-py
+```
 
 ## `pip install` from repository
 
