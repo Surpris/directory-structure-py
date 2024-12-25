@@ -191,4 +191,4 @@ Please see [output/sample](https://github.com/Surpris/directory-structure-py/tre
 
 # Contributions
 
-Any feedback is welcome via the Issue section!
+Any feedback is welcome via [the Issue section](https://github.com/Surpris/directory-structure-py/issues)!
