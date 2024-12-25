@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "directory-structure-py-core"
+version = "0.1.0"
+description = "The core module of `directory-structure-py`"
+readme = "README.md"
+license = { file = "LICENSE" }
+authors = [{ name = "Surpris", email = "take90-it09-easy27@outlook.jp" }]
+dependencies = []
+requires-python = ">=3.12"
+classifiers = [
+    'Development Status :: 3 - Alpha',
+    'Intended Audience :: Developers',
+    'Programming Language :: Python :: 3.12',
+    "Operating System :: OS Independent",
+    "Operating System :: POSIX",
+    "Operating System :: MacOS",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: Microsoft :: Windows",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    'License :: OSI Approved :: Apache Software License'
+]
+
+[project.optional-dependencies]
+dev = [
+    "line_profiler",
+    "pytest",
+    "pylint",
+    "autopep8",
+    "flake8"
+]
+
+[project.urls]
+Homepage = "https://github.com/Surpris/directory-structure-py"
+Repository = "https://github.com/Surpris/directory-structure-py"
+"Source Code" = "https://github.com/Surpris/directory-structure-py/libs/core"
+"Bug Tracker" = "https://github.com/Surpris/directory-structure-py/issues"
