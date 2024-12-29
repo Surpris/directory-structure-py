@@ -6,6 +6,9 @@ from directory_structure_py._version import __version__
 
 
 def __getattr__(name: str) -> Any:
+    if name == "cli_main":
+        from directory_structure_py_cli.cli import main as cli_main
+        return cli_main
     if name == "get_metadata_of_files_in_list_format":
         from directory_structure_py_core.get_metadata import get_metadata_of_files_in_list_format
         return get_metadata_of_files_in_list_format
@@ -31,6 +34,7 @@ def __getattr__(name: str) -> Any:
 
 
 __all__ = [
+    "cli_main",
     "get_metadata_of_files_in_list_format",
     "update_statistical_info_to_metadata_list",
     "list2tree",
