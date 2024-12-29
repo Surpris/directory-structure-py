@@ -9,7 +9,7 @@ description = "The extension module of `directory-structure-py`"
 readme = "README.md"
 license = { file = "LICENSE" }
 authors = [{ name = "Surpris", email = "take90-it09-easy27@outlook.jp" }]
-dependencies = ["rocrate"]
+dependencies = ["directory-structure-py-core", "rocrate"]
 requires-python = ">=3.12"
 classifiers = [
     'Development Status :: 3 - Alpha',
