@@ -5,11 +5,15 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "directory-structure-py"
 version = "0.2.6"
-description = "Python function collecting the metadata of a directory and its contents"
+description = "Python function collecting the metadata of a file or a directory and its contents"
 readme = "README.md"
 license = { file = "LICENSE" }
 authors = [{ name = "Surpris", email = "take90-it09-easy27@outlook.jp" }]
-dependencies = ["rocrate"]
+dependencies = [
+    "directory-structure-py-cli",
+    "directory-structure-py-core",
+    "directory-structure-py-extension"
+]
 requires-python = ">=3.12"
 classifiers = [
     'Development Status :: 3 - Alpha',
