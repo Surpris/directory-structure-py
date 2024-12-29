@@ -1,6 +1,4 @@
-"""directory_structure_py
-
-get the directory tree
+"""cli.py
 """
 
 import copy
@@ -18,16 +16,16 @@ from rocrate.rocrate import ROCrate
 from directory_structure_py_cli.constants import (
     ENSURE_ASCII, JSON_OUTPUT_INDENT
 )
-from directory_structure_py.get_metadata import (
+from directory_structure_py_core.get_metadata import (
     get_metadata_of_files_in_list_format,
     update_statistical_info_to_metadata_list
 )
-from directory_structure_py.conversion import (
+from directory_structure_py_core.conversion import (
     list2tree,
-    convert_meta_list_json_to_tsv,
-    convert_meta_list_json_to_rocrate
+    convert_meta_list_json_to_tsv
 )
-from directory_structure_py.rocrate_models import Preview, Metadata
+from directory_structure_py_extension.rocrate.converter import convert_meta_list_json_to_rocrate
+from directory_structure_py_extension.rocrate.models import Preview, Metadata
 
 LOG_CONF_PATH: str = importlib.resources.files(
     __package__

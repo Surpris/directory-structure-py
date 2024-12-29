@@ -1,11 +1,10 @@
-"""directory_structure_py"""
-
-
+"""directory_structure_py_cli.__main__
+"""
 
 from directory_structure_py_cli.constants import (
     DEFAULT_OUTPUT_NAME, DEFAULT_PREVIEW_TEMPLATE_PATH
 )
-from directory_structure_py.main import (
+from directory_structure_py_cli.cli import (
     main, LOG_OUTPUT_PATH, LOG_CONF_PATH
 )
 

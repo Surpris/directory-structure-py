@@ -33,8 +33,18 @@ dev = [
     "flake8"
 ]
 
+[project.scripts]
+directory-structure-py-cli = "directory_structure_py_cli.cli:main"
+
 [project.urls]
 Homepage = "https://github.com/Surpris/directory-structure-py"
 Repository = "https://github.com/Surpris/directory-structure-py"
 "Source Code" = "https://github.com/Surpris/directory-structure-py/libs/core"
 "Bug Tracker" = "https://github.com/Surpris/directory-structure-py/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["directory_structure_py_cli"]
+
+[tool.setuptools.data-files]
+"directory_structure_py_cli/config" = ["directory_structure_py_cli/config/*"]
