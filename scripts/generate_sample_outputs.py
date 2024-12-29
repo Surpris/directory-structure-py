@@ -4,8 +4,8 @@ generate sample outputs
 """
 
 import os
-from directory_structure_py.constants import DEFAULT_OUTPUT_NAME
-from directory_structure_py.main import main
+from directory_structure_py_cli.constants import DEFAULT_OUTPUT_NAME
+from directory_structure_py_cli.cli import main
 
 SRC_DIR_PATH: str = os.path.join(os.path.dirname(__file__), "../sample")
 DST_DIR_PATH: str = os.path.join(
