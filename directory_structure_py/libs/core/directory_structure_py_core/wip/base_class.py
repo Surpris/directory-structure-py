@@ -14,7 +14,7 @@ class ExtractorBase:
     """Base class for all extractors.
     """
 
-    def __call__(self, src: FilePathType | Metadata) -> Metadata:
+    def __call__(self, src: FilePathType, metadata: Metadata | None = None) -> Metadata:
         if isinstance(src, FilePathType):
             return self.process_file(src)
         if isinstance(src, Metadata):
