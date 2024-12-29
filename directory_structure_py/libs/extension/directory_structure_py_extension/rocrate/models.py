@@ -111,7 +111,7 @@ class Preview(PreviewOrigin):
 
         favicon_path: str = str(importlib.resources.files(
             __package__
-        ).joinpath("docs/favicon.ico"))
+        ).joinpath("templates/favicon.ico"))
         favicon: str = ""
         with open(favicon_path, "rb") as image_file:
             favicon = base64.b64encode(image_file.read()).decode()
