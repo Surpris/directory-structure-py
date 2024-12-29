@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 from typing import Dict, Any, List
 import warnings
-from directory_structure_py.constants import OUTPUT_ROOT_KEY
+from directory_structure_py_core.constants import OUTPUT_ROOT_KEY
 
 
 def convert_meta_list_json_to_tsv(src: Dict[str, Any]) -> List[List[str]]:
