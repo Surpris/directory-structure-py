@@ -2,7 +2,7 @@
 """
 
 from pathlib import Path
-from directory_structure_py_core.base_class import FilePathType
+from directory_structure_py_core.wip.base_class import FilePathType
 
 
 def generate_id(path: FilePathType, root_path: FilePathType = "") -> str:

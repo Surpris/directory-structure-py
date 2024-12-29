@@ -1,7 +1,7 @@
 """extractor.py: Extracts the directory structure of a given directory.
 """
 
-from directory_structure_py.libs.core.directory_structure_py_core.wip.base_class import ExtractorBase, Metadata, FilePathType
+from directory_structure_py_core.wip.base_class import ExtractorBase, Metadata, FilePathType
 
 
 class FileMetadataExtractor(ExtractorBase):
@@ -30,6 +30,7 @@ class FileMetadataExtractor(ExtractorBase):
         """
         fpath: str = src.get("@id")
         raise NotImplementedError
+
 
 class DirectoryMetadataExtractor(ExtractorBase):
     """Extracts the directory metadata of a given directory.
