@@ -2,7 +2,10 @@
 
 
 from directory_structure_py.main import (
-    main, DEFAULT_OUTPUT_NAME, LOG_OUTPUT_PATH, LOG_CONF_PATH,
+    main, LOG_OUTPUT_PATH, LOG_CONF_PATH
+)
+from directory_structure_py.constants import (
+    DEFAULT_OUTPUT_NAME,
     DEFAULT_PREVIEW_TEMPLATE_PATH
 )
 
